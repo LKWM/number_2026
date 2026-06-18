@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Leçon 1 – Distinguer les systèmes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #fff5f2;
+  color: #1e293b;
+}
+
+/* ══════════════════════════════
+   APP SHELL
+══════════════════════════════ */
+#app { width: 100%; height: 100%; display: flex; flex-direction: column; }
+
+#prog-wrap { flex-shrink: 0; height: 0.5vh; background: #e2e8f0; }
+#prog-bar  { height: 100%; background: #f1552e; transition: width 0.35s ease; width: 0%; }
+
+#pages { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+
+#bottom-nav {
+  flex-shrink: 0;
+  height: 13vmin; max-height: 80px; min-height: 52px;
+  background: #fff; border-top: 1.5px solid #e2e8f0;
+  display: none;
+  align-items: center; justify-content: space-between;
+  padding: 0 6vw;
+}
+.nav-btn {
+  border: none; background: none; cursor: pointer;
+  font-family: inherit; font-weight: 700;
+  font-size: clamp(0.95rem, 3vmin, 1.3rem);
+  display: flex; align-items: center; gap: 0.3em;
+  padding: 0; transition: opacity 0.15s;
+}
+.nav-btn:disabled { opacity: 0.28; cursor: default; }
+#btn-prev { color: #64748b; }
+#btn-next { color: #f1552e; }
+#page-num { font-size: clamp(0.9rem, 2.8vmin, 1.2rem); font-weight: 600; color: #94a3b8; }
+
+/* ══════════════════════════════
+   PAGE
+══════════════════════════════ */
+.page {
+  display: none;
+  position: absolute; inset: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3vh 6vw;
+  gap: 2.5vh;
+  overflow: hidden;
+  animation: fadeUp 0.28s ease forwards;
+}
+.page.active { display: flex; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════
+   COVER / OUTRO
+══════════════════════════════ */
+#page-1, #page-12 { background: #fff5f2; }
+
+.cover-badge {
+  background: #ffe4de; color: #c0392b;
+  border-radius: 99px;
+  padding: 0.5vh 3vw;
+  font-size: 2.2vh; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  text-align: center;
+}
+.cover-title {
+  font-size: 5.5vh; font-weight: 800; color: #7c1f0e;
+  text-align: center; line-height: 1.15;
+}
+.cover-start {
+  background: #f1552e; color: #fff;
+  border: none; border-radius: 99px; cursor: pointer;
+  font-family: inherit; font-weight: 700; font-size: 3vh;
+  padding: 1.5vh 8vw;
+  box-shadow: 0 4px 18px rgba(241,85,46,0.35);
+  transition: background 0.18s, transform 0.1s;
+  margin-top: 1vh; text-align: center;
+}
+.cover-start:hover { background: #c0392b; transform: translateY(-2px); }
+
+/* ══════════════════════════════
+   CARD
+══════════════════════════════ */
+.card-text {
+  background: #fff; border: 2px solid #e2e8f0; border-radius: 1.5vh;
+  padding: 2.2vh 6vw; width: 100%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  gap: 0.8vh; flex-shrink: 0;
+}
+.card-body { font-size: calc(3.6vh * var(--fit,1)); font-weight: 800; color: #1e293b; line-height: 1.2; }
+.card-sub2 { font-size: calc(2.2vh * var(--fit,1)); font-weight: 700; color: #1e293b; line-height: 1.3; }
+.card-sub1 { font-size: calc(1.8vh * var(--fit,1)); font-weight: 500; color: #64748b; line-height: 1.5; }
+
+/* ══════════════════════════════
+   TEXT BLOCK
+══════════════════════════════ */
+.text-block {
+  background: #fff; border: 2px solid #e2e8f0; border-radius: 1.5vh;
+  padding: 2vh 6vw; width: 100%;
+  font-size: calc(2.4vh * var(--fit,1));
+  line-height: 1.7; color: #334155;
+  text-align: justify;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════
+   SYSTEM TAG / INFO BOX / EMOJI
+══════════════════════════════ */
+.sys-tag {
+  background: #ffe4de; color: #f1552e;
+  border-radius: 99px; padding: 0.5vh 3vw;
+  font-size: calc(2vh * var(--fit,1)); font-weight: 700;
+  text-align: center; flex-shrink: 0;
+}
+.info-box {
+  width: 100%; padding: 1.5vh 3vw;
+  background: #fff; border: 2px solid #e2e8f0; border-radius: 1.5vh;
+  font-size: calc(2.1vh * var(--fit,1)); line-height: 1.6; color: #334155;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  flex-shrink: 0; text-align: left;
+}
+.big-emoji { font-size: calc(6.5vh * var(--fit,1)); line-height: 1; }
+.page-h2 {
+  font-size: calc(3.2vh * var(--fit,1)); font-weight: 800;
+  color: #f1552e; text-align: center; line-height: 1.2; flex-shrink: 0;
+}
+
+/* ══════════════════════════════
+   QUIZ INTRO / OUTRO INNER
+══════════════════════════════ */
+.big-check { font-size: calc(5.5vh * var(--fit,1)); }
+.outro-title { font-size: calc(3.5vh * var(--fit,1)); font-weight: 800; color: #7c1f0e; text-align: center; }
+.outro-sub   { font-size: calc(2.2vh * var(--fit,1)); color: #94a3b8; text-align: center; }
+
+/* ══════════════════════════════
+   MCQ
+══════════════════════════════ */
+.consigne {
+  font-size: calc(2.8vh * var(--fit,1)); font-weight: 700; color: #1e293b;
+  text-align: center; line-height: 1.35;
+  width: 100%; flex-shrink: 0;
+}
+.mcq-opts {
+  display: flex; flex-direction: column;
+  gap: calc(1.2vh * var(--fit,1));
+  width: 100%; flex-shrink: 0;
+}
+.mcq-opt {
+  background: #fff; border: 2px solid #e2e8f0; border-radius: 1vh;
+  padding: calc(1.2vh * var(--fit,1)) 4vw;
+  font-family: inherit; font-size: calc(2.2vh * var(--fit,1));
+  font-weight: 600; color: #475569;
+  cursor: pointer; transition: all 0.15s; user-select: none;
+  text-align: left; width: 100%;
+}
+.mcq-opt:hover:not(.disabled):not(.correct):not(.wrong) {
+  border-color: #f1552e; color: #f1552e; background: #fff5f2;
+}
+.mcq-opt.correct  { border-color: #22c55e; background: #dcfce7; color: #15803d; cursor: default; }
+.mcq-opt.wrong    { border-color: #ef4444; background: #fee2e2; color: #b91c1c; }
+.mcq-opt.disabled { cursor: default; pointer-events: none; opacity: 0.55; }
+
+.feedback {
+  font-size: calc(2.2vh * var(--fit,1)); font-weight: 700;
+  text-align: center; min-height: 1.4em;
+  width: 100%; flex-shrink: 0;
+}
+.feedback.ok  { color: #15803d; }
+.feedback.err { color: #b91c1c; }
+</style>
+</head>
+<body>
+<div id="app">
+
+<div id="prog-wrap"><div id="prog-bar"></div></div>
+
+<div id="pages">
+
+<!-- PAGE 1 : COVER -->
+<div class="page active" id="page-1">
+  <span class="cover-badge">Maîtriser les nombres coréens</span>
+  <div class="cover-title">Leçon 1 — Distinguer les systèmes</div>
+  <button class="cover-start" onclick="startLesson()">Commencer</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page-2">
+  <p class="big-emoji">🔢</p>
+  <div class="card-text">
+    <div class="card-body">Deux systèmes numériques</div>
+    <div class="card-sub2">Le système chinois : 일, 이, 삼…</div>
+    <div class="card-sub2">Le système coréen : 하나, 둘, 셋…</div>
+  </div>
+  <p class="text-block">En coréen, il existe deux systèmes numériques distincts. Pour un non-sinophone, la distinction n'est pas évidente. Voyons la règle générale.</p>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page-3" style="justify-content:flex-start;padding-top:4vh;">
+  <span class="sys-tag">Système 1</span>
+  <p class="page-h2">Le système chinois<br><span style="font-size:0.72em;font-weight:600;color:#64748b;">(Nombres ordinaux)</span></p>
+  <p class="text-block">S'utilise surtout pour parler d'un <strong>ORDRE</strong> ou pour lire des nombres abstraits et ceux qui <strong>dépassent 100</strong>.</p>
+  <div class="info-box">🗓️ Dates &nbsp; ⏰ Minutes &nbsp; 💵 Argent &nbsp; 📞 Numéros…</div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="page-4" style="justify-content:flex-start;padding-top:4vh;">
+  <span class="sys-tag">Système 2</span>
+  <p class="page-h2">Le système coréen<br><span style="font-size:0.72em;font-weight:600;color:#64748b;">(Nombres cardinaux)</span></p>
+  <p class="text-block">S'utilise surtout pour parler d'une <strong>QUANTITÉ</strong> d'objets ou de personnes, principalement <strong>entre 1 et 99</strong>.</p>
+  <div class="info-box">👨‍👩‍👧 Personnes &nbsp; 🎂 Âge &nbsp; 📦 Objets &nbsp; ☕ Tasses…</div>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="page-5">
+  <p class="big-emoji">⚠️</p>
+  <div class="card-text">
+    <div class="card-body">Attention !</div>
+    <div class="card-sub1">Ce sont des règles <strong>générales</strong>. L'usage réel peut varier selon les régions, les générations et même les personnes. Ne soyez pas surpris de rencontrer des exceptions !</div>
+  </div>
+</div>
+
+<!-- PAGE 6 -->
+<div class="page" id="page-6">
+  <p class="big-emoji">📋</p>
+  <div class="info-box">
+    <strong>Système Chinois (Ordinal) :</strong><br>
+    Ordre, dates, argent, numéros, et tout ce qui est &gt; 99.
+  </div>
+  <div class="info-box">
+    <strong>Système Coréen (Cardinal) :</strong><br>
+    Quantité, âge, objets, personnes (généralement 1–99).
+  </div>
+</div>
+
+<!-- PAGE 7 : QUIZ INTRO -->
+<div class="page" id="page-7">
+  <span class="big-check">✅</span>
+  <div class="outro-title">Prêt(e) à vérifier ?</div>
+  <div class="outro-sub">Quelques questions pour valider vos acquis !</div>
+</div>
+
+<!-- PAGE 8 : Q1 -->
+<div class="page" id="page-8">
+  <p class="consigne">Pour compter 3 livres 📚 sur une table (une <strong>quantité</strong>), quel système est le plus approprié ?</p>
+  <div class="mcq-opts" id="p8-opts">
+    <button class="mcq-opt" onclick="checkQ(8,this,'A')">A) Le système chinois (ordinal)</button>
+    <button class="mcq-opt" onclick="checkQ(8,this,'B')">B) Le système coréen (cardinal)</button>
+    <button class="mcq-opt" onclick="checkQ(8,this,'C')">C) Les deux sont possibles</button>
+  </div>
+  <p class="feedback" id="p8-fb"></p>
+</div>
+
+<!-- PAGE 9 : Q2 -->
+<div class="page" id="page-9">
+  <p class="consigne">Pour dire la date du 10 mai (un <strong>ordre</strong> dans le calendrier), quel système utilise-t-on ?</p>
+  <div class="mcq-opts" id="p9-opts">
+    <button class="mcq-opt" onclick="checkQ(9,this,'A')">A) Le système chinois (ordinal)</button>
+    <button class="mcq-opt" onclick="checkQ(9,this,'B')">B) Le système coréen (cardinal)</button>
+    <button class="mcq-opt" onclick="checkQ(9,this,'C')">C) L'un ou l'autre</button>
+  </div>
+  <p class="feedback" id="p9-fb"></p>
+</div>
+
+<!-- PAGE 10 : Q3 -->
+<div class="page" id="page-10">
+  <p class="consigne">Le nombre <strong>300</strong> doit être lu avec quel système ?</p>
+  <div class="mcq-opts" id="p10-opts">
+    <button class="mcq-opt" onclick="checkQ(10,this,'A')">A) Le système chinois (car &gt; 99)</button>
+    <button class="mcq-opt" onclick="checkQ(10,this,'B')">B) Le système coréen (car c'est une quantité)</button>
+    <button class="mcq-opt" onclick="checkQ(10,this,'C')">C) Ça dépend du contexte</button>
+  </div>
+  <p class="feedback" id="p10-fb"></p>
+</div>
+
+<!-- PAGE 11 : Q4 -->
+<div class="page" id="page-11">
+  <p class="consigne">Quelle est l'affirmation la plus correcte ?</p>
+  <div class="mcq-opts" id="p11-opts">
+    <button class="mcq-opt" onclick="checkQ(11,this,'A')">A) Il n'y a aucune règle, c'est aléatoire.</button>
+    <button class="mcq-opt" onclick="checkQ(11,this,'B')">B) Il y a des règles générales (<strong>quantité vs ordre</strong>), même si l'usage peut parfois varier.</button>
+    <button class="mcq-opt" onclick="checkQ(11,this,'C')">C) Le système chinois est pour les petits nombres, le coréen pour les grands.</button>
+  </div>
+  <p class="feedback" id="p11-fb"></p>
+</div>
+
+<!-- PAGE 12 : OUTRO -->
+<div class="page" id="page-12">
+  <span class="big-check">🎉</span>
+  <div class="outro-title">Bravo !</div>
+  <p class="text-block">Vous avez terminé la Leçon 1. Vous connaissez maintenant la différence fondamentale entre les deux systèmes numériques coréens.</p>
+</div>
+
+</div><!-- /pages -->
+
+<div id="bottom-nav">
+  <button class="nav-btn" id="btn-prev" onclick="go(-1)">◀ Précédent</button>
+  <span id="page-num"></span>
+  <button class="nav-btn" id="btn-next" onclick="go(1)">Suivant ▶</button>
+</div>
+
+</div><!-- /app -->
+
+<!-- SFX -->
+<audio id="sfx-pg"    preload="auto"></audio>
+<audio id="sfx-ok"    preload="auto"></audio>
+<audio id="sfx-err"   preload="auto"></audio>
+<audio id="sfx-end"   preload="auto"></audio>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   SFX  —  inline WAV generation (louder, 5 distinct sounds)
+══════════════════════════════════════════════════════════════ */
+(function(){
+  var sr = 44100;
+  function w(fn, d) {
+    var n = Math.round(sr * d), b = new ArrayBuffer(44 + n * 2), v = new DataView(b);
+    function s(o,t){for(var i=0;i<4;i++)v.setUint8(o+i,t.charCodeAt(i));}
+    s(0,'RIFF'); v.setUint32(4,36+n*2,true); s(8,'WAVE'); s(12,'fmt ');
+    v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+    v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
+    s(36,'data'); v.setUint32(40,n*2,true);
+    for(var i=0;i<n;i++){var t=i/sr; v.setInt16(44+i*2,Math.max(-1,Math.min(1,fn(t,d)))*32767,true);}
+    var u=new Uint8Array(b),c=''; for(var i=0;i<u.length;i++) c+=String.fromCharCode(u[i]);
+    return 'data:audio/wav;base64,'+btoa(c);
+  }
+  function env(t,d,a,r){return t<a?t/a:t>d-r?Math.max(0,(d-t)/r):1;}
+
+  /* START: ascending arpeggio C5→E5→G5 (clearly different from correct) */
+  document.getElementById('sfx-start').src = w(function(t,d){
+    var f = t < d/3 ? 523 : t < 2*d/3 ? 659 : 784;
+    return Math.sin(2*Math.PI*f*t) * env(t,d,.01,.07) * .8;
+  }, 0.5);
+
+  /* PAGE TURN: short click */
+  document.getElementById('sfx-pg').src = w(function(t,d){
+    return Math.sin(2*Math.PI*700*t) * env(t,d,.005,.04) * .65;
+  }, 0.09);
+
+  /* CORRECT: two-tone chime 880→1108 Hz */
+  document.getElementById('sfx-ok').src = w(function(t,d){
+    return Math.sin(2*Math.PI*(t<.14?880:1108)*t) * env(t,d,.008,.07) * .9;
+  }, 0.32);
+
+  /* WRONG: square-wave buzz */
+  document.getElementById('sfx-err').src = w(function(t,d){
+    return (Math.sin(2*Math.PI*200*t)>0?1:-1) * env(t,d,.01,.06) * .75;
+  }, 0.28);
+
+  /* END: sustained major chord C5+E5+G5 */
+  document.getElementById('sfx-end').src = w(function(t,d){
+    var x = env(t,d,.02,.3);
+    return (Math.sin(2*Math.PI*523*t)+Math.sin(2*Math.PI*659*t)+Math.sin(2*Math.PI*784*t))/3*x*.9;
+  }, 1.2);
+})();
+
+function sfx(id){ var a=document.getElementById(id); if(a){a.currentTime=0;a.play().catch(function(){});} }
+
+/* ══════════════════════════════════════════════════════════════
+   CONFIG
+══════════════════════════════════════════════════════════════ */
+var TOTAL        = 12;
+var LOCKED       = new Set([8,9,10,11]);
+var QUIZ_ANSWERS = {8:'B', 9:'A', 10:'A', 11:'B'};
+
+/* ══════════════════════════════════════════════════════════════
+   MESSAGES  (Rule 7: 4 French feedback messages)
+══════════════════════════════════════════════════════════════ */
+var MSG = {
+  successDone: 'Très bien ! Passez à la suite.',
+  failRetry:   'On y est presque ! Essayons encore une fois.',
+};
+
+/* ══════════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════════ */
+var cur      = 1;
+var unlocked = new Set();
+var qDone    = {};
+var qTimer   = {};
+
+/* ══════════════════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════════════════ */
+function startLesson() {
+  document.getElementById('bottom-nav').style.display = 'flex';
+  sfx('sfx-start');
+  setTimeout(function(){ goTo(2); }, 80);
+}
+
+function go(dir) {
+  goTo(cur + dir);
+}
+
+function goTo(next) {
+  if (next < 1 || next > TOTAL) return;
+  document.getElementById('page-' + cur).classList.remove('active');
+  cur = next;
+  document.getElementById('page-' + cur).classList.add('active');
+  sfx('sfx-pg');
+  render();
+  if (cur === TOTAL) {
+    document.getElementById('bottom-nav').style.display = 'none';
+    sfx('sfx-end');
+    window.parent.postMessage({type:'lesson_complete'},'*');
+  }
+  setTimeout(function(){ fitPage(document.getElementById('page-' + cur)); }, 30);
+}
+
+function render() {
+  document.getElementById('page-num').textContent = cur + ' / ' + TOTAL;
+  var pct = ((cur - 1) / (TOTAL - 1)) * 100;
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('btn-prev').disabled = (cur <= 2);
+  var nb = document.getElementById('btn-next');
+  if      (cur === TOTAL)                        nb.disabled = true;
+  else if (LOCKED.has(cur) && !unlocked.has(cur)) nb.disabled = true;
+  else                                            nb.disabled = false;
+}
+
+function unlock(pg) {
+  unlocked.add(pg);
+  if (cur === pg) document.getElementById('btn-next').disabled = false;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   QUIZ
+══════════════════════════════════════════════════════════════ */
+function checkQ(pg, btn, val) {
+  if (qDone[pg]) return;
+  var opts    = Array.from(document.querySelectorAll('#p' + pg + '-opts .mcq-opt'));
+  var fb      = document.getElementById('p' + pg + '-fb');
+  var correct = (val === QUIZ_ANSWERS[pg]);
+  if (correct) {
+    if (qTimer[pg]) { clearTimeout(qTimer[pg]); qTimer[pg] = null; }
+    sfx('sfx-ok');
+    btn.classList.add('correct');
+    fb.textContent = MSG.successDone; fb.className = 'feedback ok';
+    opts.forEach(function(o){ o.classList.add('disabled'); });
+    qDone[pg] = true;
+    unlock(pg);
+  } else {
+    sfx('sfx-err');
+    btn.classList.add('wrong');
+    fb.textContent = MSG.failRetry; fb.className = 'feedback err';
+    qTimer[pg] = setTimeout(function(){
+      btn.classList.remove('wrong');
+      fb.textContent = ''; fb.className = 'feedback';
+      qTimer[pg] = null;
+    }, 2000);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FIT TEXT  —  scales all calc(Xvh * var(--fit,1)) elements
+   to prevent overflow without scrolling
+══════════════════════════════════════════════════════════════ */
+function fitPage(pageEl) {
+  if (!pageEl) return;
+  pageEl.style.setProperty('--fit', '1');
+  if (pageEl.scrollHeight <= pageEl.offsetHeight && pageEl.scrollWidth <= pageEl.offsetWidth) return;
+  var lo = 0.4, hi = 1.0, mid;
+  for (var i = 0; i < 12; i++) {
+    mid = (lo + hi) / 2;
+    pageEl.style.setProperty('--fit', mid);
+    if (pageEl.scrollHeight <= pageEl.offsetHeight && pageEl.scrollWidth <= pageEl.offsetWidth) lo = mid;
+    else hi = mid;
+  }
+  pageEl.style.setProperty('--fit', lo);
+}
+
+window.addEventListener('resize', function(){
+  var p = document.getElementById('page-' + cur); if (p) fitPage(p);
+});
+window.addEventListener('orientationchange', function(){
+  setTimeout(function(){ var p = document.getElementById('page-' + cur); if (p) fitPage(p); }, 200);
+});
+</script>
+</body>
+</html>
