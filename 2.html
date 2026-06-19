@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leçon 2 – Le système chinois (1–9)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── Design tokens ──────────────────────────────────────── */
+        :root {
+            --theme:        #f1552e;
+            --theme-light:  #fdf0eb;
+            --text:         #333333;
+            --border:       #eeeeee;
+            --white:        #ffffff;
+            --success:      #28a745;
+            --success-bg:   #e3fcef;
+            --error:        #dc3545;
+            --error-bg:     #fff1f2;
+            --blue:         #4A90E2;
+            --teal:         #50E3C2;
+            --radius-btn:   2em;
+            --radius-box:   0.8em;
+        }
+
+        html { font-size: max(2.8vh, 3.2vmin); }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--text);
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── Slider ─────────────────────────────────────────────── */
+        .content-window { flex: 1; overflow: hidden; position: relative; }
+
+        .pages-slider {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform .4s ease-in-out;
+        }
+
+        /* ── Base page ──────────────────────────────────────────── */
+        .page {
+            width: 100%;
+            flex-shrink: 0;
+            height: 100%;
+            padding: 0.8em 1.4em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 0.6em;
+            overflow: hidden;
+        }
+
+        /* ── Cover pages ────────────────────────────────────────── */
+        .page-cover {
+            background: var(--theme);
+            color: var(--white);
+            gap: 0.35em;
+        }
+        .page-cover .kicker {
+            font-size: 0.72em;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: .8;
+            margin: 0;
+        }
+        .page-cover .chapter {
+            font-size: 0.88em;
+            font-weight: 700;
+            opacity: .9;
+            margin: 0;
+        }
+        .page-cover h1 {
+            font-size: 1.7em;
+            line-height: 1.2;
+            margin: 0.15em 0 0;
+        }
+        .page-cover p { margin: 0; }
+
+        /* ── Content typography ─────────────────────────────────── */
+        .emoji { font-size: 2.5em; line-height: 1; margin: 0; }
+
+        h2 { color: var(--theme); font-size: 1.3em; margin: 0.3em 0 0.15em; }
+        h3 { font-size: 1.05em; margin: 0.3em 0 0.2em; }
+        p  { font-size: 0.9em; line-height: 1.6; margin: 0.25em 0; }
+
+        .highlight { color: var(--theme); font-weight: 700; }
+
+        /* ── Practice pages ─────────────────────────────────────── */
+        .practice-number {
+            font-size: 4.5em;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+            line-height: 1;
+        }
+        .practice-pronunciation {
+            font-size: 1.6em;
+            color: var(--theme);
+            margin: 0;
+        }
+
+        /* ── Action buttons ─────────────────────────────────────── */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 16em;
+            padding: 0.6em 1em;
+            border-radius: var(--radius-box);
+            font-size: 0.9em;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: opacity .2s;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+        .action-button .icon { margin-right: 0.5em; }
+        .action-button:hover { opacity: .85; }
+        .tts-button  { background: var(--blue); }
+        .rec-button  { background: var(--teal); }
+        .rec-button.listening { background: #F5A623; }
+
+        /* Feedback – fixed height, visibility:hidden to reserve space (Rule 2) */
+        .speech-feedback {
+            width: 100%;
+            height: 2.8em;
+            line-height: 1.4;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-align: center;
+            visibility: hidden;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .speech-feedback.show { visibility: visible; }
+        .speech-feedback.show.success { color: var(--success); }
+        .speech-feedback.show.error   { color: var(--error); }
+
+        /* ── Grid (page 16) ─────────────────────────────────────── */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6em;
+            width: 100%;
+            max-width: 14em;
+        }
+        .grid-item {
+            background: var(--theme-light);
+            border: 0.1em solid var(--border);
+            border-radius: var(--radius-box);
+            padding: 0.7em;
+            font-size: 1.5em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+        .grid-item:hover { background: var(--theme); color: var(--white); border-color: var(--theme); }
+
+        /* ── Fill-in-the-blank ──────────────────────────────────── */
+        .fitb-questions-container {
+            width: 100%;
+        }
+        .fitb-question {
+            margin-bottom: 0.5em;
+            background: #f9f9f9;
+            padding: 0.5em 0.6em;
+            border-radius: var(--radius-box);
+        }
+        .fitb-sequence {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin: 0 0 0.4em;
+            color: #555;
+        }
+        .fitb-options {
+            display: flex;
+            justify-content: center;
+            gap: 0.5em;
+        }
+        .fitb-option {
+            padding: 0.4em 0.8em;
+            border: 0.12em solid var(--border);
+            border-radius: 0.5em;
+            cursor: pointer;
+            font-size: 1em;
+            transition: border-color .2s;
+        }
+        .fitb-option:hover { border-color: var(--theme); }
+        .fitb-option.correct  { background: var(--success-bg); border-color: var(--success); color: var(--success); font-weight: 700; }
+        .fitb-option.incorrect { background: var(--error-bg); border-color: var(--error); color: var(--error); opacity: .7; }
+        .fitb-question.answered .fitb-option { cursor: default; opacity: .7; }
+        .fitb-question.answered .fitb-option.correct { opacity: 1; }
+
+        /* ── Speech puzzle ──────────────────────────────────────── */
+        .speech-puzzle-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.4em;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+        .speech-puzzle-item, .speech-puzzle-blank {
+            padding: 0.5em 0.6em;
+            border-radius: 0.5em;
+            line-height: 1.2;
+        }
+        .speech-puzzle-item  { background: #eee; }
+        .speech-puzzle-blank { background: var(--theme-light); color: var(--theme); min-width: 2em; display: inline-block; }
+
+        .hint-button {
+            background: transparent;
+            border: 0.1em solid #F5A623;
+            color: #F5A623;
+            padding: 0.45em 1em;
+            font-size: 0.85em;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: background .2s, color .2s;
+            flex-shrink: 0;
+        }
+        .hint-button:hover { background: #F5A623; color: var(--white); }
+
+        .exercise-label {
+            font-size: 0.75em;
+            color: #888;
+            margin: 0;
+            align-self: flex-start;
+        }
+
+        /* ── Bottom nav bar ─────────────────────────────────────── */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2vh 3vw;
+            border-top: 0.06em solid var(--border);
+            flex-shrink: 0;
+        }
+        .navigation[hidden] { display: none; }
+
+        .nav-btn {
+            background: var(--theme);
+            color: var(--white);
+            border: none;
+            padding: 1.2vh 3vw;
+            font-size: 1.8vh;
+            font-family: inherit;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: opacity .2s;
+            white-space: nowrap;
+        }
+        .nav-btn:hover:not(:disabled) { opacity: .85; }
+        .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .page-indicator {
+            font-size: 1.8vh;
+            color: #888;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+
+    <div class="content-window">
+        <div class="pages-slider" id="pagesSlider">
+
+            <!-- PAGE 1 · Intro cover — NO nav -->
+            <div class="page page-cover">
+                <p class="kicker">Maîtriser les nombres coréens</p>
+                <p class="chapter">Chapitre 2 – Le système chinois</p>
+                <h1>Leçon 2<br>Les nombres de 1 à 9</h1>
+                <button class="action-button tts-button" id="startBtn" style="margin-top:1.2em; background:var(--white); color:var(--theme); font-size:0.95em;">Commencer</button>
+            </div>
+
+            <!-- PAGE 2 · Rappel -->
+            <div class="page">
+                <p class="emoji">ℹ️</p>
+                <h2>Le système chinois</h2>
+                <p>Rappel : On l'utilise pour l'<span class="highlight">ordre</span>, les nombres <span class="highlight">&gt; 99</span>, les dates, l'argent ou les minutes.</p>
+            </div>
+
+            <!-- PAGE 3 · Intro pratique -->
+            <div class="page">
+                <p class="emoji">💪</p>
+                <h2>Pratique, pratique !</h2>
+                <p>La meilleure façon d'apprendre est de répéter.</p>
+                <p>Écoutez les nombres de 1 à 9.</p>
+            </div>
+
+            <!-- PAGES 4–12 · Numbers 1–9 -->
+            <div class="page practice-page" data-korean="일">
+                <p class="practice-number">1</p>
+                <p class="practice-pronunciation">일</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+            <div class="page practice-page" data-korean="이">
+                <p class="practice-number">2</p>
+                <p class="practice-pronunciation">이</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+            <div class="page practice-page" data-korean="삼">
+                <p class="practice-number">3</p>
+                <p class="practice-pronunciation">삼</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+            <div class="page practice-page" data-korean="사">
+                <p class="practice-number">4</p>
+                <p class="practice-pronunciation">사</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+            <div class="page practice-page" data-korean="오">
+                <p class="practice-number">5</p>
+                <p class="practice-pronunciation">오</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+            <div class="page practice-page" data-korean="육">
+                <p class="practice-number">6</p>
+                <p class="practice-pronunciation">육</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+            <div class="page practice-page" data-korean="칠">
+                <p class="practice-number">7</p>
+                <p class="practice-pronunciation">칠</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+            <div class="page practice-page" data-korean="팔">
+                <p class="practice-number">8</p>
+                <p class="practice-pronunciation">팔</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+            <div class="page practice-page" data-korean="구">
+                <p class="practice-number">9</p>
+                <p class="practice-pronunciation">구</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+
+            <!-- PAGES 13–15 · Groupe practice -->
+            <div class="page practice-page" data-korean="일 이 삼">
+                <h3>Pratique groupée</h3>
+                <p class="practice-pronunciation">1, 2, 3</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <p class="speech-feedback" aria-live="polite"></p>
+            </div>
+            <div class="page practice-page" data-korean="사 오 육">
+                <h3>Pratique groupée</h3>
+                <p class="practice-pronunciation">4, 5, 6</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <p class="speech-feedback" aria-live="polite"></p>
+            </div>
+            <div class="page practice-page" data-korean="칠 팔 구">
+                <h3>Pratique groupée</h3>
+                <p class="practice-pronunciation">7, 8, 9</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
+                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <p class="speech-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE 16 · Grid -->
+            <div class="page">
+                <h3>Cliquez sur un numéro pour l'écouter</h3>
+                <div class="grid-container">
+                    <div class="grid-item" data-korean="일">1</div>
+                    <div class="grid-item" data-korean="이">2</div>
+                    <div class="grid-item" data-korean="삼">3</div>
+                    <div class="grid-item" data-korean="사">4</div>
+                    <div class="grid-item" data-korean="오">5</div>
+                    <div class="grid-item" data-korean="육">6</div>
+                    <div class="grid-item" data-korean="칠">7</div>
+                    <div class="grid-item" data-korean="팔">8</div>
+                    <div class="grid-item" data-korean="구">9</div>
+                </div>
+            </div>
+
+            <!-- PAGE 17 · FITB 1 -->
+            <div class="page fitb-page" data-parts-total="3" data-parts-correct="0" data-answered="false">
+                <p class="exercise-label">Exercice 1 / 3</p>
+                <h3>Écoutez et complétez les blancs</h3>
+                <button class="action-button tts-button" data-korean="일 이 삼"><span class="icon">🔊</span>Écouter la séquence</button>
+                <div class="fitb-questions-container">
+                    <div class="fitb-question" data-correct-answer="일">
+                        <p class="fitb-sequence">__ , 이, 삼</p>
+                        <div class="fitb-options"><span class="fitb-option">사</span><span class="fitb-option">일</span><span class="fitb-option">오</span></div>
+                    </div>
+                    <div class="fitb-question" data-correct-answer="이">
+                        <p class="fitb-sequence">일, __ , 삼</p>
+                        <div class="fitb-options"><span class="fitb-option">이</span><span class="fitb-option">육</span><span class="fitb-option">구</span></div>
+                    </div>
+                    <div class="fitb-question" data-correct-answer="삼">
+                        <p class="fitb-sequence">일, 이, __</p>
+                        <div class="fitb-options"><span class="fitb-option">칠</span><span class="fitb-option">팔</span><span class="fitb-option">삼</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 18 · FITB 2 -->
+            <div class="page fitb-page" data-parts-total="3" data-parts-correct="0" data-answered="false">
+                <p class="exercise-label">Exercice 2 / 3</p>
+                <h3>Écoutez et complétez les blancs</h3>
+                <button class="action-button tts-button" data-korean="사 오 육"><span class="icon">🔊</span>Écouter la séquence</button>
+                <div class="fitb-questions-container">
+                    <div class="fitb-question" data-correct-answer="오">
+                        <p class="fitb-sequence">사, __, 육</p>
+                        <div class="fitb-options"><span class="fitb-option">오</span><span class="fitb-option">이</span><span class="fitb-option">구</span></div>
+                    </div>
+                    <div class="fitb-question" data-correct-answer="육">
+                        <p class="fitb-sequence">사, 오, __</p>
+                        <div class="fitb-options"><span class="fitb-option">삼</span><span class="fitb-option">육</span><span class="fitb-option">팔</span></div>
+                    </div>
+                    <div class="fitb-question" data-correct-answer="사">
+                        <p class="fitb-sequence">__, 오, 육</p>
+                        <div class="fitb-options"><span class="fitb-option">일</span><span class="fitb-option">칠</span><span class="fitb-option">사</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 19 · FITB 3 -->
+            <div class="page fitb-page" data-parts-total="3" data-parts-correct="0" data-answered="false">
+                <p class="exercise-label">Exercice 3 / 3</p>
+                <h3>Écoutez et complétez les blancs</h3>
+                <button class="action-button tts-button" data-korean="칠 팔 구"><span class="icon">🔊</span>Écouter la séquence</button>
+                <div class="fitb-questions-container">
+                    <div class="fitb-question" data-correct-answer="팔">
+                        <p class="fitb-sequence">칠, __, 구</p>
+                        <div class="fitb-options"><span class="fitb-option">육</span><span class="fitb-option">팔</span><span class="fitb-option">이</span></div>
+                    </div>
+                    <div class="fitb-question" data-correct-answer="칠">
+                        <p class="fitb-sequence">__, 팔, 구</p>
+                        <div class="fitb-options"><span class="fitb-option">칠</span><span class="fitb-option">오</span><span class="fitb-option">삼</span></div>
+                    </div>
+                    <div class="fitb-question" data-correct-answer="구">
+                        <p class="fitb-sequence">칠, 팔, __</p>
+                        <div class="fitb-options"><span class="fitb-option">사</span><span class="fitb-option">구</span><span class="fitb-option">일</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 20 · Speech Puzzle 1 -->
+            <div class="page speech-puzzle-page" data-answered="false">
+                <p class="exercise-label">Exercice 1 / 3</p>
+                <h3>Dites les nombres manquants dans l'ordre</h3>
+                <div class="speech-puzzle-container"></div>
+                <p class="speech-feedback" aria-live="polite"></p>
+                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <button class="hint-button">💡 Indice</button>
+            </div>
+
+            <!-- PAGE 21 · Speech Puzzle 2 -->
+            <div class="page speech-puzzle-page" data-answered="false">
+                <p class="exercise-label">Exercice 2 / 3</p>
+                <h3>Dites les nombres manquants dans l'ordre</h3>
+                <div class="speech-puzzle-container"></div>
+                <p class="speech-feedback" aria-live="polite"></p>
+                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <button class="hint-button">💡 Indice</button>
+            </div>
+
+            <!-- PAGE 22 · Speech Puzzle 3 -->
+            <div class="page speech-puzzle-page" data-answered="false">
+                <p class="exercise-label">Exercice 3 / 3</p>
+                <h3>Dites les nombres manquants dans l'ordre</h3>
+                <div class="speech-puzzle-container"></div>
+                <p class="speech-feedback" aria-live="polite"></p>
+                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <button class="hint-button">💡 Indice</button>
+            </div>
+
+            <!-- PAGE 23 · Listen & Speak 1–9 -->
+            <div class="page practice-page" data-korean="일 이 삼 사 오 육 칠 팔 구">
+                <h3>Écoutez et répétez</h3>
+                <p class="practice-pronunciation" style="font-size:1.3em;">1, 2, 3, 4, 5, 6, 7, 8, 9</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter la séquence</button>
+                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <p class="speech-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE 24 · Listen & Speak 9–1 -->
+            <div class="page practice-page" data-korean="구 팔 칠 육 오 사 삼 이 일">
+                <h3>Défi : de 9 à 1 !</h3>
+                <p class="practice-pronunciation" style="font-size:1.3em;">9, 8, 7, 6, 5, 4, 3, 2, 1</p>
+                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter la séquence inverse</button>
+                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <p class="speech-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE 25 · Bravo -->
+            <div class="page">
+                <p class="emoji">🎉</p>
+                <h2>Bravo !</h2>
+                <p>La clé est la <span class="highlight">répétition</span>.</p>
+                <p>N'hésitez pas à refaire les exercices jusqu'à ce que les sons deviennent naturels !</p>
+            </div>
+
+            <!-- PAGE 26 · Final cover — NO nav -->
+            <div class="page page-cover">
+                <p class="emoji" style="font-size:2.5em;">✅</p>
+                <h1 style="font-size:1.6em;">Leçon 2 terminée !</h1>
+                <p style="opacity:.9;">Vous êtes prêt(e) pour la suite.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <nav class="navigation" id="navigation">
+        <button class="nav-btn" id="prevBtn">Précédent</button>
+        <span class="page-indicator" id="pageIndicator"></span>
+        <button class="nav-btn" id="nextBtn">Suivant</button>
+    </nav>
+
+</div>
+
+<script>
+// ================================================================
+// AUDIO FILE LIST — remplacez les chaînes vides par des URLs.
+// ================================================================
+const AUDIO = {
+    lesson_start: '',
+    page_turn:    '',
+    correct:      '',
+    incorrect:    '',
+    lesson_end:   '',
+};
+// ================================================================
+
+// ── TTS audio map (real recordings) ─────────────────────────────
+const audioMap = {
+    '일': 'https://static.wixstatic.com/mp3/699687_b01a9ec15d4d49058b002e678ee8e217.mp3',
+    '이': 'https://static.wixstatic.com/mp3/699687_5c921d1430b3408696e7b6ef09fe2ffc.mp3',
+    '삼': 'https://static.wixstatic.com/mp3/699687_52600fcc5618407899fca88f6f2f98d7.mp3',
+    '사': 'https://static.wixstatic.com/mp3/699687_544bb9c2a4624346af7c943b4c6ddadb.mp3',
+    '오': 'https://static.wixstatic.com/mp3/699687_11b5f3f02652439ea0ea15e4fe46f161.mp3',
+    '육': 'https://static.wixstatic.com/mp3/699687_3cc547c384cc40b38cc2c5ed93726066.mp3',
+    '칠': 'https://static.wixstatic.com/mp3/699687_d59a95d186db40ac8a73e3b9b867ec1e.mp3',
+    '팔': 'https://static.wixstatic.com/mp3/699687_7c391bb82f1d4652b8e78257d3d829c3.mp3',
+    '구': 'https://static.wixstatic.com/mp3/699687_9436c4cb30794c2784938e8c0ba50be0.mp3',
+};
+
+// ── Feedback messages (Rule 8) ───────────────────────────────────
+const MSG = {
+    success: 'Très bien ! Passez à la suite.',
+    fail:    'On y est presque ! Essayons encore une fois.',
+};
+
+// ── Audio engine ─────────────────────────────────────────────────
+let audioCtx = null;
+
+function initAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function playSynth(type) {
+    if (!audioCtx) return;
+    const now = audioCtx.currentTime;
+    const configs = {
+        lesson_start: { notes: [[523,.00],[659,.12],[784,.24],[1047,.38]], shape: 'sine',   vol: .07 },
+        page_turn:    { notes: [[600,.00]],                               shape: 'sine',   vol: .06 },
+        correct:      { notes: [[784,.00],[988,.12]],                     shape: 'sine',   vol: .08 },
+        incorrect:    { notes: [[220,.00],[196,.10]],                     shape: 'square', vol: .05 },
+        lesson_end:   { notes: [[523,.00],[659,.10],[784,.20],[1047,.32],[1319,.46]], shape:'sine', vol:.07 },
+    };
+    const cfg = configs[type] || configs.page_turn;
+    cfg.notes.forEach(([freq, delay]) => {
+        const osc = audioCtx.createOscillator();
+        const g   = audioCtx.createGain();
+        osc.type = cfg.shape;
+        osc.frequency.value = freq;
+        g.gain.setValueAtTime(0, now + delay);
+        g.gain.linearRampToValueAtTime(cfg.vol, now + delay + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.18);
+        osc.connect(g);
+        g.connect(audioCtx.destination);
+        osc.start(now + delay);
+        osc.stop(now + delay + 0.2);
+    });
+}
+
+function playSound(type) {
+    initAudio();
+    const url = AUDIO[type];
+    if (url) {
+        const a = new Audio(url);
+        a.play().catch(() => playSynth(type));
+    } else {
+        playSynth(type);
+    }
+}
+
+// ── TTS playback ─────────────────────────────────────────────────
+let currentTTSAudio = null;
+let ttsQueue = [];
+
+function playAudioSequence(text) {
+    if (currentTTSAudio) { currentTTSAudio.pause(); currentTTSAudio = null; }
+    ttsQueue = text.split(' ').map(w => audioMap[w]).filter(Boolean);
+    playNextTTS();
+}
+
+function playNextTTS() {
+    if (!ttsQueue.length) { currentTTSAudio = null; return; }
+    currentTTSAudio = new Audio(ttsQueue.shift());
+    currentTTSAudio.play().catch(e => console.error(e));
+    currentTTSAudio.onended = playNextTTS;
+}
+
+// ── Speech Recognition ───────────────────────────────────────────
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition;
+if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.lang = 'ko-KR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+}
+
+function setFeedback(el, text, type) {
+    el.textContent = text;
+    el.className = `speech-feedback show ${type}`;
+}
+
+function startListening(recBtn, feedbackEl, koreanText) {
+    if (!recognition || recBtn.classList.contains('listening')) return;
+    const orig = recBtn.innerHTML;
+    recBtn.innerHTML = `<span class="icon">🎧</span>En écoute...`;
+    recBtn.classList.add('listening');
+    feedbackEl.className = 'speech-feedback';
+
+    recognition.start();
+
+    recognition.onresult = (e) => {
+        const spoken  = e.results[0][0].transcript.replace(/\s+/g, '');
+        const target  = koreanText.replace(/\s+/g, '');
+        const numMap  = { '일':'1','이':'2','삼':'3','사':'4','오':'5','육':'6','칠':'7','팔':'8','구':'9' };
+        const numTgt  = koreanText.split(' ').map(k => numMap[k] || k).join('');
+        if (spoken === target || spoken === numTgt) {
+            setFeedback(feedbackEl, '✅ ' + MSG.success, 'success');
+            playSound('correct');
+        } else {
+            setFeedback(feedbackEl, '❌ ' + MSG.fail + ` (Entendu : "${e.results[0][0].transcript}")`, 'error');
+            playSound('incorrect');
+        }
+    };
+    recognition.onerror = () => {
+        setFeedback(feedbackEl, 'Erreur ou son non détecté.', 'error');
+    };
+    recognition.onend = () => {
+        recBtn.innerHTML = orig;
+        recBtn.classList.remove('listening');
+    };
+}
+
+// ── FITB logic ───────────────────────────────────────────────────
+function checkFitb(option) {
+    const question = option.closest('.fitb-question');
+    const page     = option.closest('.fitb-page');
+    if (question.classList.contains('answered')) return;
+    question.classList.add('answered');
+
+    const isCorrect = option.textContent === question.dataset.correctAnswer;
+    if (isCorrect) {
+        option.classList.add('correct');
+        playSound('correct');
+        const correct = parseInt(page.dataset.partsCorrect) + 1;
+        page.dataset.partsCorrect = correct;
+        if (correct === parseInt(page.dataset.partsTotal)) {
+            page.dataset.answered = 'true';
+            nextBtn.disabled = false;
+        }
+    } else {
+        option.classList.add('incorrect');
+        playSound('incorrect');
+        question.querySelectorAll('.fitb-option').forEach(o => {
+            if (o.textContent === question.dataset.correctAnswer) o.classList.add('correct');
+        });
+        // Count as answered (wrong answer revealed)
+        const correct = parseInt(page.dataset.partsCorrect);
+        const newCorrect = correct; // don't increment
+        const total = parseInt(page.dataset.partsTotal);
+        // Count answered questions regardless of correctness
+        const answeredCount = page.querySelectorAll('.fitb-question.answered').length;
+        if (answeredCount === total) {
+            page.dataset.answered = 'true';
+            nextBtn.disabled = false;
+        }
+    }
+}
+
+// ── Speech puzzle setup ──────────────────────────────────────────
+const koreanMap = {1:'일',2:'이',3:'삼',4:'사',5:'오',6:'육',7:'칠',8:'팔',9:'구'};
+
+function setupSpeechPuzzle(page) {
+    const container = page.querySelector('.speech-puzzle-container');
+    const missing = [];
+    while (missing.length < 2) {
+        const r = Math.floor(Math.random() * 9);
+        if (!missing.includes(r)) missing.push(r);
+    }
+    missing.sort((a, b) => a - b);
+    let answer = '';
+    container.innerHTML = '';
+    for (let i = 0; i < 9; i++) {
+        if (missing.includes(i)) {
+            const b = document.createElement('span');
+            b.className = 'speech-puzzle-blank';
+            b.textContent = '?';
+            container.appendChild(b);
+            answer += koreanMap[i + 1] + ' ';
+        } else {
+            const s = document.createElement('span');
+            s.className = 'speech-puzzle-item';
+            s.innerHTML = `${i+1}<br><span style="font-size:.7em;color:#666;font-weight:normal;">${koreanMap[i+1]}</span>`;
+            container.appendChild(s);
+        }
+    }
+    page.dataset.answer = answer.trim();
+}
+
+// ── App state ────────────────────────────────────────────────────
+const TOTAL     = 26;
+const IDX_FIRST = 0;
+const IDX_LAST  = TOTAL - 1;
+
+let currentPage = 0;
+
+const slider    = document.getElementById('pagesSlider');
+const navEl     = document.getElementById('navigation');
+const prevBtn   = document.getElementById('prevBtn');
+const nextBtn   = document.getElementById('nextBtn');
+const indicator = document.getElementById('pageIndicator');
+const allPages  = Array.from(document.querySelectorAll('.page'));
+
+// ── Navigation ───────────────────────────────────────────────────
+function goTo(idx, sound = 'page_turn') {
+    if (idx < 0 || idx >= TOTAL) return;
+    currentPage = idx;
+    playSound(sound);
+    render();
+}
+
+function render() {
+    slider.style.transform = `translateX(-${currentPage * 100}%)`;
+
+    const isCover = currentPage === IDX_FIRST || currentPage === IDX_LAST;
+    navEl.hidden = isCover;
+
+    if (!isCover) {
+        indicator.textContent = `${currentPage + 1} / ${TOTAL}`;
+        prevBtn.disabled = (currentPage <= 1);
+
+        const page     = allPages[currentPage];
+        const isQuiz   = page.matches('.fitb-page, .speech-puzzle-page');
+        const answered = page.dataset.answered === 'true';
+        nextBtn.disabled = isQuiz && !answered;
+    }
+
+    if (currentPage === IDX_LAST) triggerLessonComplete();
+}
+
+prevBtn.onclick = () => goTo(currentPage - 1);
+nextBtn.onclick = () => goTo(currentPage + 1);
+
+// ── Lesson complete (Rule 9) ─────────────────────────────────────
+function triggerLessonComplete() {
+    playSound('lesson_end');
+    window.parent.postMessage({ type: 'lesson_complete' }, '*');
+}
+
+// ── Wire up page interactions ────────────────────────────────────
+allPages.forEach(page => {
+    // Practice pages (TTS + speech rec)
+    if (page.classList.contains('practice-page')) {
+        const korean = page.dataset.korean;
+        const ttsBtn = page.querySelector('.tts-button');
+        if (ttsBtn) ttsBtn.addEventListener('click', () => playAudioSequence(korean));
+
+        const recBtn  = page.querySelector('.rec-button');
+        const feedEl  = page.querySelector('.speech-feedback');
+        if (recBtn && feedEl) recBtn.addEventListener('click', () => startListening(recBtn, feedEl, korean));
+    }
+
+    // Grid
+    page.querySelectorAll('.grid-item').forEach(item => {
+        item.addEventListener('click', () => playAudioSequence(item.dataset.korean));
+    });
+
+    // FITB
+    if (page.classList.contains('fitb-page')) {
+        const ttsBtn = page.querySelector('.tts-button');
+        if (ttsBtn) ttsBtn.addEventListener('click', () => playAudioSequence(ttsBtn.dataset.korean));
+        page.querySelectorAll('.fitb-option').forEach(opt => {
+            opt.addEventListener('click', () => checkFitb(opt));
+        });
+    }
+
+    // Speech puzzle
+    if (page.classList.contains('speech-puzzle-page')) {
+        setupSpeechPuzzle(page);
+        const feedEl  = page.querySelector('.speech-feedback');
+        const recBtn  = page.querySelector('.rec-button');
+        const hintBtn = page.querySelector('.hint-button');
+        if (recBtn)  recBtn.addEventListener('click', () => startListening(recBtn, feedEl, page.dataset.answer));
+        if (hintBtn) hintBtn.addEventListener('click', () => playAudioSequence(Object.values(koreanMap).join(' ')));
+    }
+});
+
+// Start button on cover
+document.getElementById('startBtn').addEventListener('click', () => goTo(1, 'lesson_start'));
+
+// ── Boot ─────────────────────────────────────────────────────────
+document.body.addEventListener('click', initAudio, { once: true });
+render();
+</script>
+</body>
+</html>
