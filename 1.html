@@ -74,11 +74,9 @@ html, body {
 
 .cover-badge {
   background: #ffe4de; color: #c0392b;
-  border-radius: 99px;
-  padding: 0.5vh 3vw;
+  border-radius: 99px; padding: 0.5vh 3vw;
   font-size: 2.2vh; font-weight: 600;
-  letter-spacing: 0.05em; text-transform: uppercase;
-  text-align: center;
+  letter-spacing: 0.05em; text-transform: uppercase; text-align: center;
 }
 .cover-title {
   font-size: 5.5vh; font-weight: 800; color: #7c1f0e;
@@ -107,8 +105,8 @@ html, body {
   gap: 0.8vh; flex-shrink: 0;
 }
 .card-body { font-size: calc(3.6vh * var(--fit,1)); font-weight: 800; color: #1e293b; line-height: 1.2; }
-.card-sub2 { font-size: calc(2.2vh * var(--fit,1)); font-weight: 700; color: #1e293b; line-height: 1.3; }
-.card-sub1 { font-size: calc(1.8vh * var(--fit,1)); font-weight: 500; color: #64748b; line-height: 1.5; }
+.card-sub2 { font-size: calc(2.4vh * var(--fit,1)); font-weight: 700; color: #1e293b; line-height: 1.3; }
+.card-sub1 { font-size: calc(2.4vh * var(--fit,1)); font-weight: 500; color: #64748b; line-height: 1.5; }
 
 /* ══════════════════════════════
    TEXT BLOCK
@@ -117,10 +115,8 @@ html, body {
   background: #fff; border: 2px solid #e2e8f0; border-radius: 1.5vh;
   padding: 2vh 6vw; width: 100%;
   font-size: calc(2.4vh * var(--fit,1));
-  line-height: 1.7; color: #334155;
-  text-align: justify;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-  flex-shrink: 0;
+  line-height: 1.7; color: #334155; text-align: justify;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07); flex-shrink: 0;
 }
 
 /* ══════════════════════════════
@@ -129,15 +125,15 @@ html, body {
 .sys-tag {
   background: #ffe4de; color: #f1552e;
   border-radius: 99px; padding: 0.5vh 3vw;
-  font-size: calc(2vh * var(--fit,1)); font-weight: 700;
+  font-size: calc(2.2vh * var(--fit,1)); font-weight: 700;
   text-align: center; flex-shrink: 0;
 }
 .info-box {
-  width: 100%; padding: 1.5vh 3vw;
+  width: 100%; padding: 1.8vh 4vw;
   background: #fff; border: 2px solid #e2e8f0; border-radius: 1.5vh;
-  font-size: calc(2.1vh * var(--fit,1)); line-height: 1.6; color: #334155;
+  font-size: calc(2.4vh * var(--fit,1)); line-height: 1.6; color: #334155;
   box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-  flex-shrink: 0; text-align: left;
+  flex-shrink: 0; text-align: center;
 }
 .big-emoji { font-size: calc(6.5vh * var(--fit,1)); line-height: 1; }
 .page-h2 {
@@ -146,11 +142,11 @@ html, body {
 }
 
 /* ══════════════════════════════
-   QUIZ INTRO / OUTRO INNER
+   QUIZ INTRO / OUTRO
 ══════════════════════════════ */
-.big-check { font-size: calc(5.5vh * var(--fit,1)); }
+.big-check  { font-size: calc(5.5vh * var(--fit,1)); }
 .outro-title { font-size: calc(3.5vh * var(--fit,1)); font-weight: 800; color: #7c1f0e; text-align: center; }
-.outro-sub   { font-size: calc(2.2vh * var(--fit,1)); color: #94a3b8; text-align: center; }
+.outro-sub   { font-size: calc(2.4vh * var(--fit,1)); color: #94a3b8; text-align: center; }
 
 /* ══════════════════════════════
    MCQ
@@ -168,7 +164,7 @@ html, body {
 .mcq-opt {
   background: #fff; border: 2px solid #e2e8f0; border-radius: 1vh;
   padding: calc(1.2vh * var(--fit,1)) 4vw;
-  font-family: inherit; font-size: calc(2.2vh * var(--fit,1));
+  font-family: inherit; font-size: calc(2.4vh * var(--fit,1));
   font-weight: 600; color: #475569;
   cursor: pointer; transition: all 0.15s; user-select: none;
   text-align: left; width: 100%;
@@ -181,7 +177,7 @@ html, body {
 .mcq-opt.disabled { cursor: default; pointer-events: none; opacity: 0.55; }
 
 .feedback {
-  font-size: calc(2.2vh * var(--fit,1)); font-weight: 700;
+  font-size: calc(2.4vh * var(--fit,1)); font-weight: 700;
   text-align: center; min-height: 1.4em;
   width: 100%; flex-shrink: 0;
 }
@@ -235,8 +231,8 @@ html, body {
   <p class="big-emoji">⚠️</p>
   <div class="card-text">
     <div class="card-body">Attention !</div>
-    <div class="card-sub1">Ce sont des règles <strong>générales</strong>. L'usage réel peut varier selon les régions, les générations et même les personnes. Ne soyez pas surpris de rencontrer des exceptions !</div>
   </div>
+  <p class="text-block">Ce sont des règles générales. L'usage réel peut varier selon les régions, les générations et même les personnes. Ne soyez pas surpris de rencontrer des exceptions !</p>
 </div>
 
 <!-- PAGE 6 -->
@@ -261,7 +257,7 @@ html, body {
 
 <!-- PAGE 8 : Q1 -->
 <div class="page" id="page-8">
-  <p class="consigne">Pour compter 3 livres 📚 sur une table (une <strong>quantité</strong>), quel système est le plus approprié ?</p>
+  <p class="consigne">Pour compter 3 livres 📚 sur une table (une quantité), quel système est le plus approprié ?</p>
   <div class="mcq-opts" id="p8-opts">
     <button class="mcq-opt" onclick="checkQ(8,this,'A')">A) Le système chinois (ordinal)</button>
     <button class="mcq-opt" onclick="checkQ(8,this,'B')">B) Le système coréen (cardinal)</button>
@@ -272,7 +268,7 @@ html, body {
 
 <!-- PAGE 9 : Q2 -->
 <div class="page" id="page-9">
-  <p class="consigne">Pour dire la date du 10 mai (un <strong>ordre</strong> dans le calendrier), quel système utilise-t-on ?</p>
+  <p class="consigne">Pour dire la date du 10 mai (un ordre dans le calendrier), quel système utilise-t-on ?</p>
   <div class="mcq-opts" id="p9-opts">
     <button class="mcq-opt" onclick="checkQ(9,this,'A')">A) Le système chinois (ordinal)</button>
     <button class="mcq-opt" onclick="checkQ(9,this,'B')">B) Le système coréen (cardinal)</button>
@@ -283,9 +279,9 @@ html, body {
 
 <!-- PAGE 10 : Q3 -->
 <div class="page" id="page-10">
-  <p class="consigne">Le nombre <strong>300</strong> doit être lu avec quel système ?</p>
+  <p class="consigne">Le nombre 300 doit être lu avec quel système ?</p>
   <div class="mcq-opts" id="p10-opts">
-    <button class="mcq-opt" onclick="checkQ(10,this,'A')">A) Le système chinois (car &gt; 99)</button>
+    <button class="mcq-opt" onclick="checkQ(10,this,'A')">A) Le système chinois (car supérieur à 99)</button>
     <button class="mcq-opt" onclick="checkQ(10,this,'B')">B) Le système coréen (car c'est une quantité)</button>
     <button class="mcq-opt" onclick="checkQ(10,this,'C')">C) Ça dépend du contexte</button>
   </div>
@@ -297,7 +293,7 @@ html, body {
   <p class="consigne">Quelle est l'affirmation la plus correcte ?</p>
   <div class="mcq-opts" id="p11-opts">
     <button class="mcq-opt" onclick="checkQ(11,this,'A')">A) Il n'y a aucune règle, c'est aléatoire.</button>
-    <button class="mcq-opt" onclick="checkQ(11,this,'B')">B) Il y a des règles générales (<strong>quantité vs ordre</strong>), même si l'usage peut parfois varier.</button>
+    <button class="mcq-opt" onclick="checkQ(11,this,'B')">B) Il y a des règles générales (quantité vs ordre), même si l'usage peut parfois varier.</button>
     <button class="mcq-opt" onclick="checkQ(11,this,'C')">C) Le système chinois est pour les petits nombres, le coréen pour les grands.</button>
   </div>
   <p class="feedback" id="p11-fb"></p>
@@ -321,56 +317,33 @@ html, body {
 </div><!-- /app -->
 
 <!-- SFX -->
-<audio id="sfx-pg"    preload="auto"></audio>
-<audio id="sfx-ok"    preload="auto"></audio>
-<audio id="sfx-err"   preload="auto"></audio>
-<audio id="sfx-end"   preload="auto"></audio>
+<audio id="sfx-pg"  preload="auto"></audio>
+<audio id="sfx-ok"  preload="auto"></audio>
+<audio id="sfx-err" preload="auto"></audio>
+<audio id="sfx-end" preload="auto"></audio>
 
 <script>
 /* ══════════════════════════════════════════════════════════════
-   SFX  —  inline WAV generation (louder, 5 distinct sounds)
+   SFX  —  conjugaison-2026 레퍼런스 동일
 ══════════════════════════════════════════════════════════════ */
 (function(){
-  var sr = 44100;
-  function w(fn, d) {
-    var n = Math.round(sr * d), b = new ArrayBuffer(44 + n * 2), v = new DataView(b);
+  var sr=44100;
+  function w(fn,d){
+    var n=Math.round(sr*d),b=new ArrayBuffer(44+n*2),v=new DataView(b);
     function s(o,t){for(var i=0;i<4;i++)v.setUint8(o+i,t.charCodeAt(i));}
-    s(0,'RIFF'); v.setUint32(4,36+n*2,true); s(8,'WAVE'); s(12,'fmt ');
-    v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
-    v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
-    s(36,'data'); v.setUint32(40,n*2,true);
-    for(var i=0;i<n;i++){var t=i/sr; v.setInt16(44+i*2,Math.max(-1,Math.min(1,fn(t,d)))*32767,true);}
-    var u=new Uint8Array(b),c=''; for(var i=0;i<u.length;i++) c+=String.fromCharCode(u[i]);
+    s(0,'RIFF');v.setUint32(4,36+n*2,true);s(8,'WAVE');s(12,'fmt ');
+    v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+    v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);
+    s(36,'data');v.setUint32(40,n*2,true);
+    for(var i=0;i<n;i++){var t=i/sr;v.setInt16(44+i*2,Math.max(-1,Math.min(1,fn(t,d)))*32767,true);}
+    var u=new Uint8Array(b),c='';for(var i=0;i<u.length;i++)c+=String.fromCharCode(u[i]);
     return 'data:audio/wav;base64,'+btoa(c);
   }
-  function env(t,d,a,r){return t<a?t/a:t>d-r?Math.max(0,(d-t)/r):1;}
-
-  /* START: ascending arpeggio C5→E5→G5 (clearly different from correct) */
-  document.getElementById('sfx-start').src = w(function(t,d){
-    var f = t < d/3 ? 523 : t < 2*d/3 ? 659 : 784;
-    return Math.sin(2*Math.PI*f*t) * env(t,d,.01,.07) * .8;
-  }, 0.5);
-
-  /* PAGE TURN: short click */
-  document.getElementById('sfx-pg').src = w(function(t,d){
-    return Math.sin(2*Math.PI*700*t) * env(t,d,.005,.04) * .65;
-  }, 0.09);
-
-  /* CORRECT: two-tone chime 880→1108 Hz */
-  document.getElementById('sfx-ok').src = w(function(t,d){
-    return Math.sin(2*Math.PI*(t<.14?880:1108)*t) * env(t,d,.008,.07) * .9;
-  }, 0.32);
-
-  /* WRONG: square-wave buzz */
-  document.getElementById('sfx-err').src = w(function(t,d){
-    return (Math.sin(2*Math.PI*200*t)>0?1:-1) * env(t,d,.01,.06) * .75;
-  }, 0.28);
-
-  /* END: sustained major chord C5+E5+G5 */
-  document.getElementById('sfx-end').src = w(function(t,d){
-    var x = env(t,d,.02,.3);
-    return (Math.sin(2*Math.PI*523*t)+Math.sin(2*Math.PI*659*t)+Math.sin(2*Math.PI*784*t))/3*x*.9;
-  }, 1.2);
+  function e(t,d,a,r){return t<a?t/a:t>d-r?Math.max(0,(d-t)/r):1;}
+  document.getElementById('sfx-pg').src =w(function(t,d){return Math.sin(2*Math.PI*700*t)*e(t,d,.005,.04)*.35;},0.09);
+  document.getElementById('sfx-ok').src =w(function(t,d){return Math.sin(2*Math.PI*(t<.14?880:1108)*t)*e(t,d,.008,.07)*.5;},0.32);
+  document.getElementById('sfx-err').src=w(function(t,d){return(Math.sin(2*Math.PI*180*t)>0?1:-1)*e(t,d,.01,.06)*.4;},0.28);
+  document.getElementById('sfx-end').src=w(function(t,d){var x=e(t,d,.02,.3);return(Math.sin(2*Math.PI*523*t)+Math.sin(2*Math.PI*659*t)+Math.sin(2*Math.PI*784*t))/3*x*.55;},1.2);
 })();
 
 function sfx(id){ var a=document.getElementById(id); if(a){a.currentTime=0;a.play().catch(function(){});} }
@@ -383,7 +356,7 @@ var LOCKED       = new Set([8,9,10,11]);
 var QUIZ_ANSWERS = {8:'B', 9:'A', 10:'A', 11:'B'};
 
 /* ══════════════════════════════════════════════════════════════
-   MESSAGES  (Rule 7: 4 French feedback messages)
+   MESSAGES
 ══════════════════════════════════════════════════════════════ */
 var MSG = {
   successDone: 'Très bien ! Passez à la suite.',
@@ -399,12 +372,16 @@ var qDone    = {};
 var qTimer   = {};
 
 /* ══════════════════════════════════════════════════════════════
-   NAV
+   NAV  — 화면 흔들림 없음: 표지 숨김 → 네비바 표시 → 다음 페이지 표시
+   모두 같은 동기 블록에서 처리 (브라우저가 한 번에 렌더링)
 ══════════════════════════════════════════════════════════════ */
 function startLesson() {
+  document.getElementById('page-' + cur).classList.remove('active');
   document.getElementById('bottom-nav').style.display = 'flex';
-  sfx('sfx-start');
-  setTimeout(function(){ goTo(2); }, 80);
+  cur = 2;
+  document.getElementById('page-' + cur).classList.add('active');
+  render();
+  setTimeout(function(){ fitPage(document.getElementById('page-' + cur)); }, 30);
 }
 
 function go(dir) {
@@ -416,13 +393,14 @@ function goTo(next) {
   document.getElementById('page-' + cur).classList.remove('active');
   cur = next;
   document.getElementById('page-' + cur).classList.add('active');
-  sfx('sfx-pg');
-  render();
   if (cur === TOTAL) {
     document.getElementById('bottom-nav').style.display = 'none';
     sfx('sfx-end');
     window.parent.postMessage({type:'lesson_complete'},'*');
+  } else {
+    sfx('sfx-pg');
   }
+  render();
   setTimeout(function(){ fitPage(document.getElementById('page-' + cur)); }, 30);
 }
 
@@ -432,9 +410,9 @@ function render() {
   document.getElementById('prog-bar').style.width = pct + '%';
   document.getElementById('btn-prev').disabled = (cur <= 2);
   var nb = document.getElementById('btn-next');
-  if      (cur === TOTAL)                        nb.disabled = true;
+  if      (cur === TOTAL)                         nb.disabled = true;
   else if (LOCKED.has(cur) && !unlocked.has(cur)) nb.disabled = true;
-  else                                            nb.disabled = false;
+  else                                             nb.disabled = false;
 }
 
 function unlock(pg) {
@@ -471,8 +449,7 @@ function checkQ(pg, btn, val) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   FIT TEXT  —  scales all calc(Xvh * var(--fit,1)) elements
-   to prevent overflow without scrolling
+   FIT TEXT
 ══════════════════════════════════════════════════════════════ */
 function fitPage(pageEl) {
   if (!pageEl) return;
