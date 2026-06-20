@@ -186,7 +186,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            max-width: 15em;
+            max-width: 85%;
             padding: 0.55em 1em;
             border-radius: var(--radius-box);
             font-size: 0.88em;
@@ -209,14 +209,17 @@
         .quiz-feedback {
             width: 100%;
             margin-top: 0;
-            height: 2.8em;
+            height: 4.2em;
             line-height: 1.4;
             font-size: 0.88em;
-            font-weight: 700;
+            font-weight: 600;
             text-align: center;
             visibility: hidden;
             flex-shrink: 0;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .speech-feedback.show,
         .quiz-feedback.show { visibility: visible; }
@@ -878,18 +881,20 @@ async function startListening(recBtn, feedbackEl, page) {
 
                 recBtn.innerHTML = `<span class="icon">🎤</span>Parler`;
 
+                const scoreInfo = ` — « ${recognized} » (${score}%)`;
+
                 if (score >= SCORE_THRESHOLD) {
-                    setFeedback(feedbackEl, MSG.success_end, 'success');
+                    setFeedback(feedbackEl, MSG.success_end + scoreInfo, 'success');
                     playSound('correct');
                     page.dataset.answered = 'true';
                     nextBtn.disabled = false;
                 } else if (attempts >= MAX_ATTEMPTS) {
-                    setFeedback(feedbackEl, MSG.fail_end, 'error');
+                    setFeedback(feedbackEl, MSG.fail_end + scoreInfo, 'error');
                     playSound('incorrect');
                     page.dataset.answered = 'true';
                     nextBtn.disabled = false;
                 } else {
-                    setFeedback(feedbackEl, MSG.fail_retry, 'error');
+                    setFeedback(feedbackEl, MSG.fail_retry + scoreInfo, 'error');
                     playSound('incorrect');
                 }
             };
@@ -1008,7 +1013,7 @@ function goTo(idx, sound = 'page_turn') {
             korean = ttsBtn ? ttsBtn.dataset.korean : null;
         }
         if (korean) playAudioSequence(korean);
-    }, 500);
+    }, 200);
 }
 
 function render() {
