@@ -180,6 +180,12 @@
             color: var(--theme);
             margin: 0;
         }
+        .practice-korean {
+            font-size: 1.1em;
+            color: var(--theme);
+            opacity: 0.75;
+            margin: 0;
+        }
 
         .action-button {
             display: flex;
@@ -475,6 +481,7 @@
                 <h3>Écoutez et répétez</h3>
                 <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
                 <p class="practice-pronunciation">1 · 2 · 3</p>
+                <p class="practice-korean">일 · 이 · 삼</p>
                 <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
                 <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
@@ -485,6 +492,7 @@
                 <h3>Écoutez et répétez</h3>
                 <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
                 <p class="practice-pronunciation">4 · 5 · 6</p>
+                <p class="practice-korean">사 · 오 · 육</p>
                 <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
                 <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
@@ -495,6 +503,7 @@
                 <h3>Écoutez et répétez</h3>
                 <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
                 <p class="practice-pronunciation">7 · 8 · 9</p>
+                <p class="practice-korean">칠 · 팔 · 구</p>
                 <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
                 <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
@@ -817,9 +826,17 @@ function restoreRec() {
     micBlocked = false;
 }
 
+function normalize(text) {
+    const numMap = {'1':'일','2':'이','3':'삼','4':'사','5':'오','6':'육','7':'칠','8':'팔','9':'구'};
+    return text
+        .replace(/[\s.,?!。·]/g, '')
+        .replace(/[1-9]/g, d => numMap[d])
+        .toLowerCase();
+}
+
 function similarity(a, b) {
-    const s1 = a.replace(/[\s.,?!。]/g, '').toLowerCase();
-    const s2 = b.replace(/[\s.,?!。]/g, '').toLowerCase();
+    const s1 = normalize(a);
+    const s2 = normalize(b);
     if (s1 === s2) return 100;
     if (!s1.length || !s2.length) return 0;
     const m = [];
