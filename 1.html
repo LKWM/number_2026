@@ -212,9 +212,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.2vh 3vw;
-            border-top: 0.06em solid var(--border);
-            flex-shrink: 0;
+            padding: 1.9vh 6vw;
+            border-top: 1px solid var(--border);
         }
         .navigation[hidden] { display: none; }
 
@@ -222,14 +221,12 @@
             background: var(--theme);
             color: var(--white);
             border: none;
-            /* Decouple nav from large root font so it stays compact.
-               1.8vh gives consistent sizing regardless of content font scale. */
-            padding: 1.2vh 3vw;
-            font-size: 1.8vh;
+            padding: 1.5vh 6vw;
+            font-size: 2vh;
             font-family: inherit;
-            border-radius: 2em;
+            border-radius: 2.5vh;
             cursor: pointer;
-            transition: opacity .2s;
+            transition: opacity 0.2s ease;
             white-space: nowrap;
         }
         .nav-btn:hover:not(:disabled) { opacity: .85; }
@@ -238,9 +235,9 @@
             cursor: not-allowed;
         }
         .page-indicator {
-            font-size: 1.8vh;
+            font-size: 2vh;
             color: #888;
-            font-weight: 700;
+            font-weight: bold;
             white-space: nowrap;
         }
     </style>
