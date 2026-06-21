@@ -778,13 +778,13 @@ let currentTTS = null;
 let ttsQueue   = [];
 
 function playAudioSequence(text) {
+    if (activeRecorder && activeRecorder.state === 'recording') return;
     if (currentTTS) { currentTTS.pause(); currentTTS = null; }
+    ttsQueue = audioMap[text]
+        ? [audioMap[text]]
+        : text.split(' ').map(w => audioMap[w]).filter(Boolean);
+    if (!ttsQueue.length) return;
     blockRec();
-    if (audioMap[text]) {
-        ttsQueue = [audioMap[text]];
-    } else {
-        ttsQueue = text.split(' ').map(w => audioMap[w]).filter(Boolean);
-    }
     playNextTTS();
 }
 
@@ -820,10 +820,18 @@ function blockRec() {
         activeRecorder.stop();
         if (recordingTimeout) { clearTimeout(recordingTimeout); recordingTimeout = null; }
     }
+    document.querySelectorAll('.rec-button:not(.listening)').forEach(btn => {
+        if (!btn.disabled) { btn.disabled = true; btn.dataset.audioBlocked = '1'; }
+    });
 }
 
 function restoreRec() {
     micBlocked = false;
+    document.querySelectorAll('.rec-button[data-audio-blocked]').forEach(btn => {
+        delete btn.dataset.audioBlocked;
+        const page = btn.closest('[data-answered]');
+        if (!page || page.dataset.answered !== 'true') btn.disabled = false;
+    });
 }
 
 function normalize(text) {
