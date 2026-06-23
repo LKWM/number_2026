@@ -187,6 +187,18 @@
             margin: 0;
         }
 
+        .answer-hint {
+            font-size: 1em;
+            color: var(--theme);
+            font-weight: 600;
+            text-align: center;
+            margin: 0;
+            visibility: hidden;
+            height: 1.6em;
+            flex-shrink: 0;
+        }
+        .answer-hint.show { visibility: visible; }
+
         .action-button {
             display: flex;
             align-items: center;
@@ -557,7 +569,6 @@
                         </div>
                     </div>
                 </div>
-                <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
             <!-- PAGE 18 · FITB 2 -->
@@ -592,7 +603,6 @@
                         </div>
                     </div>
                 </div>
-                <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
             <!-- PAGE 19 · FITB 3 -->
@@ -627,7 +637,6 @@
                         </div>
                     </div>
                 </div>
-                <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
             <!-- PAGE 20 · Speech Puzzle 1 (80%, max 2) -->
@@ -663,21 +672,23 @@
                 <button class="hint-button">💡 Indice</button>
             </div>
 
-            <!-- PAGE 23 · Listen & Repeat 1–9 (80%, max 2) -->
-            <div class="page listen-repeat-page" data-korean="일 이 삼 사 오 육 칠 팔 구" data-attempts="0" data-answered="false">
+            <!-- PAGE 23 · Listen & Repeat 1–9 (80%, max 3) -->
+            <div class="page listen-repeat-page" data-korean="일 이 삼 사 오 육 칠 팔 구" data-attempts="0" data-answered="false" data-max-attempts="3" data-max-record="12000">
                 <h3>Écoutez et répétez</h3>
                 <p class="quiz-instruction">Écoutez la séquence complète, puis prononcez-la à voix haute.</p>
                 <p class="practice-pronunciation" style="font-size:1.1em;">1 · 2 · 3 · 4 · 5 · 6 · 7 · 8 · 9</p>
+                <p class="answer-hint" aria-live="polite">일 · 이 · 삼 · 사 · 오 · 육 · 칠 · 팔 · 구</p>
                 <button class="action-button tts-button"><span class="icon">🔊</span>Écouter la séquence</button>
                 <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
             </div>
 
-            <!-- PAGE 24 · Listen & Repeat 9–1 (80%, max 2) -->
-            <div class="page listen-repeat-page" data-korean="구 팔 칠 육 오 사 삼 이 일" data-attempts="0" data-answered="false">
+            <!-- PAGE 24 · Listen & Repeat 9–1 (80%, max 3) -->
+            <div class="page listen-repeat-page" data-korean="구 팔 칠 육 오 사 삼 이 일" data-attempts="0" data-answered="false" data-max-attempts="3" data-max-record="12000">
                 <h3>Défi : de 9 à 1 !</h3>
                 <p class="quiz-instruction">Écoutez la séquence inverse, puis prononcez-la à voix haute.</p>
                 <p class="practice-pronunciation" style="font-size:1.1em;">9 · 8 · 7 · 6 · 5 · 4 · 3 · 2 · 1</p>
+                <p class="answer-hint" aria-live="polite">구 · 팔 · 칠 · 육 · 오 · 사 · 삼 · 이 · 일</p>
                 <button class="action-button tts-button"><span class="icon">🔊</span>Écouter la séquence inverse</button>
                 <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
@@ -901,6 +912,7 @@ async function startListening(recBtn, feedbackEl, page) {
                     score      = similarity(recognized, koreanText);
                 } catch { score = 0; }
 
+                const maxAttempts = parseInt(page.dataset.maxAttempts || String(MAX_ATTEMPTS));
                 const attempts = parseInt(page.dataset.attempts || '0') + 1;
                 page.dataset.attempts = attempts;
 
@@ -913,14 +925,21 @@ async function startListening(recBtn, feedbackEl, page) {
                     playSound('correct');
                     page.dataset.answered = 'true';
                     nextBtn.disabled = false;
-                } else if (attempts >= MAX_ATTEMPTS) {
+                    recBtn.disabled = true;
+                    if (page.classList.contains('speech-puzzle-page')) revealSpeechPuzzle(page);
+                } else if (attempts >= maxAttempts) {
                     setFeedback(feedbackEl, MSG.fail_end + scoreInfo, 'error');
                     playSound('incorrect');
                     page.dataset.answered = 'true';
                     nextBtn.disabled = false;
+                    recBtn.disabled = true;
+                    if (page.classList.contains('speech-puzzle-page')) revealSpeechPuzzle(page);
                 } else {
                     setFeedback(feedbackEl, MSG.fail_retry + scoreInfo, 'error');
                     playSound('incorrect');
+                    const hintEl = page.querySelector('.answer-hint');
+                    if (hintEl) hintEl.classList.add('show');
+                    setTimeout(() => playAudioSequence(koreanText), 600);
                 }
             };
         };
@@ -930,10 +949,11 @@ async function startListening(recBtn, feedbackEl, page) {
         recBtn.classList.add('listening');
         clearFeedback(feedbackEl);
 
+        const maxRecord = parseInt(page.dataset.maxRecord || '6000');
         recordingTimeout = setTimeout(() => {
             if (rec.state === 'recording') rec.stop();
             recordingTimeout = null;
-        }, 6000);
+        }, maxRecord);
 
     } catch {
         setFeedback(feedbackEl, 'Erreur micro.', 'error');
@@ -942,9 +962,8 @@ async function startListening(recBtn, feedbackEl, page) {
 
 // ── FITB: retry until correct (Rule 6) ──────────────────────────
 function checkFitbAnswer(option) {
-    const question   = option.closest('.fitb-question');
-    const page       = option.closest('.fitb-page');
-    const feedbackEl = page.querySelector('.quiz-feedback');
+    const question = option.closest('.fitb-question');
+    const page     = option.closest('.fitb-page');
 
     if (question.classList.contains('answered')) return;
 
@@ -961,16 +980,11 @@ function checkFitbAnswer(option) {
         if (correct === parseInt(page.dataset.partsTotal)) {
             page.dataset.answered = 'true';
             nextBtn.disabled = false;
-            setFeedback(feedbackEl, MSG.success_end, 'success');
         }
     } else {
         option.classList.add('incorrect');
-        setFeedback(feedbackEl, MSG.fail_retry, 'error');
         playSound('incorrect');
-        setTimeout(() => {
-            option.classList.remove('incorrect');
-            clearFeedback(feedbackEl);
-        }, 1200);
+        setTimeout(() => option.classList.remove('incorrect'), 1200);
     }
 }
 
@@ -985,6 +999,7 @@ function setupSpeechPuzzle(page) {
         if (!missing.includes(r)) missing.push(r);
     }
     missing.sort((a, b) => a - b);
+    page.dataset.missingIndices = missing.join(',');
 
     let answer = '';
     container.innerHTML = '';
@@ -999,10 +1014,27 @@ function setupSpeechPuzzle(page) {
             const s = document.createElement('span');
             s.className = 'speech-puzzle-item';
             s.innerHTML = `${i + 1}<br><span style="font-size:.7em;color:#666;font-weight:normal;">${koreanOrder[i]}</span>`;
+            s.style.cursor = 'pointer';
+            s.addEventListener('click', () => playAudioSequence(koreanOrder[i]));
             container.appendChild(s);
         }
     }
     page.dataset.answer = answer.trim();
+}
+
+function revealSpeechPuzzle(page) {
+    const missingIndices = page.dataset.missingIndices.split(',').map(Number);
+    const blanks = page.querySelectorAll('.speech-puzzle-blank');
+    blanks.forEach((blank, idx) => {
+        const i = missingIndices[idx];
+        const korean = koreanOrder[i];
+        blank.className = 'speech-puzzle-item';
+        blank.innerHTML = `${i + 1}<br><span style="font-size:.7em;color:#666;font-weight:normal;">${korean}</span>`;
+        blank.style.cursor = 'pointer';
+        blank.addEventListener('click', () => playAudioSequence(korean));
+    });
+    const recBtn = page.querySelector('.rec-button');
+    if (recBtn) recBtn.disabled = true;
 }
 
 // ── App state ────────────────────────────────────────────────────
