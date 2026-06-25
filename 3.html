@@ -7,15 +7,15 @@
     // 한국어 발음 오디오 — 녹음 완료 후 링크 추가 시 자동 연동
     // ================================================================
     const audioMap = {
-        '일': '',           // 1
-        '이': '',           // 2
-        '삼': '',           // 3
-        '사': '',           // 4
-        '오': '',           // 5
-        '육': '',           // 6
-        '칠': '',           // 7
-        '팔': '',           // 8
-        '구': '',           // 9
+        '일': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976070/1_%E1%84%8B%E1%85%B5%E1%86%AF_jkudjv.mp3',           // 1
+        '이': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976191/2_%E1%84%8B%E1%85%B5_phxtrr.mp3',           // 2
+        '삼': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976183/3_%E1%84%89%E1%85%A1%E1%86%B7_fow10k.mp3',           // 3
+        '사': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976188/4_%E1%84%89%E1%85%A1_i8bfgt.mp3',           // 4
+        '오': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976186/5_%E1%84%8B%E1%85%A9_xl84bu.mp3',           // 5
+        '육': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976180/6_%E1%84%8B%E1%85%B2%E1%86%A8_hkjni2.mp3',           // 6
+        '칠': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976074/7_%E1%84%8E%E1%85%B5%E1%86%AF_er2d6z.mp3',           // 7
+        '팔': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781975886/8_%E1%84%91%E1%85%A1%E1%86%AF_yysblf.mp3',           // 8
+        '구': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781975887/9_%E1%84%80%E1%85%AE_ao2yx0.mp3',           // 9
     };
     // ================================================================
     // Clova Speech API
@@ -350,7 +350,7 @@
                 <h3>Écrivez "sept" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" disabled><span class="icon">🔊</span>Écouter la prononciation</button>
+                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -387,7 +387,7 @@
                 <h3>Écrivez "deux" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" disabled><span class="icon">🔊</span>Écouter la prononciation</button>
+                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -424,7 +424,7 @@
                 <h3>Écrivez "quatre" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" disabled><span class="icon">🔊</span>Écouter la prononciation</button>
+                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -461,7 +461,7 @@
                 <h3>Écrivez "huit" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" disabled><span class="icon">🔊</span>Écouter la prononciation</button>
+                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -498,7 +498,7 @@
                 <h3>Écrivez "neuf" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" disabled><span class="icon">🔊</span>Écouter la prononciation</button>
+                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -788,7 +788,7 @@ function checkMCQAnswer(option, page) {
     }
 }
 
-// ── Writing logic (Threshold 100, 1회 틀리면 indice 버튼 활성화, 최대 3회) ─
+// ── Writing logic (Threshold 100, 1회 틀리면 Indice 버튼 노출, 최대 3회) ─
 function checkWritingAnswer(page) {
     if (page.dataset.answered === 'true') return;
     const input    = page.querySelector('.quiz-input');
@@ -812,20 +812,23 @@ function checkWritingAnswer(page) {
         page.dataset.answered = 'true';
         nextBtn.disabled = false;
     } else {
-        input.classList.add('incorrect');
         playSound('incorrect');
 
         if (attempts === 1) {
-            hintBtn.disabled = false;
+            hintBtn.hidden = false;
         }
 
         if (attempts >= maxAttempts) {
-            setFeedback(feedback, MSG.fail_reveal + ' : ' + answer, 'error');
+            input.value = answer;
+            input.classList.add('incorrect');
             input.disabled = true;
             button.disabled = true;
+            hintBtn.disabled = true;
+            setFeedback(feedback, MSG.fail_reveal, 'error');
             page.dataset.answered = 'true';
             nextBtn.disabled = false;
         } else {
+            input.classList.add('incorrect');
             setFeedback(feedback, MSG.fail_retry, 'error');
             setTimeout(() => {
                 input.value = '';
