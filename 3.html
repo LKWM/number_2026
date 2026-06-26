@@ -258,6 +258,7 @@
         .rec-button { background-color: #50E3C2; }
         .rec-button.listening { background-color: #F5A623; }
         .hint-button { background-color: #F5A623; }
+        .hint-button[data-revealed="false"] { visibility: hidden; }
 
         .answer-hint {
             font-size: 1em;
@@ -350,7 +351,7 @@
                 <h3>Écrivez "sept" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
+                <button class="action-button hint-button" data-revealed="false">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -387,7 +388,7 @@
                 <h3>Écrivez "deux" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
+                <button class="action-button hint-button" data-revealed="false">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -424,7 +425,7 @@
                 <h3>Écrivez "quatre" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
+                <button class="action-button hint-button" data-revealed="false">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -461,7 +462,7 @@
                 <h3>Écrivez "huit" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
+                <button class="action-button hint-button" data-revealed="false">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -498,7 +499,7 @@
                 <h3>Écrivez "neuf" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
                 <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" hidden><span class="icon">🔊</span>Indice</button>
+                <button class="action-button hint-button" data-revealed="false">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -815,7 +816,7 @@ function checkWritingAnswer(page) {
         playSound('incorrect');
 
         if (attempts === 1) {
-            hintBtn.hidden = false;
+            hintBtn.dataset.revealed = 'true';
         }
 
         if (attempts >= maxAttempts) {
