@@ -132,9 +132,9 @@
         /* ── Content typography ─────────────────────────────────── */
         .emoji { font-size: 2.8em; line-height: 1; margin: 0; }
 
-        h2 { color: var(--theme); font-size: 1.4em; margin: 0.4em 0 0.2em; }
-        h3 { font-size: 1.15em; margin: 0.4em 0 0.25em; }
-        p  { font-size: 0.95em; line-height: 1.6; margin: 0.35em 0; }
+        h2 { color: var(--theme); font-size: 1.4em; margin: 0; }
+        h3 { font-size: 1.15em; margin: 0; }
+        p  { font-size: 0.95em; line-height: 1.6; margin: 0; }
 
         .highlight { color: var(--theme); font-weight: 700; }
 
@@ -153,9 +153,9 @@
             flex-shrink: 0;
         }
 
-        /* ── MCQ options (identical to Leçon 1) ─────────────────── */
+        /* ── MCQ options ──────────────────────────────────────── */
         .quiz-option {
-            width: 100%;
+            width: 90%;
             padding: 0.65em 0.85em;
             margin-top: 0;
             border: 0.12em solid var(--border);
@@ -166,6 +166,7 @@
             color: var(--text);
             cursor: pointer;
             text-align: center;
+            white-space: normal;
             transition: border-color .15s, background .15s;
             flex-shrink: 0;
         }
@@ -214,9 +215,9 @@
             background: var(--white);
         }
         .quiz-input:focus { outline: none; border-color: var(--theme); }
-        .quiz-input.correct   { background: var(--success-bg); border-color: var(--success); }
-        .quiz-input.incorrect { background: var(--error-bg);   border-color: var(--error); }
-        .quiz-input:disabled  { cursor: default; }
+        .quiz-input.correct   { background: var(--success-bg); border-color: var(--success); color: var(--success); font-weight: 700; }
+        .quiz-input.incorrect { background: var(--error-bg);   border-color: var(--error);   color: var(--error);   font-weight: 700; }
+        .quiz-input:disabled  { cursor: default; opacity: 1; -webkit-text-fill-color: currentColor; }
 
         .submit-btn {
             background: var(--success);
@@ -252,6 +253,7 @@
             flex-shrink: 0;
         }
         .action-button .icon { margin-right: 0.5em; }
+        .action-button.icon-only .icon { margin-right: 0; }
         .action-button:hover { opacity: .85; }
         .action-button:disabled { opacity: .5; cursor: not-allowed; }
         .tts-button { background-color: #4A90E2; }
@@ -277,7 +279,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.9vh 6vw;
+            padding: 0.8em 1.4em;
             border-top: 1px solid var(--border);
         }
         .navigation[hidden] { display: none; }
@@ -286,19 +288,23 @@
             background: var(--theme);
             color: var(--white);
             border: none;
-            padding: 1.5vh 6vw;
-            font-size: 2vh;
+            width: 30%;
+            padding: 0.6em 0;
+            font-size: 3.6vw;
             font-family: inherit;
-            border-radius: 2.5vh;
+            border-radius: var(--radius-box);
             cursor: pointer;
             transition: opacity 0.2s ease;
             white-space: nowrap;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .nav-btn:hover:not(:disabled) { opacity: .85; }
         .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
 
         .page-indicator {
-            font-size: 2vh;
+            font-size: 0.85em;
             color: #888;
             font-weight: bold;
             white-space: nowrap;
@@ -315,7 +321,7 @@
                 <p class="kicker">Maîtriser les nombres coréens</p>
                 <p class="chapter">Chapitre 2 – Le système chinois</p>
                 <h1>Leçon 3<br>Pratiquer les nombres chinois (1-9)</h1>
-                <button class="start-btn" id="startBtn">Commencer</button>
+                <button class="start-btn" id="startBtn" type="button">Commencer</button>
             </div>
 
             <!-- PAGE 2 · Règles du quiz (원본 내용 그대로 유지) -->
@@ -330,19 +336,19 @@
             <div class="page mc-listening-page" data-answered="false" data-korean="오">
                 <p class="quiz-counter">Question 1/20</p>
                 <h3>Écoutez le son et choisissez le bon chiffre.</h3>
-                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
-                <button class="quiz-option" data-correct="false">2</button>
-                <button class="quiz-option" data-correct="true">5</button>
-                <button class="quiz-option" data-correct="false">9</button>
+                <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                <button class="quiz-option" data-correct="false" type="button">2</button>
+                <button class="quiz-option" data-correct="true" type="button">5</button>
+                <button class="quiz-option" data-correct="false" type="button">9</button>
             </div>
 
             <!-- PAGE 4 · Question 2/20 — MCQ Reading -->
             <div class="page mc-reading-page" data-answered="false">
                 <p class="quiz-counter">Question 2/20</p>
                 <h3>Quelle est la prononciation correcte de <span class="highlight" style="font-size:1.5em">3</span> ?</h3>
-                <button class="quiz-option" data-correct="false">사</button>
-                <button class="quiz-option" data-correct="true">삼</button>
-                <button class="quiz-option" data-correct="false">칠</button>
+                <button class="quiz-option" data-correct="false" type="button">사</button>
+                <button class="quiz-option" data-correct="true" type="button">삼</button>
+                <button class="quiz-option" data-correct="false" type="button">칠</button>
             </div>
 
             <!-- PAGE 5 · Question 3/20 — Writing -->
@@ -350,8 +356,8 @@
                 <p class="quiz-counter">Question 3/20</p>
                 <h3>Écrivez "sept" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
-                <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" data-revealed="false">Indice</button>
+                <button class="submit-btn" type="button">Valider</button>
+                <button class="action-button hint-button" data-revealed="false" type="button">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -359,7 +365,8 @@
             <div class="page speech-page" data-answered="false" data-korean="일 사" data-attempts="0" data-max-attempts="3">
                 <p class="quiz-counter">Question 4/20</p>
                 <h3>Dites à voix haute les chiffres : <span class="highlight">1, 4</span></h3>
-                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
             </div>
 
@@ -367,19 +374,19 @@
             <div class="page mc-listening-page" data-answered="false" data-korean="구">
                 <p class="quiz-counter">Question 5/20</p>
                 <h3>Écoutez le son et choisissez le bon chiffre.</h3>
-                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
-                <button class="quiz-option" data-correct="true">9</button>
-                <button class="quiz-option" data-correct="false">6</button>
-                <button class="quiz-option" data-correct="false">1</button>
+                <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                <button class="quiz-option" data-correct="true" type="button">9</button>
+                <button class="quiz-option" data-correct="false" type="button">6</button>
+                <button class="quiz-option" data-correct="false" type="button">1</button>
             </div>
 
             <!-- PAGE 8 · Question 6/20 — MCQ Reading -->
             <div class="page mc-reading-page" data-answered="false">
                 <p class="quiz-counter">Question 6/20</p>
                 <h3>Quelle est la prononciation correcte de <span class="highlight" style="font-size:1.5em">1</span> ?</h3>
-                <button class="quiz-option" data-correct="false">이</button>
-                <button class="quiz-option" data-correct="true">일</button>
-                <button class="quiz-option" data-correct="false">육</button>
+                <button class="quiz-option" data-correct="false" type="button">이</button>
+                <button class="quiz-option" data-correct="true" type="button">일</button>
+                <button class="quiz-option" data-correct="false" type="button">육</button>
             </div>
 
             <!-- PAGE 9 · Question 7/20 — Writing -->
@@ -387,8 +394,8 @@
                 <p class="quiz-counter">Question 7/20</p>
                 <h3>Écrivez "deux" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
-                <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" data-revealed="false">Indice</button>
+                <button class="submit-btn" type="button">Valider</button>
+                <button class="action-button hint-button" data-revealed="false" type="button">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -396,7 +403,8 @@
             <div class="page speech-page" data-answered="false" data-korean="팔 오" data-attempts="0" data-max-attempts="3">
                 <p class="quiz-counter">Question 8/20</p>
                 <h3>Dites à voix haute les chiffres : <span class="highlight">8, 5</span></h3>
-                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
             </div>
 
@@ -404,19 +412,19 @@
             <div class="page mc-listening-page" data-answered="false" data-korean="육">
                 <p class="quiz-counter">Question 9/20</p>
                 <h3>Écoutez le son et choisissez le bon chiffre.</h3>
-                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
-                <button class="quiz-option" data-correct="false">9</button>
-                <button class="quiz-option" data-correct="true">6</button>
-                <button class="quiz-option" data-correct="false">4</button>
+                <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                <button class="quiz-option" data-correct="false" type="button">9</button>
+                <button class="quiz-option" data-correct="true" type="button">6</button>
+                <button class="quiz-option" data-correct="false" type="button">4</button>
             </div>
 
             <!-- PAGE 12 · Question 10/20 — MCQ Reading -->
             <div class="page mc-reading-page" data-answered="false">
                 <p class="quiz-counter">Question 10/20</p>
                 <h3>Quelle est la prononciation correcte de <span class="highlight" style="font-size:1.5em">5</span> ?</h3>
-                <button class="quiz-option" data-correct="true">오</button>
-                <button class="quiz-option" data-correct="false">사</button>
-                <button class="quiz-option" data-correct="false">이</button>
+                <button class="quiz-option" data-correct="true" type="button">오</button>
+                <button class="quiz-option" data-correct="false" type="button">사</button>
+                <button class="quiz-option" data-correct="false" type="button">이</button>
             </div>
 
             <!-- PAGE 13 · Question 11/20 — Writing -->
@@ -424,8 +432,8 @@
                 <p class="quiz-counter">Question 11/20</p>
                 <h3>Écrivez "quatre" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
-                <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" data-revealed="false">Indice</button>
+                <button class="submit-btn" type="button">Valider</button>
+                <button class="action-button hint-button" data-revealed="false" type="button">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -433,7 +441,8 @@
             <div class="page speech-page" data-answered="false" data-korean="삼 칠" data-attempts="0" data-max-attempts="3">
                 <p class="quiz-counter">Question 12/20</p>
                 <h3>Dites à voix haute les chiffres : <span class="highlight">3, 7</span></h3>
-                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
             </div>
 
@@ -441,19 +450,19 @@
             <div class="page mc-listening-page" data-answered="false" data-korean="이">
                 <p class="quiz-counter">Question 13/20</p>
                 <h3>Écoutez le son et choisissez le bon chiffre.</h3>
-                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
-                <button class="quiz-option" data-correct="false">일</button>
-                <button class="quiz-option" data-correct="true">이</button>
-                <button class="quiz-option" data-correct="false">오</button>
+                <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                <button class="quiz-option" data-correct="false" type="button">일</button>
+                <button class="quiz-option" data-correct="true" type="button">이</button>
+                <button class="quiz-option" data-correct="false" type="button">오</button>
             </div>
 
             <!-- PAGE 16 · Question 14/20 — MCQ Reading -->
             <div class="page mc-reading-page" data-answered="false">
                 <p class="quiz-counter">Question 14/20</p>
                 <h3>Quelle est la prononciation correcte de <span class="highlight" style="font-size:1.5em">9</span> ?</h3>
-                <button class="quiz-option" data-correct="false">육</button>
-                <button class="quiz-option" data-correct="false">칠</button>
-                <button class="quiz-option" data-correct="true">구</button>
+                <button class="quiz-option" data-correct="false" type="button">육</button>
+                <button class="quiz-option" data-correct="false" type="button">칠</button>
+                <button class="quiz-option" data-correct="true" type="button">구</button>
             </div>
 
             <!-- PAGE 17 · Question 15/20 — Writing -->
@@ -461,8 +470,8 @@
                 <p class="quiz-counter">Question 15/20</p>
                 <h3>Écrivez "huit" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
-                <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" data-revealed="false">Indice</button>
+                <button class="submit-btn" type="button">Valider</button>
+                <button class="action-button hint-button" data-revealed="false" type="button">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -470,7 +479,8 @@
             <div class="page speech-page" data-answered="false" data-korean="육 이" data-attempts="0" data-max-attempts="3">
                 <p class="quiz-counter">Question 16/20</p>
                 <h3>Dites à voix haute les chiffres : <span class="highlight">6, 2</span></h3>
-                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
             </div>
 
@@ -478,19 +488,19 @@
             <div class="page mc-listening-page" data-answered="false" data-korean="칠">
                 <p class="quiz-counter">Question 17/20</p>
                 <h3>Écoutez le son et choisissez le bon chiffre.</h3>
-                <button class="action-button tts-button"><span class="icon">🔊</span>Écouter</button>
-                <button class="quiz-option" data-correct="true">칠</button>
-                <button class="quiz-option" data-correct="false">팔</button>
-                <button class="quiz-option" data-correct="false">일</button>
+                <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                <button class="quiz-option" data-correct="true" type="button">칠</button>
+                <button class="quiz-option" data-correct="false" type="button">팔</button>
+                <button class="quiz-option" data-correct="false" type="button">일</button>
             </div>
 
             <!-- PAGE 20 · Question 18/20 — MCQ Reading -->
             <div class="page mc-reading-page" data-answered="false">
                 <p class="quiz-counter">Question 18/20</p>
                 <h3>Quelle est la prononciation correcte de <span class="highlight" style="font-size:1.5em">4</span> ?</h3>
-                <button class="quiz-option" data-correct="false">삼</button>
-                <button class="quiz-option" data-correct="false">오</button>
-                <button class="quiz-option" data-correct="true">사</button>
+                <button class="quiz-option" data-correct="false" type="button">삼</button>
+                <button class="quiz-option" data-correct="false" type="button">오</button>
+                <button class="quiz-option" data-correct="true" type="button">사</button>
             </div>
 
             <!-- PAGE 21 · Question 19/20 — Writing -->
@@ -498,8 +508,8 @@
                 <p class="quiz-counter">Question 19/20</p>
                 <h3>Écrivez "neuf" en Hangeul.</h3>
                 <input type="text" class="quiz-input" placeholder="Votre réponse...">
-                <button class="submit-btn">Valider</button>
-                <button class="action-button hint-button" data-revealed="false">Indice</button>
+                <button class="submit-btn" type="button">Valider</button>
+                <button class="action-button hint-button" data-revealed="false" type="button">Indice</button>
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
@@ -507,7 +517,8 @@
             <div class="page speech-page" data-answered="false" data-korean="오 일" data-attempts="0" data-max-attempts="3">
                 <p class="quiz-counter">Question 20/20</p>
                 <h3>Dites à voix haute les chiffres : <span class="highlight">5, 1</span></h3>
-                <button class="action-button rec-button"><span class="icon">🎤</span>Parler</button>
+                <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
             </div>
 
@@ -515,16 +526,16 @@
             <div class="page page-cover">
                 <p class="emoji" style="font-size: 2.8em;">🎉</p>
                 <h1 style="font-size: 1.8em;">Félicitations !</h1>
-                <p style="opacity:.9;">Vous avez terminé le quiz et la Leçon 3.</p>
+                <p style="opacity:.9;">La Leçon 3 est terminée. Découvrez les nombres à deux chiffres dans la Leçon 4 !</p>
             </div>
 
         </div>
     </div><!-- /.content-window -->
 
     <nav class="navigation" id="navigation">
-        <button class="nav-btn" id="prevBtn">Précédent</button>
+        <button class="nav-btn" id="prevBtn" type="button">Précédent</button>
         <span class="page-indicator" id="pageIndicator"></span>
-        <button class="nav-btn" id="nextBtn">Suivant</button>
+        <button class="nav-btn" id="nextBtn" type="button">Suivant</button>
     </nav>
 
 </div><!-- /.app-container -->
@@ -677,7 +688,7 @@ function similarity(a, b) {
     return Math.max(0, Math.round((1 - m[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
 }
 
-// ── Speech page logic (직접 말하기: Threshold 80, 1회 틀리면 오디오 공개, 최대 3회) ──
+// ── Speech page logic (직접 말하기: Threshold 80, 1회 틀리면 indice 노출, 최대 3회) ──
 const SPEECH_THRESHOLD = 80;
 
 async function startListening(recBtn, feedbackEl, page) {
@@ -691,6 +702,8 @@ async function startListening(recBtn, feedbackEl, page) {
 
     const koreanText = page.dataset.korean;
     if (!koreanText) return;
+
+    const hintBtn = page.querySelector('.hint-button');
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -733,12 +746,18 @@ async function startListening(recBtn, feedbackEl, page) {
 
                 if (score >= SPEECH_THRESHOLD) {
                     setFeedback(feedbackEl, MSG.success_end + scoreInfo, 'success');
+                    hintBtn.innerHTML = `<span class="icon">🔊</span>${koreanText}`;
+                    hintBtn.classList.remove('icon-only');
+                    hintBtn.dataset.revealed = 'true';
                     playSound('correct');
                     page.dataset.answered = 'true';
                     nextBtn.disabled = false;
                     recBtn.disabled = true;
                 } else if (attempts >= maxAttempts) {
-                    setFeedback(feedbackEl, MSG.fail_reveal + scoreInfo + ' : ' + koreanText, 'error');
+                    setFeedback(feedbackEl, MSG.fail_reveal + scoreInfo, 'error');
+                    hintBtn.innerHTML = `<span class="icon">🔊</span>${koreanText}`;
+                    hintBtn.classList.remove('icon-only');
+                    hintBtn.dataset.revealed = 'true';
                     playSound('incorrect');
                     page.dataset.answered = 'true';
                     nextBtn.disabled = false;
@@ -747,7 +766,7 @@ async function startListening(recBtn, feedbackEl, page) {
                     setFeedback(feedbackEl, MSG.fail_retry + scoreInfo, 'error');
                     playSound('incorrect');
                     if (attempts === 1) {
-                        setTimeout(() => playAudioSequence(koreanText), 600);
+                        hintBtn.dataset.revealed = 'true';
                     }
                 }
             };
@@ -774,6 +793,8 @@ function checkMCQAnswer(option, page) {
     const options  = page.querySelectorAll('.quiz-option');
     const isCorrect = option.dataset.correct === 'true';
 
+    options.forEach(o => o.classList.remove('chosen-wrong'));
+
     if (isCorrect) {
         option.classList.add('chosen-right');
         options.forEach(o => o.disabled = true);
@@ -783,9 +804,6 @@ function checkMCQAnswer(option, page) {
     } else {
         option.classList.add('chosen-wrong');
         playSound('incorrect');
-        setTimeout(() => {
-            option.classList.remove('chosen-wrong');
-        }, 1400);
     }
 }
 
@@ -798,6 +816,7 @@ function checkWritingAnswer(page) {
     const feedback = page.querySelector('.quiz-feedback');
     const value    = input.value.trim();
     const answer   = page.dataset.answer;
+    input.blur();
 
     const maxAttempts = parseInt(page.dataset.maxAttempts);
     const attempts = parseInt(page.dataset.attempts) + 1;
@@ -807,7 +826,7 @@ function checkWritingAnswer(page) {
         input.classList.add('correct');
         input.disabled = true;
         button.disabled = true;
-        hintBtn.disabled = true;
+        hintBtn.dataset.revealed = 'true';
         setFeedback(feedback, MSG.success_end, 'success');
         playSound('correct');
         page.dataset.answered = 'true';
@@ -824,7 +843,6 @@ function checkWritingAnswer(page) {
             input.classList.add('incorrect');
             input.disabled = true;
             button.disabled = true;
-            hintBtn.disabled = true;
             setFeedback(feedback, MSG.fail_reveal, 'error');
             page.dataset.answered = 'true';
             nextBtn.disabled = false;
@@ -932,9 +950,12 @@ allPages.forEach(page => {
 
     // Speech
     if (page.classList.contains('speech-page')) {
-        const recBtn = page.querySelector('.rec-button');
-        const feedEl = page.querySelector('.speech-feedback');
+        const recBtn  = page.querySelector('.rec-button');
+        const feedEl  = page.querySelector('.speech-feedback');
+        const hintBtn = page.querySelector('.hint-button');
+        const korean  = page.dataset.korean;
         recBtn.addEventListener('click', () => startListening(recBtn, feedEl, page));
+        hintBtn.addEventListener('click', () => playAudioSequence(korean));
     }
 });
 
