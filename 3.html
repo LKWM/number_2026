@@ -274,12 +274,12 @@
         }
         .answer-hint.show { visibility: visible; }
 
-        /* ── Bottom nav bar (identical to Leçon 1/2) ────────────── */
+        /* ── Bottom nav bar ──────────────────────────────────────── */
         .navigation {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.8em 1.4em;
+            padding: 1.9vh 6vw;
             border-top: 1px solid var(--border);
         }
         .navigation[hidden] { display: none; }
@@ -288,23 +288,21 @@
             background: var(--theme);
             color: var(--white);
             border: none;
-            width: 30%;
-            padding: 0.6em 0;
-            font-size: 3.6vw;
+            width: 11ch;
+            padding: 1.5vh 0;
+            font-size: 2vh;
             font-family: inherit;
-            border-radius: var(--radius-box);
+            border-radius: 2.5vh;
             cursor: pointer;
             transition: opacity 0.2s ease;
             white-space: nowrap;
             text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         .nav-btn:hover:not(:disabled) { opacity: .85; }
         .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
 
         .page-indicator {
-            font-size: 0.85em;
+            font-size: 2vh;
             color: #888;
             font-weight: bold;
             white-space: nowrap;
