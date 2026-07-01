@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ── Design tokens ──────────────────────────────────────── */
         :root {
             --theme:        #f1552e;
             --theme-light:  #fdf0eb;
@@ -21,12 +20,6 @@
             --error-bg:     #fff1f2;
         }
 
-        /*
-         * Single scaling lever — all em values cascade from here.
-         * max(2.8vh, 3.2vmin): scales primarily with viewport HEIGHT
-         * so content fills the vertical space on any screen ratio,
-         * with vmin as a floor to prevent collapse in landscape/wide views.
-         */
         html { font-size: max(2.8vh, 3.2vmin); }
 
         *, *::before, *::after { box-sizing: border-box; }
@@ -43,7 +36,6 @@
             flex-direction: column;
         }
 
-        /* ── App fills the full viewport ────────────────────────── */
         .app-container {
             width: 100%;
             height: 100%;
@@ -53,7 +45,6 @@
             overflow: hidden;
         }
 
-        /* ── Slider ─────────────────────────────────────────────── */
         .content-window { flex: 1; overflow: hidden; position: relative; }
 
         .pages-slider {
@@ -63,23 +54,20 @@
             transition: transform .4s ease-in-out;
         }
 
-        /* ── Base page ──────────────────────────────────────────── */
         .page {
             width: 100%;
             flex-shrink: 0;
             height: 100%;
-            /* em padding scales with viewport via the html font-size */
             padding: 0.8em 1.4em;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            gap: 0.8em;    /* consistent spacing between all child elements */
+            gap: 0.8em;
             overflow: hidden;
         }
 
-        /* ── Cover pages (page 1 & 12) ──────────────────────────── */
         .page-cover {
             background: var(--theme);
             color: var(--white);
@@ -117,7 +105,6 @@
         }
         .page-cover .start-btn:hover { opacity: .85; }
 
-        /* ── Quiz-intro / mid-orange pages ─────────────────────── */
         .page-orange {
             background: var(--theme);
             color: var(--white);
@@ -126,7 +113,6 @@
         .page-orange h2 { color: var(--white); font-size: 1.5em; margin: 0.3em 0; }
         .page-orange p  { margin: 0.3em 0; font-size: 0.95em; }
 
-        /* ── Content typography ─────────────────────────────────── */
         .emoji { font-size: 2.8em; line-height: 1; margin: 0; }
 
         h2 { color: var(--theme); font-size: 1.4em; margin: 0.4em 0 0.2em; }
@@ -156,7 +142,6 @@
         }
         .info-box p { font-size: 0.9em; margin: 0; line-height: 1.5; text-align: center; }
 
-        /* ── Quiz pages ─────────────────────────────────────────── */
         .quiz-counter {
             font-size: 0.78em;
             color: #888;
@@ -190,11 +175,10 @@
         .quiz-option.chosen-wrong { background: var(--error-bg);   border-color: var(--error); }
         .quiz-option:disabled     { cursor: default; }
 
-        /* Feedback – fixed height = 2 lines max so layout never shifts (Rule 2) */
         .quiz-feedback {
             width: 100%;
             margin-top: 0;
-            height: 2.8em;          /* reserves 2-line max; never collapses or grows */
+            height: 2.8em;
             line-height: 1.4;
             font-size: 0.88em;
             font-weight: 700;
@@ -207,7 +191,7 @@
         .quiz-feedback.show.success  { color: var(--success); }
         .quiz-feedback.show.error    { color: var(--error); }
 
-        /* ── Bottom nav bar (hidden on pages 1 & 12) ───────────── */
+        /* ── Bottom nav bar ── */
         .navigation {
             display: flex;
             justify-content: space-between;
@@ -221,13 +205,16 @@
             background: var(--theme);
             color: var(--white);
             border: none;
-            padding: 1.5vh 6vw;
+            width: 11ch;
+            padding: 1.5vh 0;
             font-size: 2vh;
             font-family: inherit;
             border-radius: 2.5vh;
             cursor: pointer;
             transition: opacity 0.2s ease;
             white-space: nowrap;
+            text-align: center;
+            overflow: hidden;
         }
         .nav-btn:hover:not(:disabled) { opacity: .85; }
         .nav-btn:disabled {
@@ -244,14 +231,9 @@
 </head>
 <body>
 <div class="app-container">
-
-    <!-- ══════════════════════════════════════════════════════════
-         SLIDE WINDOW
-    ══════════════════════════════════════════════════════════ -->
     <div class="content-window">
         <div class="pages-slider" id="pagesSlider">
 
-            <!-- PAGE 1 · Intro cover — NO nav bar -->
             <div class="page page-cover">
                 <p class="kicker">Maîtriser les nombres coréens</p>
                 <p class="chapter">Chapitre 1 – Introduction</p>
@@ -259,7 +241,6 @@
                 <button class="start-btn" id="startBtn">Commencer</button>
             </div>
 
-            <!-- PAGE 2 · Two systems overview -->
             <div class="page">
                 <p class="emoji">🤔</p>
                 <p>En coréen, il existe <strong>deux systèmes numériques</strong> :</p>
@@ -268,7 +249,6 @@
                 <p style="font-size:.85em;">Pour un non-sinophone, la distinction n'est pas évidente. Voyons la règle générale.</p>
             </div>
 
-            <!-- PAGE 3 · Chinese system -->
             <div class="page">
                 <p class="system-tag">Système 1</p>
                 <h2>Le système chinois <span>(Nombres ordinaux)</span></h2>
@@ -278,7 +258,6 @@
                 </div>
             </div>
 
-            <!-- PAGE 4 · Korean system -->
             <div class="page">
                 <p class="system-tag">Système 2</p>
                 <h2>Le système coréen <span>(Nombres cardinaux)</span></h2>
@@ -288,7 +267,6 @@
                 </div>
             </div>
 
-            <!-- PAGE 5 · Warning -->
             <div class="page">
                 <p class="emoji">⚠️</p>
                 <h3>Attention !</h3>
@@ -297,7 +275,6 @@
                 <p style="font-weight:700;">Ne soyez pas surpris de rencontrer des exceptions !</p>
             </div>
 
-            <!-- PAGE 6 · Summary -->
             <div class="page">
                 <p class="emoji">💡</p>
                 <h3>Récapitulons</h3>
@@ -309,14 +286,12 @@
                 </div>
             </div>
 
-            <!-- PAGE 7 · Quiz intro (orange, has nav bar) -->
             <div class="page page-orange">
                 <p class="emoji" style="font-size:2.2em;">✅</p>
                 <h2>Prêt(e) à vérifier ?</h2>
                 <p>Voyons si c'est clair avec quelques questions !</p>
             </div>
 
-            <!-- PAGE 8 · Q1 -->
             <div class="page page-quiz" data-quiz>
                 <p class="quiz-counter">Question 1 / 4</p>
                 <p class="quiz-question">Pour compter 3 livres 📚 sur une table (une <span class="highlight">quantité</span>), quel système est le plus approprié ?</p>
@@ -326,7 +301,6 @@
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
-            <!-- PAGE 9 · Q2 -->
             <div class="page page-quiz" data-quiz>
                 <p class="quiz-counter">Question 2 / 4</p>
                 <p class="quiz-question">Pour dire la date du 10 mai (un <span class="highlight">ordre</span> dans le calendrier), quel système utilise-t-on ?</p>
@@ -336,7 +310,6 @@
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
-            <!-- PAGE 10 · Q3 -->
             <div class="page page-quiz" data-quiz>
                 <p class="quiz-counter">Question 3 / 4</p>
                 <p class="quiz-question">Le nombre <span class="highlight">300</span> doit être lu avec quel système ?</p>
@@ -346,7 +319,6 @@
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
-            <!-- PAGE 11 · Q4 -->
             <div class="page page-quiz" data-quiz>
                 <p class="quiz-counter">Question 4 / 4</p>
                 <p class="quiz-question">Quelle est l'affirmation la plus correcte ?</p>
@@ -356,7 +328,6 @@
                 <p class="quiz-feedback" aria-live="polite"></p>
             </div>
 
-            <!-- PAGE 12 · Final cover — NO nav bar -->
             <div class="page page-cover">
                 <p class="emoji" style="font-size:2.8em;">🎉</p>
                 <h1 style="font-size:1.8em;">Bravo !</h1>
@@ -365,33 +336,25 @@
             </div>
 
         </div>
-    </div><!-- /.content-window -->
+    </div>
 
-    <!-- ── Bottom navigation bar ─────────────────────────────── -->
     <nav class="navigation" id="navigation">
         <button class="nav-btn" id="prevBtn">Précédent</button>
         <span class="page-indicator" id="pageIndicator"></span>
         <button class="nav-btn" id="nextBtn">Suivant</button>
     </nav>
 
-</div><!-- /.app-container -->
+</div>
 
 <script>
-// ================================================================
-// AUDIO FILE LIST
-// Remplacez les chaînes vides par les URLs des fichiers audio.
-// Les sons synthétiques sont utilisés en attendant.
-// ================================================================
 const AUDIO = {
-    lesson_start: '',   // Son joué au démarrage (bouton Commencer)
-    page_turn:    '',   // Son de changement de page
-    correct:      '',   // Son de bonne réponse
-    incorrect:    '',   // Son de mauvaise réponse
-    lesson_end:   '',   // Son joué à la fin de la leçon
+    lesson_start: '',
+    page_turn:    '',
+    correct:      '',
+    incorrect:    '',
+    lesson_end:   '',
 };
-// ================================================================
 
-// ── Feedback messages (Rule 8) ───────────────────────────────────
 const MSG = {
     success_retry: 'Très bien, essayons encore une fois.',
     success_end:   'Très bien ! Passez à la suite.',
@@ -399,18 +362,15 @@ const MSG = {
     fail_end:      'Bien essayé ! Passez à la suite.',
 };
 
-// ── Audio engine ─────────────────────────────────────────────────
 let audioCtx = null;
 
 function initAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 }
 
-// Synth fallback – distinct tones per event type
 function playSynth(type) {
     if (!audioCtx) return;
     const now = audioCtx.currentTime;
-
     const configs = {
         lesson_start: { notes: [[523,.00],[659,.12],[784,.24],[1047,.38]], shape: 'sine',   vol: .07 },
         page_turn:    { notes: [[600,.00]],                               shape: 'sine',   vol: .06 },
@@ -418,7 +378,6 @@ function playSynth(type) {
         incorrect:    { notes: [[220,.00],[196,.10]],                     shape: 'square', vol: .05 },
         lesson_end:   { notes: [[523,.00],[659,.10],[784,.20],[1047,.32],[1319,.46]], shape:'sine', vol:.07 },
     };
-
     const cfg = configs[type] || configs.page_turn;
     cfg.notes.forEach(([freq, delay]) => {
         const osc = audioCtx.createOscillator();
@@ -446,7 +405,6 @@ function playSound(type) {
     }
 }
 
-// ── App state ────────────────────────────────────────────────────
 const TOTAL     = 12;
 const IDX_FIRST = 0;
 const IDX_LAST  = TOTAL - 1;
@@ -460,10 +418,8 @@ const nextBtn   = document.getElementById('nextBtn');
 const indicator = document.getElementById('pageIndicator');
 const allPages  = Array.from(document.querySelectorAll('.page'));
 
-// Quiz state keyed by page index: { answered: bool }
 const quizState = {};
 
-// ── Quiz handlers ────────────────────────────────────────────────
 allPages.forEach((page, idx) => {
     if (!page.hasAttribute('data-quiz')) return;
 
@@ -472,7 +428,7 @@ allPages.forEach((page, idx) => {
 
     options.forEach(btn => {
         btn.addEventListener('click', () => {
-            if (quizState[idx]?.answered) return;   // already solved, ignore
+            if (quizState[idx]?.answered) return;
 
             const isCorrect = btn.dataset.correct === 'true';
 
@@ -484,14 +440,10 @@ allPages.forEach((page, idx) => {
                 quizState[idx] = { answered: true };
                 nextBtn.disabled = false;
             } else {
+                options.forEach(o => o.classList.remove('chosen-wrong'));
                 btn.classList.add('chosen-wrong');
                 setFeedback(feedback, MSG.fail_retry, 'error');
                 playSound('incorrect');
-                // allow retry after brief visual delay
-                setTimeout(() => {
-                    btn.classList.remove('chosen-wrong');
-                    clearFeedback(feedback);
-                }, 1400);
             }
         });
     });
@@ -511,7 +463,6 @@ function clearFeedback(el) {
     el.className = 'quiz-feedback';
 }
 
-// Restore visual state when revisiting a solved quiz page
 function restoreQuizPage(idx) {
     const page = allPages[idx];
     if (!page?.hasAttribute('data-quiz') || !quizState[idx]?.answered) return;
@@ -526,7 +477,6 @@ function restoreQuizPage(idx) {
     setFeedback(feedback, MSG.success_end, 'success');
 }
 
-// ── Navigation ───────────────────────────────────────────────────
 function goTo(idx, sound = 'page_turn') {
     if (idx < 0 || idx >= TOTAL) return;
     currentPage = idx;
@@ -536,18 +486,13 @@ function goTo(idx, sound = 'page_turn') {
 }
 
 function render() {
-    // Slide
     slider.style.transform = `translateX(-${currentPage * 100}%)`;
 
     const isCover = currentPage === IDX_FIRST || currentPage === IDX_LAST;
-
-    // Show/hide nav bar
     navEl.hidden = isCover;
 
     if (!isCover) {
-        // Cover = page 1, so content pages are 2~11 out of 12 total
         indicator.textContent = `${currentPage + 1} / ${TOTAL}`;
-
         prevBtn.disabled = (currentPage <= 1);
 
         const page    = allPages[currentPage];
@@ -557,7 +502,6 @@ function render() {
         nextBtn.disabled = isQuiz && !solved;
     }
 
-    // Lesson complete on arrival at final page (Rule 9)
     if (currentPage === IDX_LAST) {
         triggerLessonComplete();
     }
@@ -567,13 +511,11 @@ prevBtn.onclick = () => goTo(currentPage - 1);
 nextBtn.onclick = () => goTo(currentPage + 1);
 document.getElementById('startBtn').onclick = () => goTo(1, 'lesson_start');
 
-// ── Lesson complete (Rule 9) ─────────────────────────────────────
 function triggerLessonComplete() {
     playSound('lesson_end');
     window.parent.postMessage({ type: 'lesson_complete' }, '*');
 }
 
-// ── Boot ─────────────────────────────────────────────────────────
 document.body.addEventListener('click', initAudio, { once: true });
 render();
 </script>
