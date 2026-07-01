@@ -806,6 +806,8 @@ function checkMCQAnswer(option, page) {
 }
 
 // ── Writing logic (Threshold 100, 1회 틀리면 Indice 버튼 노출, 최대 3회) ─
+const writingTimers = new WeakMap();
+
 function checkWritingAnswer(page) {
     if (page.dataset.answered === 'true') return;
     const input    = page.querySelector('.quiz-input');
@@ -815,6 +817,11 @@ function checkWritingAnswer(page) {
     const value    = input.value.trim();
     const answer   = page.dataset.answer;
     input.blur();
+
+    if (writingTimers.has(page)) {
+        clearTimeout(writingTimers.get(page));
+        writingTimers.delete(page);
+    }
 
     const maxAttempts = parseInt(page.dataset.maxAttempts);
     const attempts = parseInt(page.dataset.attempts) + 1;
@@ -847,11 +854,13 @@ function checkWritingAnswer(page) {
         } else {
             input.classList.add('incorrect');
             setFeedback(feedback, MSG.fail_retry, 'error');
-            setTimeout(() => {
+            const timer = setTimeout(() => {
                 input.value = '';
                 input.classList.remove('incorrect');
                 clearFeedback(feedback);
+                writingTimers.delete(page);
             }, 1400);
+            writingTimers.set(page, timer);
         }
     }
 }
