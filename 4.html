@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script>
+    // ================================================================
+    // 한국어 발음 오디오 — 녹음 완료 후 링크 추가 시 자동 연동
+    // ================================================================
+    const audioMap = {
+        // 단자리 (1-9)
+        '일': '',
+        '이': '',
+        '삼': '',
+        '사': '',
+        '오': '',
+        '육': '',
+        '칠': '',
+        '팔': '',
+        '구': '',
+        // 십자리 (10, 20-90)
+        '십': '',
+        '이십': '',
+        '삼십': '',
+        '사십': '',
+        '오십': '',
+        '육십': '',
+        '칠십': '',
+        '팔십': '',
+        '구십': '',
+        // 11-19
+        '십일': '',
+        '십이': '',
+        '십삼': '',
+        '십사': '',
+        '십오': '',
+        '십육': '',
+        '십칠': '',
+        '십팔': '',
+        '십구': '',
+        // 조합 (퀴즈/예제용)
+        '구십구': '',
+        '구십칠': '',
+        '사십이': '',
+        '삼십사': '',
+        '삼십오': '',
+        '오십팔': '',
+        '육십육': '',
+        '육십일': '',
+        '이십사': '',
+        '이십삼': '',
+        '칠십일': '',
+        '팔십삼': '',
+    };
+    // ================================================================
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leçon 4 : Les nombres de 10 à 99</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --theme:        #f1552e;
+            --theme-light:  #fdf0eb;
+            --text:         #333333;
+            --border:       #eeeeee;
+            --white:        #ffffff;
+            --success:      #28a745;
+            --success-bg:   #e3fcef;
+            --error:        #dc3545;
+            --error-bg:     #fff1f2;
+            --radius-box:   0.8em;
+        }
+
+        html { font-size: max(2.8vh, 3.2vmin); }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--text);
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-window { flex: 1; overflow: hidden; position: relative; }
+
+        .pages-slider {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform .4s ease-in-out;
+        }
+
+        .page {
+            width: 100%;
+            flex-shrink: 0;
+            height: 100%;
+            padding: 0.8em 1.4em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 0.8em;
+            overflow: hidden;
+        }
+
+        /* ── Cover pages ── */
+        .page-cover {
+            background: var(--theme);
+            color: var(--white);
+            gap: 0.4em;
+        }
+        .page-cover .kicker {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: .8;
+            margin: 0;
+        }
+        .page-cover .chapter {
+            font-size: 0.9em;
+            font-weight: 700;
+            opacity: .9;
+            margin: 0;
+        }
+        .page-cover h1 {
+            font-size: 1.9em;
+            line-height: 1.2;
+            margin: 0.2em 0 0;
+        }
+        .page-cover .start-btn {
+            margin-top: 1.8em;
+            background: var(--white);
+            color: var(--theme);
+            border: none;
+            padding: 0.7em 2.2em;
+            font-size: 1em;
+            font-weight: 700;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: opacity .2s;
+        }
+        .page-cover .start-btn:hover { opacity: .85; }
+
+
+        /* ── Typography ── */
+        .emoji { font-size: 2.8em; line-height: 1; margin: 0; }
+        h2 { color: var(--theme); font-size: 1.4em; margin: 0; }
+        h3 { font-size: 1.15em; margin: 0; }
+        p  { font-size: 0.95em; line-height: 1.6; margin: 0; }
+        .highlight { color: var(--theme); font-weight: 700; }
+
+        /* ── Grid ── */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.55em;
+            width: 100%;
+            max-width: 13em;
+        }
+        .grid-item {
+            background: var(--theme-light);
+            border: 0.1em solid var(--border);
+            border-radius: var(--radius-box);
+            padding: 0.6em;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+        .grid-item span { display: block; font-size: 0.75em; color: var(--theme); }
+        .grid-item:hover { background: var(--theme); color: var(--white); }
+        .grid-item:hover span { color: var(--white); }
+
+        /* ── Practice page ── */
+        .practice-number {
+            font-size: 4em;
+            font-weight: bold;
+            color: var(--text);
+            margin: 0;
+            line-height: 1;
+        }
+        .practice-pronunciation {
+            font-size: 1.5em;
+            color: var(--theme);
+            margin: 0;
+        }
+
+        /* ── Combo cards ── */
+        .combo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5em;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .combo-card {
+            background: #f0f0f0;
+            border-radius: var(--radius-box);
+            padding: 0.5em 0.7em;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background .2s;
+            white-space: nowrap;
+        }
+        .combo-card.result { background: var(--theme); color: var(--white); }
+        .combo-op { font-size: 1.1em; font-weight: bold; color: #aaa; }
+
+        /* ── Action buttons ── */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 85%;
+            padding: 0.55em 1em;
+            border-radius: var(--radius-box);
+            font-size: 0.88em;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: opacity .2s;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+        .action-button .icon { margin-right: 0.5em; }
+        .action-button:hover { opacity: .85; }
+        .tts-button { background-color: #4A90E2; }
+
+        /* ── Quiz ── */
+        .quiz-counter { font-size: 0.78em; color: #888; margin: 0; align-self: flex-start; }
+
+        .quiz-option {
+            width: 90%;
+            padding: 0.65em 0.85em;
+            margin-top: 0;
+            border: 0.12em solid var(--border);
+            border-radius: var(--radius-box);
+            font-size: 0.9em;
+            font-family: inherit;
+            background: var(--white);
+            color: var(--text);
+            cursor: pointer;
+            text-align: center;
+            white-space: normal;
+            transition: border-color .15s, background .15s;
+            flex-shrink: 0;
+        }
+        .quiz-option:hover:not(:disabled) { border-color: var(--theme); }
+        .quiz-option.chosen-right { background: var(--success-bg); border-color: var(--success); }
+        .quiz-option.chosen-wrong { background: var(--error-bg); border-color: var(--error); }
+        .quiz-option:disabled { cursor: default; }
+
+
+        /* ── Bottom nav bar ── */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.9vh 6vw;
+            border-top: 1px solid var(--border);
+        }
+        .navigation[hidden] { display: none; }
+
+        .nav-btn {
+            background: var(--theme);
+            color: var(--white);
+            border: none;
+            width: 11ch;
+            padding: 1.5vh 0;
+            font-size: 2vh;
+            font-family: inherit;
+            border-radius: 2.5vh;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+            text-align: center;
+            overflow: hidden;
+        }
+        .nav-btn:hover:not(:disabled) { opacity: .85; }
+        .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .page-indicator {
+            font-size: 2vh;
+            color: #888;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="content-window">
+        <div class="pages-slider" id="pagesSlider">
+
+            <!-- PAGE 1 · Cover -->
+            <div class="page page-cover">
+                <p class="kicker">Maîtriser les nombres coréens</p>
+                <p class="chapter">Chapitre 2 – Le système chinois</p>
+                <h1>Leçon 4<br>Les nombres de 10 à 99</h1>
+                <button class="start-btn" id="startBtn">Commencer</button>
+            </div>
+
+            <!-- PAGE 2 · Révision -->
+            <div class="page">
+                <p class="emoji">🔍</p>
+                <h3>Révision Rapide</h3>
+                <p>Révisons les nombres de 1 à 9 avant de continuer. Cliquez sur une carte pour écouter sa prononciation.</p>
+                <div class="grid-container" id="reviewGrid"></div>
+            </div>
+
+            <!-- PAGE 3 · Principe dizaines -->
+            <div class="page">
+                <p class="emoji">💡</p>
+                <h3>Le principe des dizaines</h3>
+                <p>Les dizaines (20, 30, 40...) se forment en multipliant un chiffre <span class="highlight">(2-9)</span> par <span class="highlight">십</span> (dix).</p>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="이">2 (이)</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="십">10 (십)</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="이십">20 (이십)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 4 · Composer -->
+            <div class="page">
+                <p class="emoji">🧩</p>
+                <h3>Composer les nombres</h3>
+                <p>Pour former n'importe quel nombre de 11 à 99, il suffit de lire la <span class="highlight">dizaine</span>, puis l'<span class="highlight">unité</span> qui la suit.</p>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="이십">20 (이십)</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="사">4 (사)</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="이십사">24 (이십사)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 5 · 10 -->
+            <div class="page">
+                <p class="practice-number">10</p>
+                <p class="practice-pronunciation">십</p>
+                <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+            </div>
+
+            <!-- PAGE 6 · 11 -->
+            <div class="page">
+                <h3>Exemple : 11 (십일)</h3>
+                <p>Cliquez sur chaque carte pour entendre les sons séparément, puis sur le résultat pour entendre le nombre complet.</p>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="십">10 (십)</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="일">1 (일)</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="십일">11 (십일)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 7 · 11-19 grid -->
+            <div class="page">
+                <h3>Les nombres de 11 à 19</h3>
+                <p>Cliquez pour écouter.</p>
+                <div class="grid-container" id="teenGrid"></div>
+            </div>
+
+            <!-- PAGE 8 · 20/24 -->
+            <div class="page">
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="이">2</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="십">10</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="이십">20 (이십)</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="이십">20</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="사">4</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="이십사">24 (이십사)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 9 · 30/35 -->
+            <div class="page">
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="삼">3</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="십">10</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="삼십">30 (삼십)</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="삼십">30</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="오">5</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="삼십오">35 (삼십오)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 10 · 40/42 -->
+            <div class="page">
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="사">4</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="십">10</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="사십">40 (사십)</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="사십">40</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="이">2</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="사십이">42 (사십이)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 11 · 50/58 -->
+            <div class="page">
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="오">5</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="십">10</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="오십">50 (오십)</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="오십">50</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="팔">8</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="오십팔">58 (오십팔)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 12 · 60/66 -->
+            <div class="page">
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="육">6</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="십">10</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="육십">60 (육십)</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="육십">60</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="육">6</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="육십육">66 (육십육)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 13 · 70/71 -->
+            <div class="page">
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="칠">7</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="십">10</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="칠십">70 (칠십)</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="칠십">70</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="일">1</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="칠십일">71 (칠십일)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 14 · 80/83 -->
+            <div class="page">
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="팔">8</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="십">10</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="팔십">80 (팔십)</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="팔십">80</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="삼">3</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="팔십삼">83 (팔십삼)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 15 · 90/99 -->
+            <div class="page">
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="구">9</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="십">10</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="구십">90 (구십)</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="구십">90</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="구">9</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="구십구">99 (구십구)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 16 -->
+            <div class="page">
+                <p class="emoji">👍</p>
+                <h3>C'est compris !</h3>
+                <p>Vous avez maintenant vu comment former tous les nombres de 10 à 99.</p>
+                <p class="highlight">Prêt à tester vos connaissances ?</p>
+            </div>
+
+            <!-- PAGE 17 -->
+            <div class="page">
+                <p class="emoji">✅</p>
+                <h3>Vérifions !</h3>
+                <p>Il est temps de tester ce que vous avez appris avec un petit quiz.</p>
+            </div>
+
+            <!-- PAGE 18 · Q1 -->
+            <div class="page" data-quiz data-answered="false" data-answer="15">
+                <p class="quiz-counter">Question 1 / 8</p>
+                <h3>Choisissez le bon nombre pour <span class="highlight">십오</span>.</h3>
+                <button class="quiz-option" type="button" data-correct="false">50</button>
+                <button class="quiz-option" type="button" data-correct="true">15</button>
+                <button class="quiz-option" type="button" data-correct="false">51</button>
+            </div>
+
+            <!-- PAGE 19 · Q2 -->
+            <div class="page" data-quiz data-answered="false" data-answer="49">
+                <p class="quiz-counter">Question 2 / 8</p>
+                <h3>Choisissez le bon nombre pour <span class="highlight">사십구</span>.</h3>
+                <button class="quiz-option" type="button" data-correct="true">49</button>
+                <button class="quiz-option" type="button" data-correct="false">94</button>
+                <button class="quiz-option" type="button" data-correct="false">40</button>
+            </div>
+
+            <!-- PAGE 20 · Q3 -->
+            <div class="page" data-quiz data-answered="false" data-answer="72">
+                <p class="quiz-counter">Question 3 / 8</p>
+                <h3>Choisissez le bon nombre pour <span class="highlight">칠십이</span>.</h3>
+                <button class="quiz-option" type="button" data-correct="false">27</button>
+                <button class="quiz-option" type="button" data-correct="false">70</button>
+                <button class="quiz-option" type="button" data-correct="true">72</button>
+            </div>
+
+            <!-- PAGE 21 · Q4 -->
+            <div class="page" data-quiz data-answered="false" data-answer="86">
+                <p class="quiz-counter">Question 4 / 8</p>
+                <h3>Choisissez le bon nombre pour <span class="highlight">팔십육</span>.</h3>
+                <button class="quiz-option" type="button" data-correct="true">86</button>
+                <button class="quiz-option" type="button" data-correct="false">68</button>
+                <button class="quiz-option" type="button" data-correct="false">80</button>
+            </div>
+
+            <!-- PAGE 22 · Q5 -->
+            <div class="page" data-quiz data-answered="false" data-answer="이십삼">
+                <p class="quiz-counter">Question 5 / 8</p>
+                <h3>Choisissez la bonne prononciation pour <span class="highlight">23</span>.</h3>
+                <button class="quiz-option" type="button" data-correct="false">삼십이</button>
+                <button class="quiz-option" type="button" data-correct="true">이십삼</button>
+                <button class="quiz-option" type="button" data-correct="false">이십</button>
+            </div>
+
+            <!-- PAGE 23 · Q6 -->
+            <div class="page" data-quiz data-answered="false" data-answer="육십일">
+                <p class="quiz-counter">Question 6 / 8</p>
+                <h3>Choisissez la bonne prononciation pour <span class="highlight">61</span>.</h3>
+                <button class="quiz-option" type="button" data-correct="false">십육</button>
+                <button class="quiz-option" type="button" data-correct="true">육십일</button>
+                <button class="quiz-option" type="button" data-correct="false">일십육</button>
+            </div>
+
+            <!-- PAGE 24 · Q7 -->
+            <div class="page" data-quiz data-answered="false" data-answer="구십칠">
+                <p class="quiz-counter">Question 7 / 8</p>
+                <h3>Choisissez la bonne prononciation pour <span class="highlight">97</span>.</h3>
+                <button class="quiz-option" type="button" data-correct="false">칠십구</button>
+                <button class="quiz-option" type="button" data-correct="false">구십</button>
+                <button class="quiz-option" type="button" data-correct="true">구십칠</button>
+            </div>
+
+            <!-- PAGE 25 · Q8 -->
+            <div class="page" data-quiz data-answered="false" data-answer="삼십사">
+                <p class="quiz-counter">Question 8 / 8</p>
+                <h3>Choisissez la bonne prononciation pour <span class="highlight">34</span>.</h3>
+                <button class="quiz-option" type="button" data-correct="false">사십삼</button>
+                <button class="quiz-option" type="button" data-correct="true">삼십사</button>
+                <button class="quiz-option" type="button" data-correct="false">삼십</button>
+            </div>
+
+            <!-- PAGE 26 · Final cover -->
+            <div class="page page-cover">
+                <p class="emoji" style="font-size:2.8em;">🎉</p>
+                <h1 style="font-size:1.8em;">Félicitations !</h1>
+                <p style="font-size: 1.2em;">Continuez à écouter et à répéter les nombres sino-coréens jusqu'à ce que vous les maîtrisiez parfaitement !</p>
+            </div>
+
+        </div>
+    </div>
+
+    <nav class="navigation" id="navigation">
+        <button class="nav-btn" id="prevBtn">Précédent</button>
+        <span class="page-indicator" id="pageIndicator"></span>
+        <button class="nav-btn" id="nextBtn">Suivant</button>
+    </nav>
+</div>
+
+<script>
+// ================================================================
+// AUDIO FILE LIST (Rule 4) — 효과음 (synth fallback)
+// ================================================================
+const AUDIO = {
+    lesson_start: '',
+    page_turn:    '',
+    correct:      '',
+    incorrect:    '',
+    lesson_end:   '',
+};
+// ================================================================
+
+
+let audioCtx = null;
+
+function initAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function playSynth(type) {
+    if (!audioCtx) return;
+    const now = audioCtx.currentTime;
+    const configs = {
+        lesson_start: { notes: [[523,.00],[659,.12],[784,.24],[1047,.38]], shape:'sine',   vol:.07 },
+        page_turn:    { notes: [[600,.00]],                               shape:'sine',   vol:.06 },
+        correct:      { notes: [[784,.00],[988,.12]],                     shape:'sine',   vol:.08 },
+        incorrect:    { notes: [[220,.00],[196,.10]],                     shape:'square', vol:.05 },
+        lesson_end:   { notes: [[523,.00],[659,.10],[784,.20],[1047,.32],[1319,.46]], shape:'sine', vol:.07 },
+    };
+    const cfg = configs[type] || configs.page_turn;
+    cfg.notes.forEach(([freq, delay]) => {
+        const osc = audioCtx.createOscillator();
+        const g   = audioCtx.createGain();
+        osc.type = cfg.shape;
+        osc.frequency.value = freq;
+        g.gain.setValueAtTime(0, now + delay);
+        g.gain.linearRampToValueAtTime(cfg.vol, now + delay + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.18);
+        osc.connect(g); g.connect(audioCtx.destination);
+        osc.start(now + delay); osc.stop(now + delay + 0.2);
+    });
+}
+
+function playSound(type) {
+    initAudio();
+    const url = AUDIO[type];
+    if (url) { const a = new Audio(url); a.play().catch(() => playSynth(type)); }
+    else { playSynth(type); }
+}
+
+// ── TTS ──
+let currentTTS = null;
+let ttsQueue   = [];
+
+function playAudioSequence(text) {
+    if (currentTTS) { currentTTS.pause(); currentTTS = null; }
+    // 조합 발음: 단어 단위로 분리해서 순서대로 재생
+    const parts = [];
+    // audioMap에 있는 키 중 가장 긴 것부터 매칭 (이십사 → 이십+사 등)
+    let remaining = text;
+    while (remaining.length > 0) {
+        let matched = false;
+        const keys = Object.keys(audioMap).sort((a, b) => b.length - a.length);
+        for (const key of keys) {
+            if (remaining.startsWith(key) && audioMap[key]) {
+                parts.push(audioMap[key]);
+                remaining = remaining.slice(key.length);
+                matched = true;
+                break;
+            }
+        }
+        if (!matched) {
+            remaining = remaining.slice(1);
+        }
+    }
+    if (!parts.length) return;
+    ttsQueue = [...parts];
+    playNextTTS();
+}
+
+function playNextTTS() {
+    if (!ttsQueue.length) { currentTTS = null; return; }
+    currentTTS = new Audio(ttsQueue.shift());
+    currentTTS.play().catch(e => console.error(e));
+    currentTTS.onended = playNextTTS;
+}
+
+
+// ── MCQ logic (맞을 때까지 재시도, 즉시 초기화) ──
+
+function checkMCQAnswer(option, page) {
+    if (page.dataset.answered === 'true') return;
+    const options  = page.querySelectorAll('.quiz-option');
+    const isCorrect = option.dataset.correct === 'true';
+
+    options.forEach(o => o.classList.remove('chosen-wrong'));
+
+    if (isCorrect) {
+        option.classList.add('chosen-right');
+        options.forEach(o => o.disabled = true);
+        playSound('correct');
+        page.dataset.answered = 'true';
+        nextBtn.disabled = false;
+    } else {
+        option.classList.add('chosen-wrong');
+        playSound('incorrect');
+    }
+}
+
+// ── App state ──
+const TOTAL     = 26;
+const IDX_FIRST = 0;
+const IDX_LAST  = TOTAL - 1;
+
+let currentPage = 0;
+
+const slider    = document.getElementById('pagesSlider');
+const navEl     = document.getElementById('navigation');
+const prevBtn   = document.getElementById('prevBtn');
+const nextBtn   = document.getElementById('nextBtn');
+const indicator = document.getElementById('pageIndicator');
+const allPages  = Array.from(document.querySelectorAll('.page'));
+
+function goTo(idx, sound = 'page_turn') {
+    if (idx < 0 || idx >= TOTAL) return;
+    currentPage = idx;
+    playSound(sound);
+    render();
+}
+
+function render() {
+    slider.style.transform = `translateX(-${currentPage * 100}%)`;
+
+    const isCover = currentPage === IDX_FIRST || currentPage === IDX_LAST;
+    navEl.hidden = isCover;
+
+    if (!isCover) {
+        indicator.textContent = `${currentPage + 1} / ${TOTAL}`;
+        prevBtn.disabled = (currentPage <= 1);
+
+        const page   = allPages[currentPage];
+        const isQuiz = page.hasAttribute('data-quiz');
+        const needsAnswer = isQuiz && page.dataset.answered !== 'true';
+        nextBtn.disabled = needsAnswer;
+    }
+
+    if (currentPage === IDX_LAST) triggerLessonComplete();
+}
+
+
+function triggerLessonComplete() {
+    playSound('lesson_end');
+    window.parent.postMessage({ type: 'lesson_complete' }, '*');
+}
+
+prevBtn.onclick = () => goTo(currentPage - 1);
+nextBtn.onclick = () => goTo(currentPage + 1);
+document.getElementById('startBtn').addEventListener('click', () => goTo(1, 'lesson_start'));
+
+// ── Wire up interactions ──
+const numbers = ['일','이','삼','사','오','육','칠','팔','구'];
+
+// Review grid
+const reviewGrid = document.getElementById('reviewGrid');
+numbers.forEach((num, i) => {
+    const item = document.createElement('div');
+    item.className = 'grid-item';
+    item.innerHTML = `${i + 1}<span>${num}</span>`;
+    item.addEventListener('click', () => playAudioSequence(num));
+    reviewGrid.appendChild(item);
+});
+
+// Teen grid (11-19)
+const teenGrid = document.getElementById('teenGrid');
+for (let i = 1; i <= 9; i++) {
+    const item = document.createElement('div');
+    item.className = 'grid-item';
+    const korean = `십${numbers[i - 1]}`;
+    item.innerHTML = `${10 + i}<span>${korean}</span>`;
+    item.addEventListener('click', () => playAudioSequence(korean));
+    teenGrid.appendChild(item);
+}
+
+// Practice page tts button (PAGE 5)
+allPages.forEach((page, idx) => {
+    // TTS buttons
+    page.querySelectorAll('.tts-button').forEach(btn => {
+        const korean = btn.dataset.korean || page.dataset.korean;
+        if (korean) btn.addEventListener('click', () => playAudioSequence(korean));
+    });
+
+    // Combo cards
+    page.querySelectorAll('.combo-card[data-korean]').forEach(card => {
+        card.addEventListener('click', () => playAudioSequence(card.dataset.korean));
+    });
+
+    // Quiz options
+    if (page.hasAttribute('data-quiz')) {
+        page.querySelectorAll('.quiz-option').forEach(opt => {
+            opt.addEventListener('click', () => checkMCQAnswer(opt, page));
+        });
+    }
+});
+
+// PAGE 5 (index 4) practice page - tts button korean
+allPages[4].querySelector('.tts-button').dataset.korean = '십';
+
+// ── Boot ──
+document.body.addEventListener('click', initAudio, { once: true });
+render();
+</script>
+</body>
+</html>
