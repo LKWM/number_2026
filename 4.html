@@ -358,7 +358,7 @@
             <div class="page">
                 <p class="practice-number">10</p>
                 <p class="practice-pronunciation">십</p>
-                <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                <button class="action-button tts-button" type="button" data-korean="십"><span class="icon">🔊</span>Écouter</button>
             </div>
 
             <!-- PAGE 6 · 11 -->
@@ -683,13 +683,26 @@ function playSound(type) {
 // ── TTS ──
 let currentTTS = null;
 
+// 페이지 로드 시 모든 오디오를 미리 캐싱 (클릭 시 버퍼 없이 즉시 재생)
+const audioCache = {};
+for (const key in audioMap) {
+    if (audioMap[key]) {
+        const a = new Audio();
+        a.preload = 'auto';
+        a.src = audioMap[key];
+        a.load();
+        audioCache[key] = a;
+    }
+}
+
 function playAudioSequence(text) {
-    if (currentTTS) { currentTTS.pause(); currentTTS = null; }
+    if (currentTTS) { currentTTS.pause(); currentTTS.currentTime = 0; currentTTS = null; }
     // 카드의 data-korean 값을 통짜로 재생 (예: "십일" 카드 → 십일 파일 하나)
-    const url = audioMap[text];
-    if (!url) return;
-    currentTTS = new Audio(url);
-    currentTTS.play().catch(e => console.error(e));
+    const audio = audioCache[text];
+    if (!audio) return;
+    audio.currentTime = 0;
+    currentTTS = audio;
+    audio.play().catch(e => console.error(e));
 }
 
 
@@ -810,8 +823,6 @@ allPages.forEach((page, idx) => {
     }
 });
 
-// PAGE 5 (index 4) practice page - tts button korean
-allPages[4].querySelector('.tts-button').dataset.korean = '십';
 
 // ── Boot ──
 document.body.addEventListener('click', initAudio, { once: true });
