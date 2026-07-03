@@ -682,40 +682,16 @@ function playSound(type) {
 
 // ── TTS ──
 let currentTTS = null;
-let ttsQueue   = [];
 
 function playAudioSequence(text) {
     if (currentTTS) { currentTTS.pause(); currentTTS = null; }
-    // 조합 발음: 단어 단위로 분리해서 순서대로 재생
-    const parts = [];
-    // audioMap에 있는 키 중 가장 긴 것부터 매칭 (이십사 → 이십+사 등)
-    let remaining = text;
-    while (remaining.length > 0) {
-        let matched = false;
-        const keys = Object.keys(audioMap).sort((a, b) => b.length - a.length);
-        for (const key of keys) {
-            if (remaining.startsWith(key) && audioMap[key]) {
-                parts.push(audioMap[key]);
-                remaining = remaining.slice(key.length);
-                matched = true;
-                break;
-            }
-        }
-        if (!matched) {
-            remaining = remaining.slice(1);
-        }
-    }
-    if (!parts.length) return;
-    ttsQueue = [...parts];
-    playNextTTS();
+    // 카드의 data-korean 값을 통짜로 재생 (예: "십일" 카드 → 십일 파일 하나)
+    const url = audioMap[text];
+    if (!url) return;
+    currentTTS = new Audio(url);
+    currentTTS.play().catch(e => console.error(e));
 }
 
-function playNextTTS() {
-    if (!ttsQueue.length) { currentTTS = null; return; }
-    currentTTS = new Audio(ttsQueue.shift());
-    currentTTS.play().catch(e => console.error(e));
-    currentTTS.onended = playNextTTS;
-}
 
 
 // ── MCQ logic (맞을 때까지 재시도, 즉시 초기화) ──
