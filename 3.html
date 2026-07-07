@@ -288,8 +288,8 @@
             background: var(--theme);
             color: var(--white);
             border: none;
-            width: 11ch;
-            padding: 1.5vh 0;
+            min-width: 11ch;
+            padding: 1.5vh 6vw;
             font-size: 2vh;
             font-family: inherit;
             border-radius: 2.5vh;
@@ -731,7 +731,12 @@ async function startListening(recBtn, feedbackEl, page) {
                     if (!res.ok) throw new Error('API');
                     const data = await res.json();
                     recognized = data.recognized || data.text || '';
-                    score      = similarity(recognized, koreanText);
+                    // 숫자/글자 모두 인식: 한글 발음과 숫자 표기 중 높은 점수 채택
+                    const numericText = page.querySelector('.highlight') ? page.querySelector('.highlight').textContent.trim() : '';
+                    score      = Math.max(
+                        similarity(recognized, koreanText),
+                        numericText ? similarity(recognized, numericText) : 0
+                    );
                 } catch { score = 0; }
 
                 const maxAttempts = parseInt(page.dataset.maxAttempts);
