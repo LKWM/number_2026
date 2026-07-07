@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script>
+    // ================================================================
+    // 한국어 발음 오디오 — 녹음 완료 후 링크 추가 시 자동 연동
+    // ================================================================
+    const audioMap = {
+        // 단자리 (1-9)
+        '일': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976070/1_%E1%84%8B%E1%85%B5%E1%86%AF_jkudjv.mp3',
+        '이': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976191/2_%E1%84%8B%E1%85%B5_phxtrr.mp3',
+        '삼': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976183/3_%E1%84%89%E1%85%A1%E1%86%B7_fow10k.mp3',
+        '사': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976188/4_%E1%84%89%E1%85%A1_i8bfgt.mp3',
+        '오': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976186/5_%E1%84%8B%E1%85%A9_xl84bu.mp3',
+        '육': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976180/6_%E1%84%8B%E1%85%B2%E1%86%A8_hkjni2.mp3',
+        '칠': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976074/7_%E1%84%8E%E1%85%B5%E1%86%AF_er2d6z.mp3',
+        '팔': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781975886/8_%E1%84%91%E1%85%A1%E1%86%AF_yysblf.mp3',
+        '구': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781975887/9_%E1%84%80%E1%85%AE_ao2yx0.mp3',
+        // 십자리
+        '사십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781975891/40_%E1%84%89%E1%85%A1%E1%84%89%E1%85%B5%E1%86%B8_svzzx0.mp3',
+        '오십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976065/50_%E1%84%8B%E1%85%A9%E1%84%89%E1%85%B5%E1%86%B8_hhgqxr.mp3',
+        '육십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976178/60_%E1%84%8B%E1%85%B2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B8_ur7ko3.mp3',
+        '칠십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976175/70_%E1%84%8E%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B5%E1%86%B8_yuqyv3.mp3',
+        '팔십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976171/80_%E1%84%91%E1%85%A1%E1%86%AF%E1%84%89%E1%85%B5%E1%86%B8_zhuuwa.mp3',
+        // 백자리 (100-900) — 녹음 필요
+        '백': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976116/100_%E1%84%87%E1%85%A2%E1%86%A8_dvlhx5.mp3',
+        '이백': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976113/200_%E1%84%8B%E1%85%B5%E1%84%87%E1%85%A2%E1%86%A8_lgtxwo.mp3',
+        '삼백': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976083/300_%E1%84%89%E1%85%A1%E1%86%B7%E1%84%87%E1%85%A2%E1%86%A8_v9bbsk.mp3',
+        '사백': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976105/400_%E1%84%89%E1%85%A1%E1%84%87%E1%85%A2%E1%86%A8_w14bcn.mp3',
+        '오백': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976110/500_%E1%84%8B%E1%85%A9%E1%84%87%E1%85%A2%E1%86%A8_sotllx.mp3',
+        '육백': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976108/600_%E1%84%8B%E1%85%B2%E1%86%A8%E1%84%87%E1%85%A2%E1%86%A8_of3whu.mp3',
+        '칠백': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976095/700_%E1%84%8E%E1%85%B5%E1%86%AF%E1%84%87%E1%85%A2%E1%86%A8_rqknvc.mp3',
+        '팔백': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976098/800_%E1%84%91%E1%85%A1%E1%86%AF%E1%84%87%E1%85%A2%E1%86%A8_g9fkhw.mp3',
+        '구백': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976088/900_%E1%84%80%E1%85%AE%E1%84%87%E1%85%A2%E1%86%A8_zqzoli.mp3',
+        // 천자리 (1000-9000) — 녹음 필요
+        '천': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976100/1000_%E1%84%8E%E1%85%A5%E1%86%AB_ovxac3.mp3',
+        '이천': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976086/2000_%E1%84%8B%E1%85%B5%E1%84%8E%E1%85%A5%E1%86%AB_gmxypb.mp3',
+        '삼천': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976103/3000_%E1%84%89%E1%85%A1%E1%86%B7%E1%84%8E%E1%85%A5%E1%86%AB_gorng0.mp3',
+        '사천': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976090/4000_%E1%84%89%E1%85%A1%E1%84%8E%E1%85%A5%E1%86%AB_wazudo.mp3',
+        '오천': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976093/5000_%E1%84%8B%E1%85%A9%E1%84%8E%E1%85%A5%E1%86%AB_uzu6qt.mp3',
+        '육천': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976076/6000_%E1%84%8B%E1%85%B2%E1%86%A8%E1%84%8E%E1%85%A5%E1%86%AB_hbakiy.mp3',
+        '칠천': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976079/7000_%E1%84%8E%E1%85%B5%E1%86%AF%E1%84%8E%E1%85%A5%E1%86%AB_wh5fth.mp3',
+        '팔천': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976081/8000_%E1%84%91%E1%85%A1%E1%86%AF%E1%84%8E%E1%85%A5%E1%86%AB_peynm6.mp3',
+        '구천': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976072/9000_%E1%84%80%E1%85%AE%E1%84%8E%E1%85%A5%E1%86%AB_bwxa0e.mp3',
+        // 조합 (예제/퀴즈) — 녹음 필요
+        '오백팔십삼': '',
+        '이백오십일': '',
+        '칠백사십구': '',
+        '천구백사십이': '',
+        '구천삼백육십사': '',
+        '백구': '',
+        '팔천칠십사': '',
+        '사백육십팔': '',
+        '팔백십삼': '',
+        '천백일': '',
+        '삼천오십': '',
+        '육천칠백사': '',
+    };
+    // ================================================================
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leçon 6 : Les grands nombres</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --theme:        #f1552e;
+            --theme-light:  #fdf0eb;
+            --text:         #333333;
+            --border:       #eeeeee;
+            --white:        #ffffff;
+            --success:      #28a745;
+            --success-bg:   #e3fcef;
+            --error:        #dc3545;
+            --error-bg:     #fff1f2;
+            --radius-box:   0.8em;
+        }
+
+        html { font-size: max(2.8vh, 3.2vmin); }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--text);
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-window { flex: 1; overflow: hidden; position: relative; }
+
+        .pages-slider {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform .4s ease-in-out;
+        }
+
+        .page {
+            width: 100%;
+            flex-shrink: 0;
+            height: 100%;
+            padding: 0.8em 1.4em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 0.8em;
+            overflow: hidden;
+        }
+
+        /* ── Cover pages ── */
+        .page-cover {
+            background: var(--theme);
+            color: var(--white);
+            gap: 0.4em;
+        }
+        .page-cover .kicker {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: .8;
+            margin: 0;
+        }
+        .page-cover .chapter {
+            font-size: 0.9em;
+            font-weight: 700;
+            opacity: .9;
+            margin: 0;
+        }
+        .page-cover h1 {
+            font-size: 1.9em;
+            line-height: 1.2;
+            margin: 0.2em 0 0;
+        }
+        .page-cover .start-btn {
+            margin-top: 1.8em;
+            background: var(--white);
+            color: var(--theme);
+            border: none;
+            padding: 0.7em 2.2em;
+            font-size: 1em;
+            font-weight: 700;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: opacity .2s;
+        }
+        .page-cover .start-btn:hover { opacity: .85; }
+
+
+        /* ── Typography ── */
+        .emoji { font-size: 2.8em; line-height: 1; margin: 0; }
+        h2 { color: var(--theme); font-size: 1.4em; margin: 0; }
+        h3 { font-size: 1.15em; margin: 0; }
+        p  { font-size: 0.95em; line-height: 1.6; margin: 0; }
+        .highlight { color: var(--theme); font-weight: 700; }
+
+        /* ── Grid ── */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.55em;
+            width: 100%;
+            max-width: 13em;
+        }
+        .grid-item {
+            background: var(--theme-light);
+            border: 0.1em solid var(--border);
+            border-radius: var(--radius-box);
+            padding: 0.6em;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+        .grid-item span { display: block; font-size: 0.75em; color: var(--theme); }
+        .grid-item:hover { background: var(--theme); color: var(--white); }
+        .grid-item:hover span { color: var(--white); }
+
+        /* ── Practice page ── */
+        .practice-number {
+            font-size: 4em;
+            font-weight: bold;
+            color: var(--text);
+            margin: 0;
+            line-height: 1;
+        }
+        .practice-pronunciation {
+            font-size: 1.5em;
+            color: var(--theme);
+            margin: 0;
+        }
+
+        /* ── Combo cards ── */
+        .combo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5em;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .combo-card {
+            background: #f0f0f0;
+            border-radius: var(--radius-box);
+            padding: 0.5em 0.7em;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background .2s;
+            white-space: nowrap;
+        }
+        .combo-card.result { background: var(--theme); color: var(--white); }
+        .combo-card.empty { background: transparent; border: 0.12em dashed #ccc; color: #ccc; cursor: default; }
+        .combo-op { font-size: 1.1em; font-weight: bold; color: #aaa; }
+
+        /* ── Action buttons ── */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 85%;
+            padding: 0.55em 1em;
+            border-radius: var(--radius-box);
+            font-size: 0.88em;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: opacity .2s;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+        .action-button .icon { margin-right: 0.5em; }
+        .action-button:hover { opacity: .85; }
+        .tts-button { background-color: #4A90E2; }
+
+        /* ── Quiz ── */
+        .quiz-counter { font-size: 0.78em; color: #888; margin: 0; align-self: flex-start; }
+
+        .quiz-option {
+            width: 90%;
+            padding: 0.65em 0.85em;
+            margin-top: 0;
+            border: 0.12em solid var(--border);
+            border-radius: var(--radius-box);
+            font-size: 0.9em;
+            font-family: inherit;
+            background: var(--white);
+            color: var(--text);
+            cursor: pointer;
+            text-align: center;
+            white-space: normal;
+            transition: border-color .15s, background .15s;
+            flex-shrink: 0;
+        }
+        .quiz-option:hover:not(:disabled) { border-color: var(--theme); }
+        .quiz-option.chosen-right { background: var(--success-bg); border-color: var(--success); }
+        .quiz-option.chosen-wrong { background: var(--error-bg); border-color: var(--error); }
+        .quiz-option:disabled { cursor: default; }
+
+
+        /* ── Bottom nav bar ── */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.9vh 6vw;
+            border-top: 1px solid var(--border);
+        }
+        .navigation[hidden] { display: none; }
+
+        .nav-btn {
+            background: var(--theme);
+            color: var(--white);
+            border: none;
+            width: 11ch;
+            padding: 1.5vh 0;
+            font-size: 2vh;
+            font-family: inherit;
+            border-radius: 2.5vh;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+            text-align: center;
+            overflow: hidden;
+        }
+        .nav-btn:hover:not(:disabled) { opacity: .85; }
+        .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .page-indicator {
+            font-size: 2vh;
+            color: #888;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="content-window">
+        <div class="pages-slider" id="pagesSlider">
+
+            <!-- PAGE 1 · Cover -->
+            <div class="page page-cover">
+                <p class="kicker">Maîtriser les nombres coréens</p>
+                <p class="chapter">Chapitre 2 – Le système chinois</p>
+                <h1>Leçon 6<br>Les grands nombres</h1>
+                <button class="start-btn" id="startBtn" type="button">Commencer</button>
+            </div>
+
+            <!-- PAGE 2 · Rappel important -->
+            <div class="page">
+                <p class="emoji">📢</p>
+                <h3>Rappel important</h3>
+                <p>Pour les nombres <span class="highlight">supérieurs à 100</span>, on utilise <span class="highlight">uniquement</span> le système sino-coréen, que ce soit pour l'ordre ou la quantité.</p>
+            </div>
+
+            <!-- PAGE 3 · Nouvelles unités -->
+            <div class="page">
+                <h3>Les nouvelles unités</h3>
+                <button class="action-button tts-button" type="button" data-korean="백"><span class="icon">🔊</span>Écouter : 100 (백)</button>
+                <button class="action-button tts-button" type="button" data-korean="천"><span class="icon">🔊</span>Écouter : 1000 (천)</button>
+            </div>
+
+            <!-- PAGE 4 · Le même principe -->
+            <div class="page">
+                <h3>Le même principe</h3>
+                <p>Comme pour les dizaines, on combine un chiffre avec l'unité de grandeur.</p>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="이">2 (이)</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="백">100 (백)</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="이백">200 (이백)</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="삼">3 (삼)</div>
+                    <div class="combo-op">×</div>
+                    <div class="combo-card" data-korean="천">1000 (천)</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="삼천">3000 (삼천)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 5 · Centaines grid -->
+            <div class="page">
+                <h3>Les centaines (100-900)</h3>
+                <p>Cliquez pour écouter.</p>
+                <div class="grid-container" id="hundredsGrid"></div>
+            </div>
+
+            <!-- PAGE 6 · Milliers grid -->
+            <div class="page">
+                <h3>Les milliers (1000-9000)</h3>
+                <p>Cliquez pour écouter.</p>
+                <div class="grid-container" id="thousandsGrid"></div>
+            </div>
+
+            <!-- PAGE 7 · Ordre de lecture -->
+            <div class="page">
+                <p class="emoji">📖</p>
+                <h3>Ordre de lecture</h3>
+                <p>On lit toujours du plus grand au plus petit, en assemblant chaque unité.</p>
+                <p class="highlight">Milliers → Centaines → Dizaines → Unités</p>
+            </div>
+
+            <!-- PAGE 8 · Exemple 583 -->
+            <div class="page">
+                <h3>Exemple : 583</h3>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="오백">500</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="팔십">80</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="삼">3</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="오백팔십삼">583 (오백팔십삼)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 9 · Exemples 3 chiffres -->
+            <div class="page">
+                <h3>Autres exemples (3 chiffres)</h3>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="이백">200</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="오십">50</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="일">1</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="이백오십일">251</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="칠백">700</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="사십">40</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="구">9</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="칠백사십구">749</div>
+                </div>
+            </div>
+
+            <!-- PAGE 10 · Exemples 4 chiffres -->
+            <div class="page">
+                <h3>Autres exemples (4 chiffres)</h3>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="천">1000</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="구백">900</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="사십">40</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="이">2</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="천구백사십이">1942</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="구천">9000</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="삼백">300</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="육십">60</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="사">4</div>
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="구천삼백육십사">9364</div>
+                </div>
+            </div>
+
+            <!-- PAGE 11 · Et le zéro -->
+            <div class="page">
+                <p class="emoji">🤫</p>
+                <h3>Et le zéro (0) ?</h3>
+                <p>Si une position (centaine, dizaine) a une valeur de zéro, on ne la lit tout simplement pas.</p>
+            </div>
+
+            <!-- PAGE 12 · Exemple zéro 109 -->
+            <div class="page">
+                <h3>Exemple avec zéro (109)</h3>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="백">100</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card empty">vide</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="구">9</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="백구">109 (백구)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 13 · Exemple zéro 8074 -->
+            <div class="page">
+                <h3>Exemple avec zéro (8074)</h3>
+                <div class="combo-container">
+                    <div class="combo-card" data-korean="팔천">8000</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card empty">vide</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="칠십">70</div>
+                    <div class="combo-op">+</div>
+                    <div class="combo-card" data-korean="사">4</div>
+                </div>
+                <div class="combo-container">
+                    <div class="combo-op">=</div>
+                    <div class="combo-card result" data-korean="팔천칠십사">8074 (팔천칠십사)</div>
+                </div>
+            </div>
+
+            <!-- PAGE 14 · Vérifions -->
+            <div class="page">
+                <p class="emoji">✅</p>
+                <h3>Vérifions !</h3>
+                <p>Testons ce que vous avez appris avec un quiz.</p>
+            </div>
+
+            <!-- PAGE 15 · Question 1/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="251">
+                <p class="quiz-counter">Question 1/10</p>
+                <h3>Quel est le bon nombre pour <span class="highlight">이백오십일</span> ?</h3>
+                <button class="quiz-option" data-correct="true" type="button">251</button>
+                <button class="quiz-option" data-correct="false" type="button">152</button>
+                <button class="quiz-option" data-correct="false" type="button">250</button>
+            </div>
+
+            <!-- PAGE 16 · Question 2/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="709">
+                <p class="quiz-counter">Question 2/10</p>
+                <h3>Quel est le bon nombre pour <span class="highlight">칠백구</span> ?</h3>
+                <button class="quiz-option" data-correct="false" type="button">790</button>
+                <button class="quiz-option" data-correct="true" type="button">709</button>
+                <button class="quiz-option" data-correct="false" type="button">907</button>
+            </div>
+
+            <!-- PAGE 17 · Question 3/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="1840">
+                <p class="quiz-counter">Question 3/10</p>
+                <h3>Quel est le bon nombre pour <span class="highlight">천팔백사십</span> ?</h3>
+                <button class="quiz-option" data-correct="false" type="button">1804</button>
+                <button class="quiz-option" data-correct="true" type="button">1840</button>
+                <button class="quiz-option" data-correct="false" type="button">1480</button>
+            </div>
+
+            <!-- PAGE 18 · Question 4/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="5062">
+                <p class="quiz-counter">Question 4/10</p>
+                <h3>Quel est le bon nombre pour <span class="highlight">오천육십이</span> ?</h3>
+                <button class="quiz-option" data-correct="false" type="button">5620</button>
+                <button class="quiz-option" data-correct="false" type="button">5602</button>
+                <button class="quiz-option" data-correct="true" type="button">5062</button>
+            </div>
+
+            <!-- PAGE 19 · Question 5/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="9999">
+                <p class="quiz-counter">Question 5/10</p>
+                <h3>Quel est le bon nombre pour <span class="highlight">구천구백구십구</span> ?</h3>
+                <button class="quiz-option" data-correct="false" type="button">999</button>
+                <button class="quiz-option" data-correct="false" type="button">9990</button>
+                <button class="quiz-option" data-correct="true" type="button">9999</button>
+            </div>
+
+            <!-- PAGE 20 · Question 6/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="사백육십팔">
+                <p class="quiz-counter">Question 6/10</p>
+                <h3>Quelle est la prononciation de <span class="highlight" style="font-size:1.5em">468</span> ?</h3>
+                <button class="quiz-option" data-correct="false" type="button">사백팔십육</button>
+                <button class="quiz-option" data-correct="false" type="button">육백팔십사</button>
+                <button class="quiz-option" data-correct="true" type="button">사백육십팔</button>
+            </div>
+
+            <!-- PAGE 21 · Question 7/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="팔백십삼">
+                <p class="quiz-counter">Question 7/10</p>
+                <h3>Quelle est la prononciation de <span class="highlight" style="font-size:1.5em">813</span> ?</h3>
+                <button class="quiz-option" data-correct="true" type="button">팔백십삼</button>
+                <button class="quiz-option" data-correct="false" type="button">팔백삼십일</button>
+                <button class="quiz-option" data-correct="false" type="button">삼백십팔</button>
+            </div>
+
+            <!-- PAGE 22 · Question 8/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="천백일">
+                <p class="quiz-counter">Question 8/10</p>
+                <h3>Quelle est la prononciation de <span class="highlight" style="font-size:1.5em">1101</span> ?</h3>
+                <button class="quiz-option" data-correct="false" type="button">천일백일</button>
+                <button class="quiz-option" data-correct="true" type="button">천백일</button>
+                <button class="quiz-option" data-correct="false" type="button">일천백일</button>
+            </div>
+
+            <!-- PAGE 23 · Question 9/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="삼천오십">
+                <p class="quiz-counter">Question 9/10</p>
+                <h3>Quelle est la prononciation de <span class="highlight" style="font-size:1.5em">3050</span> ?</h3>
+                <button class="quiz-option" data-correct="true" type="button">삼천오십</button>
+                <button class="quiz-option" data-correct="false" type="button">삼천오백</button>
+                <button class="quiz-option" data-correct="false" type="button">삼십오십</button>
+            </div>
+
+            <!-- PAGE 24 · Question 10/10 — MCQ -->
+            <div class="page" data-quiz data-answered="false" data-answer="육천칠백사">
+                <p class="quiz-counter">Question 10/10</p>
+                <h3>Quelle est la prononciation de <span class="highlight" style="font-size:1.5em">6704</span> ?</h3>
+                <button class="quiz-option" data-correct="false" type="button">육천칠십사</button>
+                <button class="quiz-option" data-correct="false" type="button">육천칠백사십</button>
+                <button class="quiz-option" data-correct="true" type="button">육천칠백사</button>
+            </div>
+
+            <!-- PAGE 25 · Final cover -->
+            <div class="page page-cover">
+                <p class="emoji" style="font-size:2.8em;">🎉</p>
+                <h1 style="font-size:1.8em;">Excellent !</h1>
+                <p style="opacity:.9;">Continuez à écouter et à répéter les nombres sino-coréens jusqu'à ce que vous les maîtrisiez parfaitement !</p>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navigation" id="navigation">
+        <button class="nav-btn" id="prevBtn">Précédent</button>
+        <span class="page-indicator" id="pageIndicator"></span>
+        <button class="nav-btn" id="nextBtn">Suivant</button>
+    </nav>
+</div>
+
+<script>
+// ================================================================
+// AUDIO FILE LIST (Rule 4) — 효과음 (synth fallback)
+// ================================================================
+const AUDIO = {
+    lesson_start: '',
+    page_turn:    '',
+    correct:      '',
+    incorrect:    '',
+    lesson_end:   '',
+};
+// ================================================================
+
+
+let audioCtx = null;
+
+function initAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function playSynth(type) {
+    if (!audioCtx) return;
+    const now = audioCtx.currentTime;
+    const configs = {
+        lesson_start: { notes: [[523,.00],[659,.12],[784,.24],[1047,.38]], shape:'sine',   vol:.07 },
+        page_turn:    { notes: [[600,.00]],                               shape:'sine',   vol:.06 },
+        correct:      { notes: [[784,.00],[988,.12]],                     shape:'sine',   vol:.08 },
+        incorrect:    { notes: [[220,.00],[196,.10]],                     shape:'square', vol:.05 },
+        lesson_end:   { notes: [[523,.00],[659,.10],[784,.20],[1047,.32],[1319,.46]], shape:'sine', vol:.07 },
+    };
+    const cfg = configs[type] || configs.page_turn;
+    cfg.notes.forEach(([freq, delay]) => {
+        const osc = audioCtx.createOscillator();
+        const g   = audioCtx.createGain();
+        osc.type = cfg.shape;
+        osc.frequency.value = freq;
+        g.gain.setValueAtTime(0, now + delay);
+        g.gain.linearRampToValueAtTime(cfg.vol, now + delay + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.18);
+        osc.connect(g); g.connect(audioCtx.destination);
+        osc.start(now + delay); osc.stop(now + delay + 0.2);
+    });
+}
+
+function playSound(type) {
+    initAudio();
+    const url = AUDIO[type];
+    if (url) { const a = new Audio(url); a.play().catch(() => playSynth(type)); }
+    else { playSynth(type); }
+}
+
+// ── TTS ──
+let currentTTS = null;
+
+// 페이지 로드 시 모든 오디오를 미리 캐싱 (클릭 시 버퍼 없이 즉시 재생)
+const audioCache = {};
+for (const key in audioMap) {
+    if (audioMap[key]) {
+        const a = new Audio();
+        a.preload = 'auto';
+        a.src = audioMap[key];
+        a.load();
+        audioCache[key] = a;
+    }
+}
+
+function playAudioSequence(text) {
+    if (currentTTS) { currentTTS.pause(); currentTTS.currentTime = 0; currentTTS = null; }
+    // 카드의 data-korean 값을 통짜로 재생 (예: "십일" 카드 → 십일 파일 하나)
+    const audio = audioCache[text];
+    if (!audio) return;
+    audio.currentTime = 0;
+    currentTTS = audio;
+    audio.play().catch(e => console.error(e));
+}
+
+
+
+// ── MCQ logic (맞을 때까지 재시도, 즉시 초기화) ──
+
+function checkMCQAnswer(option, page) {
+    if (page.dataset.answered === 'true') return;
+    const options  = page.querySelectorAll('.quiz-option');
+    const isCorrect = option.dataset.correct === 'true';
+
+    options.forEach(o => o.classList.remove('chosen-wrong'));
+
+    if (isCorrect) {
+        option.classList.add('chosen-right');
+        options.forEach(o => o.disabled = true);
+        playSound('correct');
+        page.dataset.answered = 'true';
+        nextBtn.disabled = false;
+    } else {
+        option.classList.add('chosen-wrong');
+        playSound('incorrect');
+    }
+}
+
+// ── App state ──
+const TOTAL     = 25;
+const IDX_FIRST = 0;
+const IDX_LAST  = TOTAL - 1;
+
+let currentPage = 0;
+
+const slider    = document.getElementById('pagesSlider');
+const navEl     = document.getElementById('navigation');
+const prevBtn   = document.getElementById('prevBtn');
+const nextBtn   = document.getElementById('nextBtn');
+const indicator = document.getElementById('pageIndicator');
+const allPages  = Array.from(document.querySelectorAll('.page'));
+
+function goTo(idx, sound = 'page_turn') {
+    if (idx < 0 || idx >= TOTAL) return;
+    currentPage = idx;
+    playSound(sound);
+    render();
+}
+
+function render() {
+    slider.style.transform = `translateX(-${currentPage * 100}%)`;
+
+    const isCover = currentPage === IDX_FIRST || currentPage === IDX_LAST;
+    navEl.hidden = isCover;
+
+    if (!isCover) {
+        indicator.textContent = `${currentPage + 1} / ${TOTAL}`;
+        prevBtn.disabled = (currentPage <= 1);
+
+        const page   = allPages[currentPage];
+        const isQuiz = page.hasAttribute('data-quiz');
+        const needsAnswer = isQuiz && page.dataset.answered !== 'true';
+        nextBtn.disabled = needsAnswer;
+    }
+
+    if (currentPage === IDX_LAST) triggerLessonComplete();
+}
+
+
+function triggerLessonComplete() {
+    playSound('lesson_end');
+    window.parent.postMessage({ type: 'lesson_complete' }, '*');
+}
+
+prevBtn.onclick = () => goTo(currentPage - 1);
+nextBtn.onclick = () => goTo(currentPage + 1);
+document.getElementById('startBtn').addEventListener('click', () => goTo(1, 'lesson_start'));
+
+// ── Wire up interactions ──
+const numbers = ['일','이','삼','사','오','육','칠','팔','구'];
+
+// Centaines grid (100-900) & Milliers grid (1000-9000)
+const hundredsGrid = document.getElementById('hundredsGrid');
+const thousandsGrid = document.getElementById('thousandsGrid');
+for (let i = 1; i <= 9; i++) {
+    const hItem = document.createElement('div');
+    hItem.className = 'grid-item';
+    const hKorean = (i === 1 ? '' : numbers[i - 1]) + '백';
+    hItem.innerHTML = `${i * 100}<span>${hKorean}</span>`;
+    hItem.addEventListener('click', () => playAudioSequence(hKorean));
+    hundredsGrid.appendChild(hItem);
+
+    const tItem = document.createElement('div');
+    tItem.className = 'grid-item';
+    const tKorean = (i === 1 ? '' : numbers[i - 1]) + '천';
+    tItem.innerHTML = `${i * 1000}<span>${tKorean}</span>`;
+    tItem.addEventListener('click', () => playAudioSequence(tKorean));
+    thousandsGrid.appendChild(tItem);
+}
+
+// Practice page tts button (PAGE 5)
+allPages.forEach((page, idx) => {
+    // TTS buttons
+    page.querySelectorAll('.tts-button').forEach(btn => {
+        const korean = btn.dataset.korean || page.dataset.korean;
+        if (korean) btn.addEventListener('click', () => playAudioSequence(korean));
+    });
+
+    // Combo cards
+    page.querySelectorAll('.combo-card[data-korean]').forEach(card => {
+        card.addEventListener('click', () => playAudioSequence(card.dataset.korean));
+    });
+
+    // Quiz options
+    if (page.hasAttribute('data-quiz')) {
+        page.querySelectorAll('.quiz-option').forEach(opt => {
+            opt.addEventListener('click', () => checkMCQAnswer(opt, page));
+        });
+    }
+});
+
+
+// ── Boot ──
+document.body.addEventListener('click', initAudio, { once: true });
+render();
+</script>
+</body>
+</html>
