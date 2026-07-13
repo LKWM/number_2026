@@ -781,12 +781,8 @@ async function startListening(recBtn, feedbackEl, page) {
                     if (!res.ok) throw new Error('API');
                     const data = await res.json();
                     recognized = data.recognized || data.text || '';
-                    // 숫자/글자 모두 인식: 한글 발음과 숫자 표기 중 높은 점수 채택
-                    const numericText = page.querySelector('.highlight') ? page.querySelector('.highlight').textContent.trim() : '';
-                    score      = Math.max(
-                        similarity(recognized, koreanText),
-                        numericText ? similarity(recognized, numericText) : 0
-                    );
+                    // 정답은 한글 발음만 인정 (고유어 수사)
+                    score      = similarity(recognized, koreanText);
                 } catch { score = 0; }
 
                 const maxAttempts = parseInt(page.dataset.maxAttempts);
