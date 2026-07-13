@@ -602,7 +602,8 @@ function render() {
         const isFitb = page.classList.contains('fitb-page');
         const isPuzzle = page.classList.contains('speech-puzzle-page');
         const isListenRepeat = page.classList.contains('listen-repeat-page');
-        const needsAnswer = (isFitb || isPuzzle || isListenRepeat) && page.dataset.answered !== 'true';
+        const isMCQ = page.classList.contains('mc-listening-page') || page.classList.contains('mc-reading-page');
+        const needsAnswer = (isFitb || isPuzzle || isListenRepeat || isMCQ) && page.dataset.answered !== 'true';
         nextBtn.disabled = needsAnswer;
     }
     if (currentPage === IDX_LAST) triggerLessonComplete();
