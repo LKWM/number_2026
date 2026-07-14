@@ -116,9 +116,11 @@
         .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55em; width: 100%; max-width: 13em; }
         .grid-item {
             background: var(--theme-light); border: 0.1em solid var(--border); border-radius: var(--radius-box);
-            padding: 0.6em; font-size: 1.4em; font-weight: bold; cursor: pointer; transition: background .2s, color .2s;
+            padding: 0.6em; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: background .2s, color .2s;
         }
+        .grid-item span { display: block; font-size: 0.75em; color: var(--theme); }
         .grid-item:hover { background: var(--theme); color: var(--white); border-color: var(--theme); }
+        .grid-item:hover span { color: var(--white); }
 
         .quiz-option {
             width: 90%; padding: 0.65em 0.85em; margin-top: 0;
@@ -131,6 +133,17 @@
         .quiz-option.chosen-right { background: var(--success-bg); border-color: var(--success); }
         .quiz-option.chosen-wrong { background: var(--error-bg);   border-color: var(--error); }
         .quiz-option:disabled     { cursor: default; }
+        .quiz-counter {
+            font-size: 0.78em;
+            color: #888;
+            margin: 0;
+            flex-shrink: 0;
+            text-align: center;
+        }
+        .note { font-size: 0.82em; color: #777; }
+        .quiz-option:has(.audio-icon) { display: flex; justify-content: space-between; align-items: center; }
+        .option-text { font-size: 1em; }
+        .audio-icon { font-size: 1.1em; cursor: pointer; padding: 0 0.2em; }
         .quiz-instruction { font-size: 0.82em; color: #555; text-align: center; margin: 0; flex-shrink: 0; }
         .exercise-label { font-size: 0.78em; color: #888; margin: 0; flex-shrink: 0; }
         .fitb-questions-container { width: 100%; }
