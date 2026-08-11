@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script>
+    // ================================================================
+    // 한국어 발음 오디오 — 녹음 완료 후 링크 추가 시 자동 연동
+    // ================================================================
+    const audioMap = {
+        // leçon 14 사용 오디오 (분류사 퀴즈)
+        '명': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261170/%E1%84%86%E1%85%A7%E1%86%BC_l3eeip.mp3',
+        '사람': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261149/%E1%84%89%E1%85%A1%E1%84%85%E1%85%A1%E1%86%B7_fhkfao.mp3',
+        '일곱': 'https://res.cloudinary.com/de76i94ia/video/upload/v1783876508/7_%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%80%E1%85%A9%E1%86%B8_ppgjm9.mp3',
+        '두': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261097/2%E1%84%83%E1%85%AE_l5gide.mp3',
+        '대': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786300792/%E1%84%83%E1%85%A2_wsmuiy.mp3',
+        '자동차': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786300954/%E1%84%8C%E1%85%A1%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8E%E1%85%A1_izd3kg.mp3',
+        '권': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786300823/%E1%84%80%E1%85%AF%E1%86%AB_rtr5jm.mp3',
+        '네': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261097/4%E1%84%82%E1%85%A6_pzdy1n.mp3',
+        '장': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786300826/%E1%84%8C%E1%85%A1%E1%86%BC_ri5eos.mp3',
+        '한': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261097/1%E1%84%92%E1%85%A1%E1%86%AB_wa2ylh.mp3',
+        '종이': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786301027/%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B5_xcdbm7.mp3',
+        '학생': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261177/%E1%84%92%E1%85%A1%E1%86%A8%E1%84%89%E1%85%A2%E1%86%BC_hpnf0d.mp3',
+        '세': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261097/3%E1%84%89%E1%85%A6_a4z2jd.mp3',
+        '고양이': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261236/%E1%84%80%E1%85%A9%E1%84%8B%E1%85%A3%E1%86%BC%E1%84%8B%E1%85%B5_ybdslq.mp3',
+        '다섯': 'https://res.cloudinary.com/de76i94ia/video/upload/v1783846334/5_%E1%84%83%E1%85%A1%E1%84%89%E1%85%A5%E1%86%BA_txbten.mp3',
+        '마리': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261184/%E1%84%86%E1%85%A1%E1%84%85%E1%85%B5_zvvuc9.mp3',
+        '만화책': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786301001/%E1%84%86%E1%85%A1%E1%86%AB%E1%84%92%E1%85%AA%E1%84%8E%E1%85%A2%E1%86%A8_vy2ris.mp3',
+        '열': 'https://res.cloudinary.com/de76i94ia/video/upload/v1783846334/10_%E1%84%8B%E1%85%A7%E1%86%AF_s7qrvv.mp3',
+        '건물': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786301042/%E1%84%80%E1%85%A5%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AF_oqra7k.mp3',
+        '채': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786300831/%E1%84%8E%E1%85%A2_zpr5w6.mp3',
+        '책': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786454794/%E1%84%8E%E1%85%A2%E1%86%A8_lqinka.mp3',
+        '한국어 책': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786300992/%E1%84%92%E1%85%A1%E1%86%AB%E1%84%80%E1%85%AE%E1%86%A8%E1%84%8B%E1%85%A5_%E1%84%8E%E1%85%A2%E1%86%A8_aczixk.mp3',
+    };
+    // ================================================================
+    // Clova Speech API
+    const CLOVA_URL = 'https://coreeno.base44.app/api/functions/naverClovaSpeech';
+    // ================================================================
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leçon 14 - Pratique : Utilisation des classificateurs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── Design tokens (identical to Leçon 1 / Leçon 2) ─────── */
+        :root {
+            --theme:        #f1552e;
+            --theme-light:  #fdf0eb;
+            --text:         #333333;
+            --border:       #eeeeee;
+            --white:        #ffffff;
+            --success:      #28a745;
+            --success-bg:   #e3fcef;
+            --error:        #dc3545;
+            --error-bg:     #fff1f2;
+            --radius-box:   0.8em;
+        }
+
+        html { font-size: max(2.8vh, 3.2vmin); }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--text);
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-window { flex: 1; overflow: hidden; position: relative; }
+
+        .pages-slider {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform .4s ease-in-out;
+        }
+
+        /* ── Base page ──────────────────────────────────────────── */
+        .page {
+            width: 100%;
+            flex-shrink: 0;
+            height: 100%;
+            padding: 0.8em 1.4em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 0.8em;
+            overflow: hidden;
+        }
+
+        /* ── Cover pages ────────────────────────────────────────── */
+        .page-cover {
+            background: var(--theme);
+            color: var(--white);
+            gap: 0.4em;
+        }
+        .page-cover .kicker {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: .8;
+            margin: 0;
+        }
+        .page-cover .chapter {
+            font-size: 0.9em;
+            font-weight: 700;
+            opacity: .9;
+            margin: 0;
+        }
+        .page-cover h1 {
+            font-size: 1.9em;
+            line-height: 1.2;
+            margin: 0.2em 0 0;
+        }
+        .page-cover .start-btn {
+            margin-top: 1.8em;
+            background: var(--white);
+            color: var(--theme);
+            border: none;
+            padding: 0.7em 2.2em;
+            font-size: 1em;
+            font-weight: 700;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: opacity .2s;
+        }
+        .page-cover .start-btn:hover { opacity: .85; }
+
+        /* ── Content typography ─────────────────────────────────── */
+        .emoji { font-size: 2.8em; line-height: 1; margin: 0; }
+
+        h2 { color: var(--theme); font-size: 1.4em; margin: 0; }
+        h3 { font-size: 1.15em; margin: 0; }
+        p  { font-size: 0.95em; line-height: 1.6; margin: 0; }
+
+        .highlight { color: var(--theme); font-weight: 700; }
+
+        /* ── Quiz counter / question text ───────────────────────── */
+        .quiz-counter {
+            font-size: 0.78em;
+            color: #888;
+            margin: 0;
+            flex-shrink: 0;
+            text-align: center;
+        }
+        .quiz-question {
+            font-size: 0.9em;
+            line-height: 1.55;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        /* ── MCQ options ──────────────────────────────────────── */
+        .quiz-option {
+            width: 90%;
+            padding: 0.65em 0.85em;
+            margin-top: 0;
+            border: 0.12em solid var(--border);
+            border-radius: var(--radius-box);
+            font-size: 0.9em;
+            font-family: inherit;
+            background: var(--white);
+            color: var(--text);
+            cursor: pointer;
+            text-align: center;
+            white-space: normal;
+            transition: border-color .15s, background .15s;
+            flex-shrink: 0;
+        }
+        .quiz-option:hover:not(:disabled) { border-color: var(--theme); }
+        .quiz-option.chosen-right { background: var(--success-bg); border-color: var(--success); }
+        .quiz-option.chosen-wrong { background: var(--error-bg);   border-color: var(--error); }
+        .quiz-option:disabled     { cursor: default; }
+
+        /* Feedback – fixed height so layout never shifts (Rule 2) */
+        .quiz-feedback,
+        .speech-feedback {
+            width: 100%;
+            margin-top: 0;
+            height: 2.8em;
+            line-height: 1.4;
+            font-size: 0.88em;
+            font-weight: 700;
+            text-align: center;
+            visibility: hidden;
+            flex-shrink: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quiz-feedback.show,
+        .speech-feedback.show          { visibility: visible; }
+        .quiz-feedback.show.success,
+        .speech-feedback.show.success  { color: var(--success); }
+        .quiz-feedback.show.error,
+        .speech-feedback.show.error    { color: var(--error); }
+
+        /* ── Writing exercise ───────────────────────────────────── */
+        .quiz-input {
+            width: 100%;
+            max-width: 14em;
+            padding: 0.6em 0.7em;
+            font-size: 1.1em;
+            font-family: inherit;
+            text-align: center;
+            border: 0.12em solid var(--border);
+            border-radius: var(--radius-box);
+            margin: 0;
+            flex-shrink: 0;
+            color: var(--text);
+            background: var(--white);
+        }
+        .quiz-input:focus { outline: none; border-color: var(--theme); }
+        .quiz-input.correct   { background: var(--success-bg); border-color: var(--success); color: var(--success); font-weight: 700; }
+        .quiz-input.incorrect { background: var(--error-bg);   border-color: var(--error);   color: var(--error);   font-weight: 700; }
+        .quiz-input:disabled  { cursor: default; opacity: 1; -webkit-text-fill-color: currentColor; }
+
+        .submit-btn {
+            background: var(--success);
+            color: var(--white);
+            border: none;
+            padding: 0.6em 1.6em;
+            font-size: 0.95em;
+            font-weight: 700;
+            font-family: inherit;
+            border-radius: var(--radius-box);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: opacity .2s;
+        }
+        .submit-btn:hover:not(:disabled) { opacity: .85; }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* ── Action buttons (TTS / Rec — identical to Leçon 1/2) ── */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 85%;
+            padding: 0.55em 1em;
+            border-radius: var(--radius-box);
+            font-size: 0.88em;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: opacity .2s;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+        .action-button .icon { margin-right: 0.5em; }
+        .action-button.icon-only .icon { margin-right: 0; }
+        .action-button:hover { opacity: .85; }
+        .action-button:disabled { opacity: .5; cursor: not-allowed; }
+        .tts-button { background-color: #4A90E2; }
+        .rec-button { background-color: #50E3C2; }
+        .rec-button.listening { background-color: #F5A623; }
+        .hint-button { background-color: #F5A623; }
+        .hint-button[data-revealed="false"] { visibility: hidden; }
+
+        .answer-hint {
+            font-size: 1em;
+            color: var(--theme);
+            font-weight: 600;
+            text-align: center;
+            margin: 0;
+            visibility: hidden;
+            height: 1.6em;
+            flex-shrink: 0;
+        }
+        .answer-hint.show { visibility: visible; }
+
+        /* ── Bottom nav bar ──────────────────────────────────────── */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.9vh 6vw;
+            border-top: 1px solid var(--border);
+        }
+        .navigation[hidden] { display: none; }
+
+        .nav-btn {
+            background: var(--theme);
+            color: var(--white);
+            border: none;
+            min-width: 11ch;
+            padding: 1.5vh 6vw;
+            font-size: 2vh;
+            font-family: inherit;
+            border-radius: 2.5vh;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .nav-btn:hover:not(:disabled) { opacity: .85; }
+        .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .page-indicator {
+            font-size: 2vh;
+            color: #888;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* Matching Quiz */
+        .matching-container { display: flex; justify-content: space-between; width: 100%; margin-top: 1em; gap: 0.6em; }
+        .matching-column { width: 47%; display: flex; flex-direction: column; gap: 0.6em; }
+        .match-item { padding: 0.7em; border: 0.12em solid var(--border); border-radius: var(--radius-box); cursor: pointer; font-size: 1.05em; transition: all .2s ease; background: var(--white); }
+        .match-item.selected { border-color: var(--theme); background: var(--theme-light); font-weight: bold; }
+        .match-item.correct { background: var(--success-bg); border-color: var(--success); cursor: default; }
+        .match-item.incorrect { background: var(--error-bg); border-color: var(--error); }
+        .quiz-page.answered .match-item:not(.correct) { opacity: 0.6; cursor: default; }
+        /* Ordering Quiz */
+        .order-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6em; margin-bottom: 1em; }
+        .order-option { padding: 0.55em 0.9em; background: var(--theme-light); border-radius: var(--radius-box); cursor: pointer; font-size: 1.1em; font-weight: bold; }
+        .order-answer-area { min-height: 2.6em; border: 0.12em dashed var(--border); border-radius: var(--radius-box); padding: 0.5em; margin-bottom: 0.8em; display: flex; flex-wrap: wrap; gap: 0.5em; align-items: center; width: 100%; box-sizing: border-box; }
+        .order-answer-item { padding: 0.45em 0.7em; background: var(--theme); color: var(--white); border-radius: var(--radius-box); font-size: 1.05em; font-weight: bold; cursor: pointer; }
+        .submit-order-btn { background: var(--success); color: var(--white); border: none; padding: 0.55em 1.4em; font-size: 0.95em; font-family: inherit; border-radius: 1.2em; cursor: pointer; margin-top: 0.5em; }
+        /* Listening Comp Quiz */
+        .listen-comp-dropdowns { display: flex; justify-content: center; align-items: center; gap: 0.6em; margin-top: 1em; width: 100%; }
+        .listen-comp-dropdowns select { padding: 0.55em; border: 0.12em solid var(--border); border-radius: var(--radius-box); font-size: 1.05em; font-family: inherit; background: var(--white); flex-grow: 1; min-width: 5em; }
+        .listen-comp-dropdowns select:focus { outline: none; border-color: var(--theme); }
+        .listen-comp-dropdowns select.correct { background: var(--success-bg); border-color: var(--success); }
+        .listen-comp-dropdowns select.incorrect { background: var(--error-bg); border-color: var(--error); }
+        .translation-text { font-size: 1.3em; font-weight: bold; margin: 0.4em 0 0.8em 0; color: var(--text); }
+        .order-feedback, .listen-feedback { min-height: 1.4em; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="content-window">
+        <div class="pages-slider" id="pagesSlider">
+            <!-- PAGE 1 · Cover -->
+            <div class="page page-cover">
+                <p class="kicker">Maîtriser les nombres coréens</p>
+                <p class="chapter">Chapitre 3 – Le système coréen</p>
+                <h1>Leçon 14<br>Pratique : Utilisation des classificateurs</h1>
+                <button class="start-btn" id="startBtn" type="button">Commencer</button>
+            </div>
+
+            <!-- PAGE 2 · Règles -->
+            <div class="page">
+                <p class="emoji">📝</p>
+                <h3>Règles du quiz</h3>
+                <p>Testez vos connaissances sur les nombres coréens natifs et les classificateurs appris.</p>
+                <p>Vous devez répondre correctement pour avancer.</p>
+                <p class="highlight">Bonne chance !</p>
+            </div>
+
+            <!-- PAGE 3 · Quiz 1 Matching -->
+            <div class="page quiz-page matching-page" id="matchingQuizPage" data-answered="false" data-correct-matches="0">
+                <p class="quiz-counter">Quiz 1 / 17</p>
+                <h3>Associez l'objet au bon classificateur.</h3>
+                <div class="matching-container">
+                    <div class="matching-column" id="matchCol1">
+                        <div class="match-item" data-id="1" data-match="명">사람</div>
+                        <div class="match-item" data-id="2" data-match="대">자동차</div>
+                        <div class="match-item" data-id="3" data-match="권">책</div>
+                        <div class="match-item" data-id="4" data-match="마리">고양이</div>
+                    </div>
+                    <div class="matching-column" id="matchCol2">
+                        <div class="match-item" data-id="5" data-match="대">대</div>
+                        <div class="match-item" data-id="6" data-match="마리">마리</div>
+                        <div class="match-item" data-id="7" data-match="명">명</div>
+                        <div class="match-item" data-id="8" data-match="권">권</div>
+                    </div>
+                </div>
+                <p class="quiz-feedback" id="match-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 2 / 17 Ordering -->
+            <div class="page quiz-page order-quiz-page" data-answered="false" data-answer="사람 일곱 명">
+                <p class="quiz-counter">Quiz 2 / 17</p>
+                <h3>Mettez les mots dans le bon ordre.</h3>
+                <div class="order-options">
+                    <span class="order-option" data-korean="명">명</span>
+                    <span class="order-option" data-korean="사람">사람</span>
+                    <span class="order-option" data-korean="일곱">일곱</span>
+                </div>
+                <div class="order-answer-area"></div>
+                <button class="submit-order-btn" type="button">Valider</button>
+                <p class="quiz-feedback order-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 3 / 17 Ordering -->
+            <div class="page quiz-page order-quiz-page" data-answered="false" data-answer="자동차 두 대">
+                <p class="quiz-counter">Quiz 3 / 17</p>
+                <h3>Mettez les mots dans le bon ordre.</h3>
+                <div class="order-options">
+                    <span class="order-option" data-korean="두">두</span>
+                    <span class="order-option" data-korean="대">대</span>
+                    <span class="order-option" data-korean="자동차">자동차</span>
+                </div>
+                <div class="order-answer-area"></div>
+                <button class="submit-order-btn" type="button">Valider</button>
+                <p class="quiz-feedback order-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 4 / 17 Ordering -->
+            <div class="page quiz-page order-quiz-page" data-answered="false" data-answer="한국어 책 네 권">
+                <p class="quiz-counter">Quiz 4 / 17</p>
+                <h3>Mettez les mots dans le bon ordre.</h3>
+                <div class="order-options">
+                    <span class="order-option" data-korean="권">권</span>
+                    <span class="order-option" data-korean="한국어 책">한국어 책</span>
+                    <span class="order-option" data-korean="네">네</span>
+                </div>
+                <div class="order-answer-area"></div>
+                <button class="submit-order-btn" type="button">Valider</button>
+                <p class="quiz-feedback order-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 5 / 17 Ordering -->
+            <div class="page quiz-page order-quiz-page" data-answered="false" data-answer="종이 한 장">
+                <p class="quiz-counter">Quiz 5 / 17</p>
+                <h3>Mettez les mots dans le bon ordre.</h3>
+                <div class="order-options">
+                    <span class="order-option" data-korean="장">장</span>
+                    <span class="order-option" data-korean="한">한</span>
+                    <span class="order-option" data-korean="종이">종이</span>
+                </div>
+                <div class="order-answer-area"></div>
+                <button class="submit-order-btn" type="button">Valider</button>
+                <p class="quiz-feedback order-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 6 / 17 Listening comp -->
+            <div class="page quiz-page listen-comp-page" data-answered="false" data-num-answer="Trois" data-obj-answer="Étudiants" data-korean="학생 세 명">
+                <p class="quiz-counter">Quiz 6 / 17</p>
+                <h3>Écoutez et sélectionnez le sens.</h3>
+                <button class="action-button tts-button" type="button" data-korean="학생 세 명"><span class="icon">🔊</span>Écouter</button>
+                <div class="listen-comp-dropdowns">
+                    <select class="listen-comp-select number-select">
+                        <option value="">(Nombre)</option>
+                        <option value="Un">Un</option>
+                        <option value="Deux">Deux</option>
+                        <option value="Trois">Trois</option>
+                        <option value="Quatre">Quatre</option>
+                    </select>
+                    <select class="listen-comp-select object-select">
+                        <option value="">(Objet/Clf.)</option>
+                        <option value="Personnes">Personnes</option>
+                        <option value="Étudiants">Étudiants</option>
+                        <option value="Amis">Amis</option>
+                        <option value="Voitures">Voitures</option>
+                    </select>
+                </div>
+                <p class="quiz-feedback listen-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 7 / 17 Listening comp -->
+            <div class="page quiz-page listen-comp-page" data-answered="false" data-num-answer="Cinq" data-obj-answer="Chats" data-korean="고양이 다섯 마리">
+                <p class="quiz-counter">Quiz 7 / 17</p>
+                <h3>Écoutez et sélectionnez le sens.</h3>
+                <button class="action-button tts-button" type="button" data-korean="고양이 다섯 마리"><span class="icon">🔊</span>Écouter</button>
+                <div class="listen-comp-dropdowns">
+                    <select class="listen-comp-select number-select">
+                        <option value="">(Nombre)</option>
+                        <option value="Quatre">Quatre</option>
+                        <option value="Cinq">Cinq</option>
+                        <option value="Six">Six</option>
+                    </select>
+                    <select class="listen-comp-select object-select">
+                        <option value="">(Objet/Clf.)</option>
+                        <option value="Chiens">Chiens</option>
+                        <option value="Animaux">Animaux</option>
+                        <option value="Chats">Chats</option>
+                        <option value="Maisons">Maisons</option>
+                    </select>
+                </div>
+                <p class="quiz-feedback listen-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 8 / 17 Listening comp -->
+            <div class="page quiz-page listen-comp-page" data-answered="false" data-num-answer="Dix" data-obj-answer="BD" data-korean="만화책 열 권">
+                <p class="quiz-counter">Quiz 8 / 17</p>
+                <h3>Écoutez et sélectionnez le sens.</h3>
+                <button class="action-button tts-button" type="button" data-korean="만화책 열 권"><span class="icon">🔊</span>Écouter</button>
+                <div class="listen-comp-dropdowns">
+                    <select class="listen-comp-select number-select">
+                        <option value="">(Nombre)</option>
+                        <option value="Neuf">Neuf</option>
+                        <option value="Dix">Dix</option>
+                        <option value="Onze">Onze</option>
+                    </select>
+                    <select class="listen-comp-select object-select">
+                        <option value="">(Objet/Clf.)</option>
+                        <option value="Livres">Livres</option>
+                        <option value="BD">BD</option>
+                        <option value="Cahiers">Cahiers</option>
+                        <option value="Feuilles">Feuilles</option>
+                    </select>
+                </div>
+                <p class="quiz-feedback listen-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 9 / 17 Listening comp -->
+            <div class="page quiz-page listen-comp-page" data-answered="false" data-num-answer="Un" data-obj-answer="Immeuble" data-korean="건물 한 채">
+                <p class="quiz-counter">Quiz 9 / 17</p>
+                <h3>Écoutez et sélectionnez le sens.</h3>
+                <button class="action-button tts-button" type="button" data-korean="건물 한 채"><span class="icon">🔊</span>Écouter</button>
+                <div class="listen-comp-dropdowns">
+                    <select class="listen-comp-select number-select">
+                        <option value="">(Nombre)</option>
+                        <option value="Un">Un</option>
+                        <option value="Deux">Deux</option>
+                        <option value="Dix">Dix</option>
+                    </select>
+                    <select class="listen-comp-select object-select">
+                        <option value="">(Objet/Clf.)</option>
+                        <option value="Maison">Maison</option>
+                        <option value="Appartement">Appartement</option>
+                        <option value="Immeuble">Immeuble</option>
+                        <option value="Ordinateurs">Ordinateurs</option>
+                    </select>
+                </div>
+                <p class="quiz-feedback listen-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 10 / 17 Traduction MCQ -->
+            <div class="page mc-reading-page" data-answered="false">
+                <p class="quiz-counter">Quiz 10 / 17</p>
+                <h3>Choisissez la bonne traduction.</h3>
+                <p class="translation-text">6 Chaises</p>
+                <button class="quiz-option" data-correct="false" type="button">여섯 의자 개</button>
+                <button class="quiz-option" data-correct="true" type="button">의자 여섯 개</button>
+                <button class="quiz-option" data-correct="false" type="button">개 여섯 의자</button>
+            </div>
+
+            <!-- PAGE · Quiz 11 / 17 Traduction MCQ -->
+            <div class="page mc-reading-page" data-answered="false">
+                <p class="quiz-counter">Quiz 11 / 17</p>
+                <h3>Choisissez la bonne traduction.</h3>
+                <p class="translation-text">2 Réfrigérateurs</p>
+                <button class="quiz-option" data-correct="false" type="button">두 냉장고 대</button>
+                <button class="quiz-option" data-correct="false" type="button">대 두 냉장고</button>
+                <button class="quiz-option" data-correct="true" type="button">냉장고 두 대</button>
+            </div>
+
+            <!-- PAGE · Quiz 12 / 17 Traduction MCQ -->
+            <div class="page mc-reading-page" data-answered="false">
+                <p class="quiz-counter">Quiz 12 / 17</p>
+                <h3>Choisissez la bonne traduction.</h3>
+                <p class="translation-text">8 Stylos</p>
+                <button class="quiz-option" data-correct="true" type="button">연필 여덟 개</button>
+                <button class="quiz-option" data-correct="false" type="button">여덟 연필 개</button>
+                <button class="quiz-option" data-correct="false" type="button">개 여덟 연필</button>
+            </div>
+
+            <!-- PAGE · Quiz 13 / 17 Traduction MCQ -->
+            <div class="page mc-reading-page" data-answered="false">
+                <p class="quiz-counter">Quiz 13 / 17</p>
+                <h3>Choisissez la bonne traduction.</h3>
+                <p class="translation-text">1 Maison</p>
+                <button class="quiz-option" data-correct="false" type="button">집 하나 채</button>
+                <button class="quiz-option" data-correct="false" type="button">한 집 채</button>
+                <button class="quiz-option" data-correct="true" type="button">집 한 채</button>
+            </div>
+
+            <!-- PAGE · Quiz 14 / 17 Speech -->
+            <div class="page speech-page" data-answered="false" data-korean="자동차 세 대" data-answer="자동차 세 대" data-attempts="0" data-max-attempts="3">
+                <p class="quiz-counter">Quiz 14 / 17</p>
+                <h3>Dites la traduction en coréen.</h3>
+                <p class="translation-text">3 Voitures</p>
+                <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                <p class="speech-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 15 / 17 Speech -->
+            <div class="page speech-page" data-answered="false" data-korean="책 다섯 권" data-answer="책 다섯 권" data-attempts="0" data-max-attempts="3">
+                <p class="quiz-counter">Quiz 15 / 17</p>
+                <h3>Dites la traduction en coréen.</h3>
+                <p class="translation-text">5 Livres</p>
+                <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                <p class="speech-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 16 / 17 Speech -->
+            <div class="page speech-page" data-answered="false" data-korean="사람 일곱 명" data-answer="사람 일곱 명" data-attempts="0" data-max-attempts="3">
+                <p class="quiz-counter">Quiz 16 / 17</p>
+                <h3>Dites la traduction en coréen.</h3>
+                <p class="translation-text">7 Personnes</p>
+                <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                <p class="speech-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE · Quiz 17 / 17 Speech -->
+            <div class="page speech-page" data-answered="false" data-korean="종이 두 장" data-answer="종이 두 장" data-attempts="0" data-max-attempts="3">
+                <p class="quiz-counter">Quiz 17 / 17</p>
+                <h3>Dites la traduction en coréen.</h3>
+                <p class="translation-text">2 Feuilles</p>
+                <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                <p class="speech-feedback" aria-live="polite"></p>
+            </div>
+
+            <!-- PAGE 20 · Final cover -->
+            <div class="page page-cover">
+                <p class="emoji" style="font-size:2.8em;">🎉</p>
+                <h1 style="font-size:1.8em;">Félicitations !</h1>
+                <p style="opacity:.9;">Dans le Chapitre 4, apprenons comment appliquer les nombres dans la vie réelle !</p>
+            </div>
+        </div>
+    </div><!-- /.content-window -->
+
+    <nav class="navigation" id="navigation">
+        <button class="nav-btn" id="prevBtn" type="button">Précédent</button>
+        <span class="page-indicator" id="pageIndicator"></span>
+        <button class="nav-btn" id="nextBtn" type="button">Suivant</button>
+    </nav>
+
+</div><!-- /.app-container -->
+
+<script>
+// ================================================================
+// AUDIO FILE LIST (Rule 4) — 효과음 (synth fallback)
+// ================================================================
+const AUDIO = {
+    lesson_start: '',
+    page_turn:    '',
+    correct:      '',
+    incorrect:    '',
+    lesson_end:   '',
+};
+// ================================================================
+
+// ── Feedback messages (Rule 8) ───────────────────────────────────
+const MSG = {
+    success_retry: 'Très bien, essayons encore une fois.',
+    success_end:   'Très bien ! Passez à la suite.',
+    fail_retry:    'On y est presque ! Essayons encore une fois.',
+    fail_end:      'Bien essayé ! Passez à la suite.',
+    fail_reveal:   'Bien essayé ! Voici la bonne réponse.',
+};
+
+// ── Audio engine (synth fallback, identical to Leçon 1/2) ────────
+let audioCtx = null;
+
+function initAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function playSynth(type) {
+    if (!audioCtx) return;
+    const now = audioCtx.currentTime;
+    const configs = {
+        lesson_start: { notes: [[523,.00],[659,.12],[784,.24],[1047,.38]], shape:'sine',   vol:.07 },
+        page_turn:    { notes: [[600,.00]],                               shape:'sine',   vol:.06 },
+        correct:      { notes: [[784,.00],[988,.12]],                     shape:'sine',   vol:.08 },
+        incorrect:    { notes: [[220,.00],[196,.10]],                     shape:'square', vol:.05 },
+        lesson_end:   { notes: [[523,.00],[659,.10],[784,.20],[1047,.32],[1319,.46]], shape:'sine', vol:.07 },
+    };
+    const cfg = configs[type] || configs.page_turn;
+    cfg.notes.forEach(([freq, delay]) => {
+        const osc = audioCtx.createOscillator();
+        const g   = audioCtx.createGain();
+        osc.type = cfg.shape;
+        osc.frequency.value = freq;
+        g.gain.setValueAtTime(0, now + delay);
+        g.gain.linearRampToValueAtTime(cfg.vol, now + delay + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.18);
+        osc.connect(g);
+        g.connect(audioCtx.destination);
+        osc.start(now + delay);
+        osc.stop(now + delay + 0.2);
+    });
+}
+
+function playSound(type) {
+    initAudio();
+    const url = AUDIO[type];
+    if (url) {
+        const a = new Audio(url);
+        a.play().catch(() => playSynth(type));
+    } else {
+        playSynth(type);
+    }
+}
+
+// ── TTS playback queue (identical to Leçon 1/2) ──────────────────
+let currentTTS = null;
+let ttsQueue   = [];
+
+function playAudioSequence(text) {
+    if (activeRecorder && activeRecorder.state === 'recording') return;
+    if (currentTTS) { currentTTS.pause(); currentTTS = null; }
+    ttsQueue = audioMap[text]
+        ? [audioMap[text]]
+        : text.split(' ').map(w => audioMap[w]).filter(Boolean);
+    if (!ttsQueue.length) return;
+    blockRec();
+    playNextTTS();
+}
+
+function playNextTTS() {
+    if (!ttsQueue.length) { currentTTS = null; restoreRec(); return; }
+    currentTTS = new Audio(ttsQueue.shift());
+    currentTTS.play().catch(e => { console.error(e); restoreRec(); });
+    currentTTS.onended = playNextTTS;
+}
+
+// ── Feedback helpers ─────────────────────────────────────────────
+function setFeedback(el, text, type) {
+    el.textContent = text;
+    el.className = `${el.className.split(' ')[0]} show ${type}`;
+}
+
+function clearFeedback(el) {
+    el.textContent = '';
+    el.className = el.className.split(' ')[0];
+}
+
+// ── Clova Speech (identical engine to Leçon 2) ───────────────────
+let activeRecorder   = null;
+let recordingTimeout = null;
+let micBlocked       = false;
+
+function blockRec() {
+    micBlocked = true;
+    if (activeRecorder && activeRecorder.state === 'recording') {
+        activeRecorder.stop();
+        if (recordingTimeout) { clearTimeout(recordingTimeout); recordingTimeout = null; }
+    }
+    document.querySelectorAll('.rec-button:not(.listening)').forEach(btn => {
+        if (!btn.disabled) { btn.disabled = true; btn.dataset.audioBlocked = '1'; }
+    });
+}
+
+function restoreRec() {
+    micBlocked = false;
+    document.querySelectorAll('.rec-button[data-audio-blocked]').forEach(btn => {
+        delete btn.dataset.audioBlocked;
+        const page = btn.closest('[data-answered]');
+        if (!page || page.dataset.answered !== 'true') btn.disabled = false;
+    });
+}
+
+function normalize(text) {
+    const numMap = {'1':'일','2':'이','3':'삼','4':'사','5':'오','6':'육','7':'칠','8':'팔','9':'구'};
+    return text
+        .replace(/[\s.,?!。·]/g, '')
+        .replace(/[1-9]/g, d => numMap[d])
+        .toLowerCase();
+}
+
+function similarity(a, b) {
+    const s1 = normalize(a);
+    const s2 = normalize(b);
+    if (s1 === s2) return 100;
+    if (!s1.length || !s2.length) return 0;
+    const m = [];
+    for (let i = 0; i <= s2.length; i++) {
+        m[i] = [];
+        for (let j = 0; j <= s1.length; j++) m[i][j] = i === 0 ? j : j === 0 ? i : 0;
+    }
+    for (let i = 1; i <= s2.length; i++)
+        for (let j = 1; j <= s1.length; j++)
+            m[i][j] = s1[j-1] === s2[i-1] ? m[i-1][j-1] : Math.min(m[i-1][j]+1, m[i][j-1]+1, m[i-1][j-1]+1);
+    return Math.max(0, Math.round((1 - m[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
+}
+
+// ── Speech page logic (직접 말하기: Threshold 80, 1회 틀리면 indice 노출, 최대 3회) ──
+const SPEECH_THRESHOLD = 80;
+
+async function startListening(recBtn, feedbackEl, page) {
+    if (page.dataset.answered === 'true') return;
+    if (micBlocked) return;
+    if (activeRecorder && activeRecorder.state === 'recording') {
+        activeRecorder.stop();
+        if (recordingTimeout) { clearTimeout(recordingTimeout); recordingTimeout = null; }
+        return;
+    }
+
+    const koreanText = page.dataset.korean;
+    if (!koreanText) return;
+
+    const hintBtn = page.querySelector('.hint-button');
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const chunks = [];
+        const rec    = new MediaRecorder(stream);
+        activeRecorder = rec;
+
+        rec.ondataavailable = e => chunks.push(e.data);
+
+        rec.onstop = async () => {
+            recBtn.innerHTML = `<span class="icon">⏳</span>Analyse…`;
+            recBtn.classList.remove('listening');
+            stream.getTracks().forEach(t => t.stop());
+
+            const blob   = new Blob(chunks, { type: 'audio/webm' });
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = async () => {
+                const b64 = reader.result.split(',')[1];
+                let recognized = '', score = 0;
+                try {
+                    const res  = await fetch(CLOVA_URL, {
+                        method:  'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body:    JSON.stringify({ audioBase64: b64, languageCode: 'Kor', assessment: false }),
+                    });
+                    if (!res.ok) throw new Error('API');
+                    const data = await res.json();
+                    recognized = data.recognized || data.text || '';
+                    // 정답은 한글 발음만 인정 (고유어 수사)
+                    score      = similarity(recognized, koreanText);
+                } catch { score = 0; }
+
+                const maxAttempts = parseInt(page.dataset.maxAttempts);
+                const attempts = parseInt(page.dataset.attempts) + 1;
+                page.dataset.attempts = attempts;
+
+                recBtn.innerHTML = `<span class="icon">🎤</span>Parler`;
+
+                const scoreInfo = ` — « ${recognized} » (${score}%)`;
+
+                if (score >= SPEECH_THRESHOLD) {
+                    setFeedback(feedbackEl, MSG.success_end + scoreInfo, 'success');
+                    hintBtn.innerHTML = `<span class="icon">🔊</span>${koreanText}`;
+                    hintBtn.classList.remove('icon-only');
+                    hintBtn.dataset.revealed = 'true';
+                    playSound('correct');
+                    page.dataset.answered = 'true';
+                    nextBtn.disabled = false;
+                    recBtn.disabled = true;
+                } else if (attempts >= maxAttempts) {
+                    setFeedback(feedbackEl, MSG.fail_reveal + scoreInfo, 'error');
+                    hintBtn.innerHTML = `<span class="icon">🔊</span>${koreanText}`;
+                    hintBtn.classList.remove('icon-only');
+                    hintBtn.dataset.revealed = 'true';
+                    playSound('incorrect');
+                    page.dataset.answered = 'true';
+                    nextBtn.disabled = false;
+                    recBtn.disabled = true;
+                } else {
+                    setFeedback(feedbackEl, MSG.fail_retry + scoreInfo, 'error');
+                    playSound('incorrect');
+                    if (attempts === 1) {
+                        hintBtn.dataset.revealed = 'true';
+                    }
+                }
+            };
+        };
+
+        rec.start();
+        recBtn.innerHTML = `<span class="icon">⏹</span>En écoute…`;
+        recBtn.classList.add('listening');
+        clearFeedback(feedbackEl);
+
+        recordingTimeout = setTimeout(() => {
+            if (rec.state === 'recording') rec.stop();
+            recordingTimeout = null;
+        }, 6000);
+
+    } catch {
+        setFeedback(feedbackEl, 'Erreur micro.', 'error');
+    }
+}
+
+// ── MCQ logic (맞출 때까지 정답 공개 없이 재시도, 안내 메시지 없이 색/효과음만) ──
+// ── Matching logic (4쌍 모두 맞출 때까지, 정답 공개 없음) ──────────
+let matchSel = { col1: null, col2: null };
+function setupMatching(page) {
+    const feedbackEl = page.querySelector('#match-feedback');
+    page.querySelectorAll('.match-item').forEach(item => {
+        item.addEventListener('click', () => {
+            if (item.classList.contains('correct') || page.dataset.answered === 'true') return;
+            const isCol1 = !!item.closest('#matchCol1');
+            const slot = isCol1 ? 'col1' : 'col2';
+            if (matchSel[slot] === item) { item.classList.remove('selected'); matchSel[slot] = null; }
+            else { if (matchSel[slot]) matchSel[slot].classList.remove('selected'); item.classList.add('selected'); matchSel[slot] = item; }
+            if (matchSel.col1) matchSel.col1.classList.remove('incorrect');
+            if (matchSel.col2) matchSel.col2.classList.remove('incorrect');
+            if (feedbackEl) clearFeedback(feedbackEl);
+            if (matchSel.col1 && matchSel.col2) {
+                if (matchSel.col1.dataset.match === matchSel.col2.dataset.match) {
+                    playSound('correct');
+                    matchSel.col1.classList.add('correct'); matchSel.col2.classList.add('correct');
+                    matchSel.col1.classList.remove('selected'); matchSel.col2.classList.remove('selected');
+                    matchSel = { col1: null, col2: null };
+                    const cnt = parseInt(page.dataset.correctMatches || '0') + 1;
+                    page.dataset.correctMatches = cnt;
+                    if (cnt === 4) { page.dataset.answered = 'true'; nextBtn.disabled = false; }
+                } else {
+                    playSound('incorrect');
+                    matchSel.col1.classList.add('incorrect'); matchSel.col2.classList.add('incorrect');
+                    const a = matchSel.col1, b = matchSel.col2;
+                    matchSel = { col1: null, col2: null };
+                    setTimeout(() => { a.classList.remove('selected','incorrect'); b.classList.remove('selected','incorrect'); }, 800);
+                }
+            }
+        });
+    });
+}
+
+// ── Ordering logic (Valider로 순서 검증, 재시도) ──────────────────
+function setupOrdering(page) {
+    const optionsC  = page.querySelector('.order-options');
+    const answerA   = page.querySelector('.order-answer-area');
+    const submitBtn = page.querySelector('.submit-order-btn');
+    const feedbackEl= page.querySelector('.order-feedback');
+    // shuffle
+    Array.from(optionsC.children).sort(() => Math.random() - 0.5).forEach(o => optionsC.appendChild(o));
+    optionsC.addEventListener('click', (e) => {
+        if (page.dataset.answered === 'true' || !e.target.classList.contains('order-option')) return;
+        playAudioSequence(e.target.dataset.korean);
+        const word = e.target.textContent, kor = e.target.dataset.korean;
+        e.target.style.display = 'none';
+        const item = document.createElement('span');
+        item.className = 'order-answer-item'; item.textContent = word; item.dataset.korean = kor;
+        item.onclick = () => {
+            if (page.dataset.answered === 'true') return;
+            const orig = Array.from(optionsC.children).find(o => o.dataset.korean === item.dataset.korean && o.style.display === 'none');
+            if (orig) orig.style.display = 'inline-block';
+            item.remove();
+        };
+        answerA.appendChild(item);
+    });
+    submitBtn.addEventListener('click', () => {
+        if (page.dataset.answered === 'true') return;
+        const built = Array.from(answerA.children).map(i => i.dataset.korean).join(' ');
+        if (built === page.dataset.answer) {
+            setFeedback(feedbackEl, MSG.success_end, 'success');
+            playSound('correct');
+            answerA.querySelectorAll('.order-answer-item').forEach(i => i.onclick = null);
+            page.dataset.answered = 'true'; nextBtn.disabled = false;
+        } else {
+            setFeedback(feedbackEl, MSG.fail_retry, 'error');
+            playSound('incorrect');
+        }
+    });
+}
+
+// ── Listening comprehension logic (두 드롭다운, 재시도) ───────────
+function setupListenComp(page) {
+    const numSel = page.querySelector('.number-select');
+    const objSel = page.querySelector('.object-select');
+    const feedbackEl = page.querySelector('.listen-feedback');
+    const check = () => {
+        if (page.dataset.answered === 'true') return;
+        const n = numSel.value, o = objSel.value;
+        if (!n || !o) return;
+        if (n === page.dataset.numAnswer && o === page.dataset.objAnswer) {
+            setFeedback(feedbackEl, MSG.success_end, 'success');
+            numSel.classList.add('correct'); objSel.classList.add('correct');
+            numSel.classList.remove('incorrect'); objSel.classList.remove('incorrect');
+            numSel.disabled = true; objSel.disabled = true;
+            playSound('correct');
+            page.dataset.answered = 'true'; nextBtn.disabled = false;
+        } else {
+            setFeedback(feedbackEl, MSG.fail_retry, 'error');
+            numSel.classList.toggle('incorrect', n !== page.dataset.numAnswer);
+            objSel.classList.toggle('incorrect', o !== page.dataset.objAnswer);
+            playSound('incorrect');
+        }
+    };
+    numSel.addEventListener('change', check);
+    objSel.addEventListener('change', check);
+}
+
+function checkMCQAnswer(option, page) {
+    if (page.dataset.answered === 'true') return;
+    const options  = page.querySelectorAll('.quiz-option');
+    const isCorrect = option.dataset.correct === 'true';
+
+    options.forEach(o => o.classList.remove('chosen-wrong'));
+
+    if (isCorrect) {
+        option.classList.add('chosen-right');
+        options.forEach(o => o.disabled = true);
+        playSound('correct');
+        page.dataset.answered = 'true';
+        nextBtn.disabled = false;
+    } else {
+        option.classList.add('chosen-wrong');
+        playSound('incorrect');
+    }
+}
+
+// ── Writing logic (Threshold 100, 1회 틀리면 Indice 버튼 노출, 최대 3회) ─
+const writingTimers = new WeakMap();
+
+function checkWritingAnswer(page) {
+    if (page.dataset.answered === 'true') return;
+    const input    = page.querySelector('.quiz-input');
+    const button   = page.querySelector('.submit-btn');
+    const hintBtn  = page.querySelector('.hint-button');
+    const feedback = page.querySelector('.quiz-feedback');
+    const value    = input.value.trim();
+    const answer   = page.dataset.answer;
+    input.blur();
+
+    if (writingTimers.has(page)) {
+        clearTimeout(writingTimers.get(page));
+        writingTimers.delete(page);
+    }
+
+    const maxAttempts = parseInt(page.dataset.maxAttempts);
+    const attempts = parseInt(page.dataset.attempts) + 1;
+    page.dataset.attempts = attempts;
+
+    if (value === answer) {
+        input.classList.add('correct');
+        input.disabled = true;
+        button.disabled = true;
+        hintBtn.dataset.revealed = 'true';
+        setFeedback(feedback, MSG.success_end, 'success');
+        playSound('correct');
+        page.dataset.answered = 'true';
+        nextBtn.disabled = false;
+    } else {
+        playSound('incorrect');
+
+        if (attempts === 1) {
+            hintBtn.dataset.revealed = 'true';
+        }
+
+        if (attempts >= maxAttempts) {
+            input.value = answer;
+            input.classList.add('incorrect');
+            input.disabled = true;
+            button.disabled = true;
+            setFeedback(feedback, MSG.fail_reveal, 'error');
+            page.dataset.answered = 'true';
+            nextBtn.disabled = false;
+        } else {
+            input.classList.add('incorrect');
+            setFeedback(feedback, MSG.fail_retry, 'error');
+            const timer = setTimeout(() => {
+                input.value = '';
+                input.classList.remove('incorrect');
+                clearFeedback(feedback);
+                writingTimers.delete(page);
+            }, 1400);
+            writingTimers.set(page, timer);
+        }
+    }
+}
+
+// ── App state ────────────────────────────────────────────────────
+const TOTAL = 20;
+const IDX_FIRST = 0;
+const IDX_LAST  = TOTAL - 1;
+
+let currentPage = 0;
+
+const slider    = document.getElementById('pagesSlider');
+const navEl     = document.getElementById('navigation');
+const prevBtn   = document.getElementById('prevBtn');
+const nextBtn   = document.getElementById('nextBtn');
+const indicator = document.getElementById('pageIndicator');
+const allPages  = Array.from(document.querySelectorAll('.page'));
+
+// ── Navigation ───────────────────────────────────────────────────
+let autoPlayTimer = null;
+
+function goTo(idx, sound = 'page_turn') {
+    if (idx < 0 || idx >= TOTAL) return;
+    if (autoPlayTimer) { clearTimeout(autoPlayTimer); autoPlayTimer = null; }
+    currentPage = idx;
+    playSound(sound);
+    render();
+    autoPlayTimer = setTimeout(() => {
+        const page = allPages[currentPage];
+        if (page.classList.contains('mc-listening-page')) {
+            const korean = page.dataset.korean;
+            if (korean) playAudioSequence(korean);
+        }
+    }, 200);
+}
+
+function render() {
+    slider.style.transform = `translateX(-${currentPage * 100}%)`;
+
+    const isCover = currentPage === IDX_FIRST || currentPage === IDX_LAST;
+    navEl.hidden  = isCover;
+
+    if (!isCover) {
+        indicator.textContent = `${currentPage + 1} / ${TOTAL}`;
+        prevBtn.disabled = (currentPage <= 1);
+
+        const page = allPages[currentPage];
+        const needsAnswer =
+            (page.classList.contains('mc-listening-page') ||
+             page.classList.contains('mc-reading-page') ||
+             page.classList.contains('writing-page') ||
+             page.classList.contains('speech-page') ||
+             page.classList.contains('matching-page') ||
+             page.classList.contains('order-quiz-page') ||
+             page.classList.contains('listen-comp-page')) &&
+            page.dataset.answered !== 'true';
+
+        nextBtn.disabled = needsAnswer;
+    }
+
+    if (currentPage === IDX_LAST) triggerLessonComplete();
+}
+
+prevBtn.onclick = () => goTo(currentPage - 1);
+nextBtn.onclick = () => goTo(currentPage + 1);
+document.getElementById('startBtn').addEventListener('click', () => goTo(1, 'lesson_start'));
+
+// ── Lesson complete (Rule 9) ─────────────────────────────────────
+function triggerLessonComplete() {
+    playSound('lesson_end');
+    window.parent.postMessage({ type: 'lesson_complete' }, '*');
+}
+
+// ── Wire up all page interactions ────────────────────────────────
+allPages.forEach(page => {
+    // TTS buttons (MCQ Listening)
+    page.querySelectorAll('.tts-button').forEach(btn => {
+        const korean = btn.dataset.korean || page.dataset.korean;
+        if (korean) btn.addEventListener('click', () => playAudioSequence(korean));
+    });
+
+    // MCQ options
+    if (page.classList.contains('mc-listening-page') || page.classList.contains('mc-reading-page')) {
+        page.querySelectorAll('.quiz-option').forEach(opt => {
+            opt.addEventListener('click', () => checkMCQAnswer(opt, page));
+        });
+    }
+
+    // Writing
+    if (page.classList.contains('writing-page')) {
+        const button  = page.querySelector('.submit-btn');
+        const hintBtn = page.querySelector('.hint-button');
+        const answer  = page.dataset.answer;
+        button.addEventListener('click', () => checkWritingAnswer(page));
+        hintBtn.addEventListener('click', () => playAudioSequence(answer));
+    }
+
+    // Speech
+    if (page.classList.contains('speech-page')) {
+        const recBtn  = page.querySelector('.rec-button');
+        const feedEl  = page.querySelector('.speech-feedback');
+        const hintBtn = page.querySelector('.hint-button');
+        const korean  = page.dataset.korean;
+        recBtn.addEventListener('click', () => startListening(recBtn, feedEl, page));
+        hintBtn.addEventListener('click', () => playAudioSequence(korean));
+    }
+
+    // Matching (Quiz 1)
+    if (page.classList.contains('matching-page')) setupMatching(page);
+
+    // Ordering (Quiz 2-5)
+    if (page.classList.contains('order-quiz-page')) setupOrdering(page);
+
+    // Listening comprehension (Quiz 6-9)
+    if (page.classList.contains('listen-comp-page')) setupListenComp(page);
+});
+
+// ── Boot ─────────────────────────────────────────────────────────
+document.body.addEventListener('click', initAudio, { once: true });
+render();
+</script>
+</body>
+</html>
