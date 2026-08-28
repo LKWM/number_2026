@@ -236,7 +236,12 @@
 
             <div class="page example-page">
                 <h3>Classificateur 명 : Personnes</h3>
-                <h4>Exemple 1 : 5 personnes</h4>
+                <button class="action-button tts-button" type="button" data-korean="명"><span class="icon">🔊</span>명</button>
+            </div>
+
+            <div class="page example-page">
+                <h3>Classificateur 명 : Personnes</h3>
+                <h4>5 personnes</h4>
                 <div class="example-phrase-buttons">
                 <div class="word-button-container">
                     <button class="word-button" type="button" data-korean="사람">사람</button>
@@ -256,7 +261,7 @@
 
             <div class="page example-page">
                 <h3>Classificateur 명 : Personnes</h3>
-                <h4>Exemple 2 : 3 personnes</h4>
+                <h4>3 personnes</h4>
                 <div class="example-phrase-buttons">
                 <div class="word-button-container">
                     <button class="word-button" type="button" data-korean="세">세</button>
@@ -272,7 +277,7 @@
 
             <div class="page example-page">
                 <h3>Classificateur 명 : Personnes</h3>
-                <h4>Exemple 3 : 2 étudiants</h4>
+                <h4>2 étudiants</h4>
                 <div class="example-phrase-buttons">
                 <div class="word-button-container">
                     <button class="word-button" type="button" data-korean="학생">학생</button>
@@ -292,7 +297,12 @@
 
             <div class="page example-page">
                 <h3>Classificateur 마리 : Animaux</h3>
-                <h4>Exemple 1 : 1 chien</h4>
+                <button class="action-button tts-button" type="button" data-korean="마리"><span class="icon">🔊</span>마리</button>
+            </div>
+
+            <div class="page example-page">
+                <h3>Classificateur 마리 : Animaux</h3>
+                <h4>1 chien</h4>
                 <div class="example-phrase-buttons">
                 <div class="word-button-container">
                     <button class="word-button" type="button" data-korean="개">개</button>
@@ -312,7 +322,7 @@
 
             <div class="page example-page">
                 <h3>Classificateur 마리 : Animaux</h3>
-                <h4>Exemple 2 : 4 chats</h4>
+                <h4>4 chats</h4>
                 <div class="example-phrase-buttons">
                 <div class="word-button-container">
                     <button class="word-button" type="button" data-korean="고양이">고양이</button>
@@ -332,7 +342,7 @@
 
             <div class="page example-page">
                 <h3>Classificateur 마리 : Animaux</h3>
-                <h4>Exemple 3 : 7 éléphants</h4>
+                <h4>7 éléphants</h4>
                 <div class="example-phrase-buttons">
                 <div class="word-button-container">
                     <button class="word-button" type="button" data-korean="코끼리">코끼리</button>
@@ -359,7 +369,7 @@
 
             <div class="page example-page">
                 <h3>Classificateur 개 : Objets</h3>
-                <h4>Exemple 1 : 4 pains</h4>
+                <h4>4 pains</h4>
                 <div class="example-phrase-buttons">
                 <div class="word-button-container">
                     <button class="word-button" type="button" data-korean="빵">빵</button>
@@ -379,7 +389,7 @@
 
             <div class="page example-page">
                 <h3>Classificateur 개 : Objets</h3>
-                <h4>Exemple 2 : 6 chaises</h4>
+                <h4>6 chaises</h4>
                 <div class="example-phrase-buttons">
                 <div class="word-button-container">
                     <button class="word-button" type="button" data-korean="의자">의자</button>
@@ -398,7 +408,7 @@
 
             <div class="page example-page">
                 <h3>Classificateur 개 : Objets</h3>
-                <h4>Exemple 3 : 9 stylos</h4>
+                <h4>9 stylos</h4>
                 <div class="example-phrase-buttons">
                 <div class="word-button-container">
                     <button class="word-button" type="button" data-korean="연필">연필</button>
@@ -623,7 +633,7 @@ function revealSpeechPuzzle(page) {
     });
     const recBtn = page.querySelector('.rec-button'); if (recBtn) recBtn.disabled = true;
 }
-const TOTAL = 15, IDX_FIRST = 0, IDX_LAST = TOTAL - 1;
+const TOTAL = 17, IDX_FIRST = 0, IDX_LAST = TOTAL - 1;
 let currentPage = 0;
 const slider = document.getElementById('pagesSlider');
 const navEl = document.getElementById('navigation');
