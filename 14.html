@@ -323,7 +323,7 @@
         }
 
         /* Matching Quiz */
-        .matching-container { display: flex; justify-content: space-between; width: 100%; margin-top: 1em; gap: 0.6em; }
+        .matching-container { display: flex; justify-content: space-between; width: 100%; gap: 0.6em; }
         .matching-column { width: 47%; display: flex; flex-direction: column; gap: 0.6em; }
         .match-item { padding: 0.7em; border: 0.12em solid var(--border); border-radius: var(--radius-box); cursor: pointer; font-size: 1.05em; transition: all .2s ease; background: var(--white); }
         .match-item.selected { border-color: var(--theme); background: var(--theme-light); font-weight: bold; }
@@ -331,18 +331,28 @@
         .match-item.incorrect { background: var(--error-bg); border-color: var(--error); }
         .quiz-page.answered .match-item:not(.correct) { opacity: 0.6; cursor: default; }
         /* Ordering Quiz */
-        .order-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6em; margin-bottom: 1em; }
+        .order-stage { display: grid; width: 100%; min-height: 3.6em; flex-shrink: 0; }
+        .order-options, .order-interpretation { grid-area: 1 / 1; align-self: center; justify-self: center; width: 100%; }
+        .order-options { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 0.6em; }
         .order-option { padding: 0.55em 0.9em; background: var(--theme-light); border-radius: var(--radius-box); cursor: pointer; font-size: 1.1em; font-weight: bold; }
-        .order-answer-area { min-height: 2.6em; border: 0.12em dashed var(--border); border-radius: var(--radius-box); padding: 0.5em; margin-bottom: 0.8em; display: flex; flex-wrap: wrap; gap: 0.5em; align-items: center; width: 100%; box-sizing: border-box; }
-        .order-answer-item { padding: 0.45em 0.7em; background: var(--theme); color: var(--white); border-radius: var(--radius-box); font-size: 1.05em; font-weight: bold; cursor: pointer; }
-        .submit-order-btn { background: var(--success); color: var(--white); border: none; padding: 0.55em 1.4em; font-size: 0.95em; font-family: inherit; border-radius: 1.2em; cursor: pointer; margin-top: 0.5em; }
+        .order-interpretation { visibility: hidden; font-size: 1.15em; font-weight: bold; color: var(--theme); text-align: center; line-height: 1.3; margin: 0; }
+        .order-interpretation.show { visibility: visible; }
+        .order-answer-wrap { display: grid; margin: 0 auto; max-width: 20em; width: 100%; flex-shrink: 0; }
+        .order-answer-area, .order-answer-ghost { grid-area: 1 / 1; min-height: 2.6em; border-radius: var(--radius-box); padding: 0.5em; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 0.5em; align-items: center; width: 100%; box-sizing: border-box; }
+        .order-answer-area { border: 0.12em dashed var(--border); }
+        .order-answer-ghost { visibility: hidden; border: 0.12em solid transparent; }
+        .order-answer-item { padding: 0.45em 0.7em; background: var(--theme); color: var(--white); border-radius: var(--radius-box); font-size: 1.05em; font-weight: bold; cursor: pointer; height: fit-content; }
+        .submit-order-btn { background: var(--success); color: var(--white); border: none; padding: 0.55em 1.4em; font-size: 0.95em; font-family: inherit; border-radius: 1.2em; cursor: pointer; flex-shrink: 0; }
         /* Listening Comp Quiz */
-        .listen-comp-dropdowns { display: flex; justify-content: center; align-items: center; gap: 0.6em; margin-top: 1em; width: 100%; }
-        .listen-comp-dropdowns select { padding: 0.55em; border: 0.12em solid var(--border); border-radius: var(--radius-box); font-size: 1.05em; font-family: inherit; background: var(--white); flex-grow: 1; min-width: 5em; }
+        .listen-comp-dropdowns { display: flex; justify-content: center; align-items: center; gap: 0.6em; width: 100%; }
+        .listen-comp-dropdowns select { padding: 0.55em; border: 0.12em solid var(--border); border-radius: var(--radius-box); font-size: 1.05em; font-family: inherit; background: var(--white); flex-grow: 1; min-width: 5em; text-align: center; text-align-last: center; }
         .listen-comp-dropdowns select:focus { outline: none; border-color: var(--theme); }
         .listen-comp-dropdowns select.correct { background: var(--success-bg); border-color: var(--success); }
         .listen-comp-dropdowns select.incorrect { background: var(--error-bg); border-color: var(--error); }
-        .translation-text { font-size: 1.3em; font-weight: bold; margin: 0.4em 0 0.8em 0; color: var(--text); }
+        .submit-listen-btn { background: var(--success); color: var(--white); border: none; padding: 0.55em 1.4em; font-size: 0.95em; font-family: inherit; border-radius: 1.2em; cursor: pointer; flex-shrink: 0; }
+        .listen-transcription { font-size: 1.1em; color: var(--theme); font-weight: 600; text-align: center; margin: 0; visibility: hidden; height: 1.6em; flex-shrink: 0; }
+        .listen-transcription.show { visibility: visible; }
+        .translation-text { font-size: 1.3em; font-weight: bold; margin: 0; color: var(--text); }
         .order-feedback, .listen-feedback { min-height: 1.4em; }
     </style>
 </head>
@@ -389,63 +399,75 @@
             </div>
 
             <!-- PAGE · Quiz 2 / 17 Ordering -->
-            <div class="page quiz-page order-quiz-page" data-answered="false" data-answer="사람 일곱 명">
+            <div class="page quiz-page order-quiz-page" data-answered="false" data-attempts="0" data-answer="사람 일곱 명">
                 <p class="quiz-counter">Quiz 2 / 17</p>
                 <h3>Mettez les mots dans le bon ordre.</h3>
-                <div class="order-options">
+                <div class="order-stage">
+                    <div class="order-options">
                     <span class="order-option" data-korean="명">명</span>
                     <span class="order-option" data-korean="사람">사람</span>
                     <span class="order-option" data-korean="일곱">일곱</span>
                 </div>
-                <div class="order-answer-area"></div>
+                    <p class="order-interpretation">7 personnes</p>
+                </div>
+                <div class="order-answer-wrap"><div class="order-answer-area"></div></div>
                 <button class="submit-order-btn" type="button">Valider</button>
                 <p class="quiz-feedback order-feedback" aria-live="polite"></p>
             </div>
 
             <!-- PAGE · Quiz 3 / 17 Ordering -->
-            <div class="page quiz-page order-quiz-page" data-answered="false" data-answer="자동차 두 대">
+            <div class="page quiz-page order-quiz-page" data-answered="false" data-attempts="0" data-answer="자동차 두 대">
                 <p class="quiz-counter">Quiz 3 / 17</p>
                 <h3>Mettez les mots dans le bon ordre.</h3>
-                <div class="order-options">
+                <div class="order-stage">
+                    <div class="order-options">
                     <span class="order-option" data-korean="두">두</span>
                     <span class="order-option" data-korean="대">대</span>
                     <span class="order-option" data-korean="자동차">자동차</span>
                 </div>
-                <div class="order-answer-area"></div>
+                    <p class="order-interpretation">2 voitures</p>
+                </div>
+                <div class="order-answer-wrap"><div class="order-answer-area"></div></div>
                 <button class="submit-order-btn" type="button">Valider</button>
                 <p class="quiz-feedback order-feedback" aria-live="polite"></p>
             </div>
 
             <!-- PAGE · Quiz 4 / 17 Ordering -->
-            <div class="page quiz-page order-quiz-page" data-answered="false" data-answer="한국어 책 네 권">
+            <div class="page quiz-page order-quiz-page" data-answered="false" data-attempts="0" data-answer="한국어 책 네 권">
                 <p class="quiz-counter">Quiz 4 / 17</p>
                 <h3>Mettez les mots dans le bon ordre.</h3>
-                <div class="order-options">
+                <div class="order-stage">
+                    <div class="order-options">
                     <span class="order-option" data-korean="권">권</span>
                     <span class="order-option" data-korean="한국어 책">한국어 책</span>
                     <span class="order-option" data-korean="네">네</span>
                 </div>
-                <div class="order-answer-area"></div>
+                    <p class="order-interpretation">4 livres de coréen</p>
+                </div>
+                <div class="order-answer-wrap"><div class="order-answer-area"></div></div>
                 <button class="submit-order-btn" type="button">Valider</button>
                 <p class="quiz-feedback order-feedback" aria-live="polite"></p>
             </div>
 
             <!-- PAGE · Quiz 5 / 17 Ordering -->
-            <div class="page quiz-page order-quiz-page" data-answered="false" data-answer="종이 한 장">
+            <div class="page quiz-page order-quiz-page" data-answered="false" data-attempts="0" data-answer="종이 한 장">
                 <p class="quiz-counter">Quiz 5 / 17</p>
                 <h3>Mettez les mots dans le bon ordre.</h3>
-                <div class="order-options">
+                <div class="order-stage">
+                    <div class="order-options">
                     <span class="order-option" data-korean="장">장</span>
                     <span class="order-option" data-korean="한">한</span>
                     <span class="order-option" data-korean="종이">종이</span>
                 </div>
-                <div class="order-answer-area"></div>
+                    <p class="order-interpretation">une feuille de papier</p>
+                </div>
+                <div class="order-answer-wrap"><div class="order-answer-area"></div></div>
                 <button class="submit-order-btn" type="button">Valider</button>
                 <p class="quiz-feedback order-feedback" aria-live="polite"></p>
             </div>
 
             <!-- PAGE · Quiz 6 / 17 Listening comp -->
-            <div class="page quiz-page listen-comp-page" data-answered="false" data-num-answer="Trois" data-obj-answer="Étudiants" data-korean="학생 세 명">
+            <div class="page quiz-page listen-comp-page" data-answered="false" data-attempts="0" data-num-answer="Trois" data-obj-answer="Étudiants" data-korean="학생 세 명">
                 <p class="quiz-counter">Quiz 6 / 17</p>
                 <h3>Écoutez et sélectionnez le sens.</h3>
                 <button class="action-button tts-button" type="button" data-korean="학생 세 명"><span class="icon">🔊</span>Écouter</button>
@@ -465,11 +487,13 @@
                         <option value="Voitures">Voitures</option>
                     </select>
                 </div>
+                <button class="submit-listen-btn" type="button">Valider</button>
                 <p class="quiz-feedback listen-feedback" aria-live="polite"></p>
+                <p class="listen-transcription" aria-hidden="true"></p>
             </div>
 
             <!-- PAGE · Quiz 7 / 17 Listening comp -->
-            <div class="page quiz-page listen-comp-page" data-answered="false" data-num-answer="Cinq" data-obj-answer="Chats" data-korean="고양이 다섯 마리">
+            <div class="page quiz-page listen-comp-page" data-answered="false" data-attempts="0" data-num-answer="Cinq" data-obj-answer="Chats" data-korean="고양이 다섯 마리">
                 <p class="quiz-counter">Quiz 7 / 17</p>
                 <h3>Écoutez et sélectionnez le sens.</h3>
                 <button class="action-button tts-button" type="button" data-korean="고양이 다섯 마리"><span class="icon">🔊</span>Écouter</button>
@@ -488,11 +512,13 @@
                         <option value="Maisons">Maisons</option>
                     </select>
                 </div>
+                <button class="submit-listen-btn" type="button">Valider</button>
                 <p class="quiz-feedback listen-feedback" aria-live="polite"></p>
+                <p class="listen-transcription" aria-hidden="true"></p>
             </div>
 
             <!-- PAGE · Quiz 8 / 17 Listening comp -->
-            <div class="page quiz-page listen-comp-page" data-answered="false" data-num-answer="Dix" data-obj-answer="BD" data-korean="만화책 열 권">
+            <div class="page quiz-page listen-comp-page" data-answered="false" data-attempts="0" data-num-answer="Dix" data-obj-answer="BD" data-korean="만화책 열 권">
                 <p class="quiz-counter">Quiz 8 / 17</p>
                 <h3>Écoutez et sélectionnez le sens.</h3>
                 <button class="action-button tts-button" type="button" data-korean="만화책 열 권"><span class="icon">🔊</span>Écouter</button>
@@ -511,11 +537,13 @@
                         <option value="Feuilles">Feuilles</option>
                     </select>
                 </div>
+                <button class="submit-listen-btn" type="button">Valider</button>
                 <p class="quiz-feedback listen-feedback" aria-live="polite"></p>
+                <p class="listen-transcription" aria-hidden="true"></p>
             </div>
 
             <!-- PAGE · Quiz 9 / 17 Listening comp -->
-            <div class="page quiz-page listen-comp-page" data-answered="false" data-num-answer="Un" data-obj-answer="Immeuble" data-korean="건물 한 채">
+            <div class="page quiz-page listen-comp-page" data-answered="false" data-attempts="0" data-num-answer="Un" data-obj-answer="Immeuble" data-korean="건물 한 채">
                 <p class="quiz-counter">Quiz 9 / 17</p>
                 <h3>Écoutez et sélectionnez le sens.</h3>
                 <button class="action-button tts-button" type="button" data-korean="건물 한 채"><span class="icon">🔊</span>Écouter</button>
@@ -534,7 +562,9 @@
                         <option value="Ordinateurs">Ordinateurs</option>
                     </select>
                 </div>
+                <button class="submit-listen-btn" type="button">Valider</button>
                 <p class="quiz-feedback listen-feedback" aria-live="polite"></p>
+                <p class="listen-transcription" aria-hidden="true"></p>
             </div>
 
             <!-- PAGE · Quiz 10 / 17 Traduction MCQ -->
@@ -598,7 +628,7 @@
             </div>
 
             <!-- PAGE · Quiz 16 / 17 Speech -->
-            <div class="page speech-page" data-answered="false" data-korean="사람 일곱 명" data-answer="사람 일곱 명" data-attempts="0" data-max-attempts="3">
+            <div class="page speech-page" data-answered="false" data-korean="사람 일곱 명" data-answer="사람 일곱 명" data-accepted="사람 일곱 명|일곱 명" data-attempts="0" data-max-attempts="3">
                 <p class="quiz-counter">Quiz 16 / 17</p>
                 <h3>Dites la traduction en coréen.</h3>
                 <p class="translation-text">7 Personnes</p>
@@ -608,10 +638,10 @@
             </div>
 
             <!-- PAGE · Quiz 17 / 17 Speech -->
-            <div class="page speech-page" data-answered="false" data-korean="종이 두 장" data-answer="종이 두 장" data-attempts="0" data-max-attempts="3">
+            <div class="page speech-page" data-answered="false" data-korean="종이 두 장" data-answer="종이 두 장" data-accepted="종이 두 장|두 장" data-attempts="0" data-max-attempts="3">
                 <p class="quiz-counter">Quiz 17 / 17</p>
                 <h3>Dites la traduction en coréen.</h3>
-                <p class="translation-text">2 Feuilles</p>
+                <p class="translation-text">2 feuilles de papier</p>
                 <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
                 <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                 <p class="speech-feedback" aria-live="polite"></p>
@@ -759,7 +789,9 @@ function restoreRec() {
 }
 
 function normalize(text) {
-    const numMap = {'1':'일','2':'이','3':'삼','4':'사','5':'오','6':'육','7':'칠','8':'팔','9':'구'};
+    // 이 레슨은 고유어 수사(классификатор 앞 수식형)만 사용하므로
+    // 숫자를 한자어가 아닌 고유어 수식형으로 치환한다.
+    const numMap = {'1':'한','2':'두','3':'세','4':'네','5':'다섯','6':'여섯','7':'일곱','8':'여덟','9':'아홉'};
     return text
         .replace(/[\s.,?!。·]/g, '')
         .replace(/[1-9]/g, d => numMap[d])
@@ -827,8 +859,9 @@ async function startListening(recBtn, feedbackEl, page) {
                     if (!res.ok) throw new Error('API');
                     const data = await res.json();
                     recognized = data.recognized || data.text || '';
-                    // 정답은 한글 발음만 인정 (고유어 수사)
-                    score      = similarity(recognized, koreanText);
+                    // 정답은 한글 발음만 인정 (고유어 수사); 목적어 생략 등 복수 정답 허용
+                    const accepted = page.dataset.accepted ? page.dataset.accepted.split('|') : [koreanText];
+                    score = Math.max(...accepted.map(a => similarity(recognized, a)));
                 } catch { score = 0; }
 
                 const maxAttempts = parseInt(page.dataset.maxAttempts);
@@ -919,13 +952,54 @@ function setupMatching(page) {
 }
 
 // ── Ordering logic (Valider로 순서 검증, 재시도) ──────────────────
+const orderTimers = new WeakMap();
+const ORDER_MAX_ATTEMPTS = 4;
+
 function setupOrdering(page) {
     const optionsC  = page.querySelector('.order-options');
     const answerA   = page.querySelector('.order-answer-area');
+    const wrap      = page.querySelector('.order-answer-wrap');
     const submitBtn = page.querySelector('.submit-order-btn');
     const feedbackEl= page.querySelector('.order-feedback');
+    const interpEl  = page.querySelector('.order-interpretation');
+
+    // 실제 칩 내용을 그대로 복제한 invisible 고스트: 최종 정답이 채워졌을 때의
+    // 실제 크기를 처음부터 확보해 입력창 크기가 절대 변하지 않도록 한다.
+    const ghost = document.createElement('div');
+    ghost.className = 'order-answer-ghost';
+    ghost.setAttribute('aria-hidden', 'true');
+    Array.from(optionsC.children).forEach(opt => {
+        const g = document.createElement('span');
+        g.className = 'order-answer-item';
+        g.textContent = opt.textContent;
+        ghost.appendChild(g);
+    });
+    wrap.appendChild(ghost);
+
     // shuffle
     Array.from(optionsC.children).sort(() => Math.random() - 0.5).forEach(o => optionsC.appendChild(o));
+
+    const resetBuilt = () => {
+        Array.from(answerA.children).forEach(item => {
+            const orig = Array.from(optionsC.children).find(o => o.dataset.korean === item.dataset.korean && o.style.display === 'none');
+            if (orig) orig.style.display = 'inline-block';
+            item.remove();
+        });
+    };
+
+    const revealAnswer = () => {
+        resetBuilt();
+        page.dataset.answer.split(' ').forEach(kor => {
+            const orig = optionsC.querySelector(`.order-option[data-korean="${kor}"]`);
+            const label = orig ? orig.textContent : kor;
+            if (orig) orig.style.display = 'none';
+            const item = document.createElement('span');
+            item.className = 'order-answer-item'; item.textContent = label; item.dataset.korean = kor;
+            answerA.appendChild(item);
+        });
+        if (interpEl) interpEl.classList.add('show');
+    };
+
     optionsC.addEventListener('click', (e) => {
         if (page.dataset.answered === 'true' || !e.target.classList.contains('order-option')) return;
         playAudioSequence(e.target.dataset.korean);
@@ -941,27 +1015,57 @@ function setupOrdering(page) {
         };
         answerA.appendChild(item);
     });
+
     submitBtn.addEventListener('click', () => {
         if (page.dataset.answered === 'true') return;
         const built = Array.from(answerA.children).map(i => i.dataset.korean).join(' ');
+
         if (built === page.dataset.answer) {
+            if (interpEl) interpEl.classList.add('show');
             setFeedback(feedbackEl, MSG.success_end, 'success');
             playSound('correct');
             answerA.querySelectorAll('.order-answer-item').forEach(i => i.onclick = null);
             page.dataset.answered = 'true'; nextBtn.disabled = false;
         } else {
+            const attempts = parseInt(page.dataset.attempts) + 1;
+            page.dataset.attempts = attempts;
+
+            if (attempts >= ORDER_MAX_ATTEMPTS) {
+                revealAnswer();
+                setFeedback(feedbackEl, MSG.fail_reveal, 'error');
+                playSound('incorrect');
+                page.dataset.answered = 'true'; nextBtn.disabled = false;
+                return;
+            }
+
             setFeedback(feedbackEl, MSG.fail_retry, 'error');
             playSound('incorrect');
+            if (orderTimers.has(page)) clearTimeout(orderTimers.get(page));
+            const timer = setTimeout(() => {
+                resetBuilt();
+                clearFeedback(feedbackEl);
+                orderTimers.delete(page);
+            }, 1400);
+            orderTimers.set(page, timer);
         }
     });
 }
 
 // ── Listening comprehension logic (두 드롭다운, 재시도) ───────────
+const listenTimers = new WeakMap();
+const LISTEN_MAX_ATTEMPTS = 4;
+
 function setupListenComp(page) {
     const numSel = page.querySelector('.number-select');
     const objSel = page.querySelector('.object-select');
     const feedbackEl = page.querySelector('.listen-feedback');
-    const check = () => {
+    const submitBtn = page.querySelector('.submit-listen-btn');
+    const transEl = page.querySelector('.listen-transcription');
+    const korean = page.dataset.korean;
+    const revealTranscription = () => {
+        if (transEl) { transEl.textContent = korean; transEl.classList.add('show'); }
+    };
+    submitBtn.addEventListener('click', () => {
         if (page.dataset.answered === 'true') return;
         const n = numSel.value, o = objSel.value;
         if (!n || !o) return;
@@ -970,17 +1074,41 @@ function setupListenComp(page) {
             numSel.classList.add('correct'); objSel.classList.add('correct');
             numSel.classList.remove('incorrect'); objSel.classList.remove('incorrect');
             numSel.disabled = true; objSel.disabled = true;
+            revealTranscription();
             playSound('correct');
             page.dataset.answered = 'true'; nextBtn.disabled = false;
         } else {
+            const attempts = parseInt(page.dataset.attempts) + 1;
+            page.dataset.attempts = attempts;
+
+            if (attempts >= LISTEN_MAX_ATTEMPTS) {
+                numSel.value = page.dataset.numAnswer; objSel.value = page.dataset.objAnswer;
+                numSel.classList.remove('incorrect'); objSel.classList.remove('incorrect');
+                numSel.classList.add('correct'); objSel.classList.add('correct');
+                numSel.disabled = true; objSel.disabled = true;
+                revealTranscription();
+                setFeedback(feedbackEl, MSG.fail_reveal, 'error');
+                playSound('incorrect');
+                page.dataset.answered = 'true'; nextBtn.disabled = false;
+                return;
+            }
+
             setFeedback(feedbackEl, MSG.fail_retry, 'error');
             numSel.classList.toggle('incorrect', n !== page.dataset.numAnswer);
             objSel.classList.toggle('incorrect', o !== page.dataset.objAnswer);
+            if (attempts >= 2) revealTranscription();
             playSound('incorrect');
+            if (listenTimers.has(page)) clearTimeout(listenTimers.get(page));
+            const timer = setTimeout(() => {
+                numSel.value = ''; objSel.value = '';
+                numSel.classList.remove('incorrect', 'correct');
+                objSel.classList.remove('incorrect', 'correct');
+                clearFeedback(feedbackEl);
+                listenTimers.delete(page);
+            }, 1400);
+            listenTimers.set(page, timer);
         }
-    };
-    numSel.addEventListener('change', check);
-    objSel.addEventListener('change', check);
+    });
 }
 
 function checkMCQAnswer(option, page) {
@@ -1087,7 +1215,7 @@ function goTo(idx, sound = 'page_turn') {
     render();
     autoPlayTimer = setTimeout(() => {
         const page = allPages[currentPage];
-        if (page.classList.contains('mc-listening-page')) {
+        if (page.classList.contains('mc-listening-page') || page.classList.contains('listen-comp-page')) {
             const korean = page.dataset.korean;
             if (korean) playAudioSequence(korean);
         }
