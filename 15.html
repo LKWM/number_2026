@@ -12,18 +12,25 @@
         '두': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261097/2%E1%84%83%E1%85%AE_l5gide.mp3',
         '삼': '',
         '세': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261097/3%E1%84%89%E1%85%A6_a4z2jd.mp3',
-        '십': '',
+        '십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600587/%E1%84%89%E1%85%B5%E1%86%B8_%E1%84%8D%E1%85%A9%E1%86%A8_gcdpe6.mp3',
         '열': 'https://res.cloudinary.com/de76i94ia/video/upload/v1783846334/10_%E1%84%8B%E1%85%A7%E1%86%AF_s7qrvv.mp3',
         '오': '',
         '이': '',
         '일': '',
         '일곱': 'https://res.cloudinary.com/de76i94ia/video/upload/v1783876508/7_%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%80%E1%85%A9%E1%86%B8_ppgjm9.mp3',
-        '쪽': '',
-        '층': '',
+        '쪽': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600705/%E1%84%8D%E1%85%A9%E1%86%A8_siykeg.mp3',
+        '층': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600796/%E1%84%8E%E1%85%B3%E1%86%BC_ald9gu.mp3',
+        // 2단어 콤보 (개별 재생보다 자연스러운 실제 녹음)
+        '세 권': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600588/%E1%84%89%E1%85%A6_%E1%84%80%E1%85%AF%E1%86%AB_d9ygsd.mp3',
+        '삼 권': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600588/%E1%84%89%E1%85%A1%E1%86%B7_%E1%84%80%E1%85%AF%E1%86%AB_e8zpvq.mp3',
+        '열 쪽': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600587/%E1%84%8B%E1%85%A7%E1%86%AF_%E1%84%8D%E1%85%A9%E1%86%A8_acbutj.mp3',
+        '십 쪽': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600587/%E1%84%89%E1%85%B5%E1%86%B8_%E1%84%8D%E1%85%A9%E1%86%A8_gcdpe6.mp3',
+        '이 층': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600594/%E1%84%8B%E1%85%B5_%E1%84%8E%E1%85%B3%E1%86%BC_aguyua.mp3',
+        '두 층': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600588/%E1%84%83%E1%85%AE_%E1%84%8E%E1%85%B3%E1%86%BC_rtas9s.mp3',
         // 문장 (통짜)
-        '병원은 삼 층에 있어요': '',
-        '만화책 두 권이 없어요': '',
-        '책 십오 쪽을 읽으세요': '',
+        '병원은 삼 층에 있어요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600793/%E1%84%87%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%8B%E1%85%B3%E1%86%AB_3%E1%84%8E%E1%85%B3%E1%86%BC%E1%84%8B%E1%85%A6_%E1%84%8B%E1%85%B5%E1%86%BB%E1%84%8B%E1%85%A5%E1%84%8B%E1%85%AD_wi0dxw.mp3',
+        '만화책 두 권이 없어요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600867/%E1%84%86%E1%85%A1%E1%86%AB%E1%84%92%E1%85%AA%E1%84%8E%E1%85%A2%E1%86%A8_2%E1%84%80%E1%85%AF%E1%86%AB%E1%84%8B%E1%85%B5_%E1%84%8B%E1%85%A5%E1%86%B9%E1%84%8B%E1%85%A5%E1%84%8B%E1%85%AD_pzn39x.mp3',
+        '책 십오 쪽을 읽으세요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600706/%E1%84%8E%E1%85%A2%E1%86%A8_15%E1%84%8D%E1%85%A9%E1%86%A8%E1%84%8B%E1%85%B3%E1%86%AF_%E1%84%8B%E1%85%B5%E1%86%B0%E1%84%8B%E1%85%B3%E1%84%89%E1%85%A6%E1%84%8B%E1%85%AD_g0l6th.mp3',
     };
     // ================================================================
     // Clova Speech API
@@ -346,11 +353,12 @@
         .comparison-phrase .korean { font-weight: bold; }
         .comparison-phrase button { background: none; border: none; font-size: 1.15em; cursor: pointer; padding: 0 0.3em; }
         .comparison-meaning { font-size: 0.9em; color: #555; }
-        .dropdown-quiz-container { display: flex; align-items: center; justify-content: center; gap: 0.5em; margin-top: 1em; flex-wrap: wrap; }
-        .dropdown-quiz-container select { padding: 0.55em; border: 0.12em solid var(--border); border-radius: var(--radius-box); font-size: 1em; font-family: inherit; background: var(--white); min-width: 4.5em; }
+        .dropdown-quiz-container { display: flex; align-items: center; justify-content: center; gap: 0.5em; flex-wrap: wrap; }
+        .dropdown-quiz-container select { padding: 0.55em; border: 0.12em solid var(--border); border-radius: var(--radius-box); font-size: 1em; font-family: inherit; background: var(--white); min-width: 4.5em; text-align: center; text-align-last: center; }
         .dropdown-quiz-container select:focus { outline: none; border-color: var(--theme); }
         .dropdown-quiz-container select.correct { background: var(--success-bg); border-color: var(--success); }
         .dropdown-quiz-container select.incorrect { background: var(--error-bg); border-color: var(--error); }
+        .submit-dropdown-btn { background: var(--success); color: var(--white); border: none; padding: 0.55em 1.4em; font-size: 0.95em; font-family: inherit; border-radius: 1.2em; cursor: pointer; flex-shrink: 0; }
         .french-phrase { font-size: 1.25em; font-weight: bold; margin-bottom: 0.6em; }
         .sentence-korean { font-size: 1.2em; font-weight: bold; color: var(--theme); margin: 0.3em 0 0.6em 0; }
         .dropdown-feedback { min-height: 1.4em; }
@@ -450,11 +458,17 @@
             </div>
 
             <!-- PAGE · Quiz 1 / 9 dropdown -->
-            <div class="page quiz-page dropdown-quiz-page" data-answered="false" data-num-answer="세" data-clf-answer="권" data-obj-answer="책">
+            <div class="page quiz-page dropdown-quiz-page" data-answered="false" data-attempts="0" data-num-answer="세" data-clf-answer="권" data-obj-answer="책">
                 <p class="quiz-counter">Quiz 1 / 9</p>
                 <h3>Comment diriez-vous en coréen ?</h3>
                 <p class="french-phrase">3 livres</p>
                 <div class="dropdown-quiz-container">
+                    <select class="dd-select obj-select">
+                        <option value="">(Objet)</option>
+                        <option value="책">책</option>
+                        <option value="쪽">쪽</option>
+                        <option value="층">층</option>
+                    </select>
                     <select class="dd-select number-select">
                         <option value="">(Nombre)</option>
                         <option value="세">세</option>
@@ -466,57 +480,54 @@
                         <option value="장">장</option>
                         <option value="쪽">쪽</option>
                     </select>
-                    <select class="dd-select obj-select">
-                        <option value="">(Objet)</option>
-                        <option value="책">책</option>
-                        <option value="쪽">쪽</option>
-                        <option value="층">층</option>
-                    </select>
                 </div>
+                <button class="submit-dropdown-btn" type="button">Valider</button>
                 <p class="quiz-feedback dropdown-feedback" aria-live="polite"></p>
             </div>
 
             <!-- PAGE · Quiz 2 / 9 dropdown -->
-            <div class="page quiz-page dropdown-quiz-page" data-answered="false" data-num-answer="십" data-clf-answer="쪽">
+            <div class="page quiz-page dropdown-quiz-page" data-answered="false" data-attempts="0" data-num-answer="십" data-clf-answer="쪽">
                 <p class="quiz-counter">Quiz 2 / 9</p>
                 <h3>Comment diriez-vous en coréen ?</h3>
                 <p class="french-phrase">la page 10</p>
                 <div class="dropdown-quiz-container">
-                    <select class="dd-select clf-select">
-                        <option value="">(Classificateur)</option>
-                        <option value="권">권</option>
-                        <option value="장">장</option>
-                        <option value="쪽">쪽</option>
-                    </select>
                     <select class="dd-select number-select">
                         <option value="">(Nombre)</option>
                         <option value="열">열</option>
                         <option value="십">십</option>
                         <option value="일">일</option>
                     </select>
+                    <select class="dd-select clf-select">
+                        <option value="">(Classificateur)</option>
+                        <option value="권">권</option>
+                        <option value="장">장</option>
+                        <option value="쪽">쪽</option>
+                    </select>
                 </div>
+                <button class="submit-dropdown-btn" type="button">Valider</button>
                 <p class="quiz-feedback dropdown-feedback" aria-live="polite"></p>
             </div>
 
             <!-- PAGE · Quiz 3 / 9 dropdown -->
-            <div class="page quiz-page dropdown-quiz-page" data-answered="false" data-num-answer="이" data-clf-answer="층">
+            <div class="page quiz-page dropdown-quiz-page" data-answered="false" data-attempts="0" data-num-answer="이" data-clf-answer="층">
                 <p class="quiz-counter">Quiz 3 / 9</p>
                 <h3>Comment diriez-vous en coréen ?</h3>
                 <p class="french-phrase">le 2ᵉ étage</p>
                 <div class="dropdown-quiz-container">
-                    <select class="dd-select clf-select">
-                        <option value="">(Classificateur)</option>
-                        <option value="개">개</option>
-                        <option value="층">층</option>
-                        <option value="채">채</option>
-                    </select>
                     <select class="dd-select number-select">
                         <option value="">(Nombre)</option>
                         <option value="이">이</option>
                         <option value="두">두</option>
                         <option value="둘">둘</option>
                     </select>
+                    <select class="dd-select clf-select">
+                        <option value="">(Classificateur)</option>
+                        <option value="개">개</option>
+                        <option value="층">층</option>
+                        <option value="채">채</option>
+                    </select>
                 </div>
+                <button class="submit-dropdown-btn" type="button">Valider</button>
                 <p class="quiz-feedback dropdown-feedback" aria-live="polite"></p>
             </div>
 
@@ -949,32 +960,76 @@ function setupListenComp(page) {
     objSel.addEventListener('change', check);
 }
 
+const DROPDOWN_MAX_ATTEMPTS = 4;
+
 function setupDropdown(page) {
     const selects = Array.from(page.querySelectorAll('.dd-select'));
     const feedbackEl = page.querySelector('.dropdown-feedback');
+    const submitBtn = page.querySelector('.submit-dropdown-btn');
     const numAns = page.dataset.numAnswer;
     const clfAns = page.dataset.clfAnswer;
     const objAns = page.dataset.objAnswer;
-    const check = () => {
-        if (page.dataset.answered === 'true') return;
+
+    const lockSelects = () => selects.forEach(s => s.disabled = true);
+    const unlockSelects = () => selects.forEach(s => s.disabled = false);
+
+    const revealAnswer = () => {
+        const nsE = page.querySelector('.number-select'), csE = page.querySelector('.clf-select'), osE = page.querySelector('.obj-select');
+        if (nsE) nsE.value = numAns;
+        if (csE) csE.value = clfAns;
+        if (osE && objAns) osE.value = objAns;
+        selects.forEach(s => { s.classList.remove('incorrect'); s.classList.add('correct'); });
+        lockSelects();
+    };
+
+    const doCheck = () => {
         const nsE = page.querySelector('.number-select'), csE = page.querySelector('.clf-select'), osE = page.querySelector('.obj-select');
         const num = nsE ? nsE.value : '', clf = csE ? csE.value : '', obj = osE ? osE.value : null;
         if (!num || !clf || (osE && !obj)) return;
         const ok = (num === numAns) && (clf === clfAns) && (!objAns || obj === objAns);
+
         if (ok) {
             setFeedback(feedbackEl, MSG.success_end, 'success');
-            selects.forEach(s => { s.classList.remove('incorrect'); s.classList.add('correct'); s.disabled = true; });
+            selects.forEach(s => s.classList.remove('incorrect'));
+            selects.forEach(s => s.classList.add('correct'));
+            lockSelects();
             playSound('correct');
+            submitBtn.disabled = true;
             page.dataset.answered = 'true'; nextBtn.disabled = false;
-        } else {
-            setFeedback(feedbackEl, MSG.fail_retry, 'error');
-            if (nsE) nsE.classList.toggle('incorrect', num !== numAns);
-            if (csE) csE.classList.toggle('incorrect', clf !== clfAns);
-            if (osE && objAns) osE.classList.toggle('incorrect', obj !== objAns);
-            playSound('incorrect');
+            return;
         }
+
+        const attempts = parseInt(page.dataset.attempts) + 1;
+        page.dataset.attempts = attempts;
+
+        if (attempts >= DROPDOWN_MAX_ATTEMPTS) {
+            revealAnswer();
+            setFeedback(feedbackEl, MSG.fail_reveal, 'error');
+            playSound('incorrect');
+            submitBtn.disabled = true;
+            page.dataset.answered = 'true'; nextBtn.disabled = false;
+            return;
+        }
+
+        setFeedback(feedbackEl, MSG.fail_retry, 'error');
+        if (nsE) nsE.classList.toggle('incorrect', num !== numAns);
+        if (csE) csE.classList.toggle('incorrect', clf !== clfAns);
+        if (osE && objAns) osE.classList.toggle('incorrect', obj !== objAns);
+        playSound('incorrect');
+        lockSelects();
+        submitBtn.textContent = 'Réessayer';
+        submitBtn.onclick = doRetry;
     };
-    selects.forEach(s => s.addEventListener('change', check));
+
+    const doRetry = () => {
+        selects.forEach(s => { s.value = ''; s.classList.remove('incorrect', 'correct'); });
+        unlockSelects();
+        clearFeedback(feedbackEl);
+        submitBtn.textContent = 'Valider';
+        submitBtn.onclick = doCheck;
+    };
+
+    submitBtn.onclick = doCheck;
 }
 
 function checkMCQAnswer(option, page) {
