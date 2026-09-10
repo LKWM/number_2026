@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script>
+    // ================================================================
+    // 한국어 발음 오디오 — 녹음 완료 후 링크 추가 시 자동 연동
+    // leçon 16 : 일의자리 수 / 십의자리 수(한자어)는 링크 연동,
+    // 이외의 조합수(년/월/일·날짜·연도)는 TTS 사용
+    // ================================================================
+    const audioMap = {
+        '일': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976070/1_%E1%84%8B%E1%85%B5%E1%86%AF_jkudjv.mp3',
+        '이': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976191/2_%E1%84%8B%E1%85%B5_phxtrr.mp3',
+        '삼': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976183/3_%E1%84%89%E1%85%A1%E1%86%B7_fow10k.mp3',
+        '사': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976188/4_%E1%84%89%E1%85%A1_i8bfgt.mp3',
+        '오': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976186/5_%E1%84%8B%E1%85%A9_xl84bu.mp3',
+        '육': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976180/6_%E1%84%8B%E1%85%B2%E1%86%A8_hkjni2.mp3',
+        '칠': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976074/7_%E1%84%8E%E1%85%B5%E1%86%AF_er2d6z.mp3',
+        '팔': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781975886/8_%E1%84%91%E1%85%A1%E1%86%AF_yysblf.mp3',
+        '구': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781975887/9_%E1%84%80%E1%85%AE_ao2yx0.mp3',
+        '십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976058/10_%E1%84%89%E1%85%B5%E1%86%B8_tc9ats.mp3',
+        '이십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976067/20_%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B5%E1%86%B8_oyjqf8.mp3',
+        '삼십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781975889/30_%E1%84%89%E1%85%A1%E1%86%B7%E1%84%89%E1%85%B5%E1%86%B8_d7zbwz.mp3',
+        '사십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781975891/40_%E1%84%89%E1%85%A1%E1%84%89%E1%85%B5%E1%86%B8_svzzx0.mp3',
+        '오십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976065/50_%E1%84%8B%E1%85%A9%E1%84%89%E1%85%B5%E1%86%B8_hhgqxr.mp3',
+        '육십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976178/60_%E1%84%8B%E1%85%B2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B8_ur7ko3.mp3',
+        '칠십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976175/70_%E1%84%8E%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B5%E1%86%B8_yuqyv3.mp3',
+        '팔십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976171/80_%E1%84%91%E1%85%A1%E1%86%AF%E1%84%89%E1%85%B5%E1%86%B8_zhuuwa.mp3',
+        '구십': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976119/90_%E1%84%80%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B8_j2inpp.mp3',
+    };
+    // ================================================================
+    // Clova Speech API
+    const CLOVA_URL = 'https://coreeno.base44.app/api/functions/naverClovaSpeech';
+    // ================================================================
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leçon 16 - Lire la date</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── Design tokens (identical to Leçon 1 / Leçon 2) ─────── */
+        :root {
+            --theme:        #f1552e;
+            --theme-light:  #fdf0eb;
+            --text:         #333333;
+            --border:       #eeeeee;
+            --white:        #ffffff;
+            --success:      #28a745;
+            --success-bg:   #e3fcef;
+            --error:        #dc3545;
+            --error-bg:     #fff1f2;
+            --radius-box:   0.8em;
+        }
+
+        html { font-size: max(2.8vh, 3.2vmin); }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--text);
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-window { flex: 1; overflow: hidden; position: relative; }
+
+        .pages-slider {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform .4s ease-in-out;
+        }
+
+        /* ── Base page ──────────────────────────────────────────── */
+        .page {
+            width: 100%;
+            flex-shrink: 0;
+            height: 100%;
+            padding: 0.8em 1.4em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 0.8em;
+            overflow: hidden;
+        }
+
+        /* ── Cover pages ────────────────────────────────────────── */
+        .page-cover {
+            background: var(--theme);
+            color: var(--white);
+            gap: 0.4em;
+        }
+        .page-cover .kicker {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: .8;
+            margin: 0;
+        }
+        .page-cover .chapter {
+            font-size: 0.9em;
+            font-weight: 700;
+            opacity: .9;
+            margin: 0;
+        }
+        .page-cover h1 {
+            font-size: 1.9em;
+            line-height: 1.2;
+            margin: 0.2em 0 0;
+        }
+        .page-cover .start-btn {
+            margin-top: 1.8em;
+            background: var(--white);
+            color: var(--theme);
+            border: none;
+            padding: 0.7em 2.2em;
+            font-size: 1em;
+            font-weight: 700;
+            border-radius: var(--radius-box);
+            cursor: pointer;
+            transition: opacity .2s;
+        }
+        .page-cover .start-btn:hover { opacity: .85; }
+
+        /* ── Content typography ─────────────────────────────────── */
+        .emoji { font-size: 2.8em; line-height: 1; margin: 0; }
+
+        h2 { color: var(--theme); font-size: 1.4em; margin: 0; }
+        h3 { font-size: 1.15em; margin: 0; }
+        p  { font-size: 0.95em; line-height: 1.6; margin: 0; }
+
+        .highlight { color: var(--theme); font-weight: 700; }
+
+        /* ── Quiz counter / question text ───────────────────────── */
+        .quiz-counter {
+            font-size: 0.78em;
+            color: #888;
+            margin: 0;
+            flex-shrink: 0;
+            text-align: center;
+        }
+        .quiz-question {
+            font-size: 0.9em;
+            line-height: 1.55;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        /* ── Feedback – fixed height so layout never shifts ─────── */
+        .quiz-feedback,
+        .speech-feedback {
+            width: 100%;
+            margin-top: 0;
+            height: 2.8em;
+            line-height: 1.4;
+            font-size: 0.88em;
+            font-weight: 700;
+            text-align: center;
+            visibility: hidden;
+            flex-shrink: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quiz-feedback.show,
+        .speech-feedback.show          { visibility: visible; }
+        .quiz-feedback.show.success,
+        .speech-feedback.show.success  { color: var(--success); }
+        .quiz-feedback.show.error,
+        .speech-feedback.show.error    { color: var(--error); }
+
+        /* ── Writing exercise inputs ────────────────────────────── */
+        .quiz-input {
+            width: 100%;
+            max-width: 14em;
+            padding: 0.6em 0.7em;
+            font-size: 1.1em;
+            font-family: inherit;
+            text-align: center;
+            border: 0.12em solid var(--border);
+            border-radius: var(--radius-box);
+            margin: 0;
+            flex-shrink: 0;
+            color: var(--text);
+            background: var(--white);
+        }
+        .quiz-input:focus { outline: none; border-color: var(--theme); }
+        .quiz-input.correct   { background: var(--success-bg); border-color: var(--success); color: var(--success); font-weight: 700; }
+        .quiz-input.incorrect { background: var(--error-bg);   border-color: var(--error);   color: var(--error);   font-weight: 700; }
+        .quiz-input:disabled  { cursor: default; opacity: 1; -webkit-text-fill-color: currentColor; }
+
+        .date-input-row { display: flex; justify-content: center; align-items: center; gap: 0.5em; width: 100%; flex-shrink: 0; }
+        .date-input-row .quiz-input { max-width: 4.5em; min-width: 3.6em; width: auto; }
+        .date-sep { font-size: 1.3em; font-weight: bold; color: var(--text); }
+
+        .submit-btn {
+            background: var(--success);
+            color: var(--white);
+            border: none;
+            padding: 0.6em 1.6em;
+            font-size: 0.95em;
+            font-weight: 700;
+            font-family: inherit;
+            border-radius: var(--radius-box);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: opacity .2s;
+        }
+        .submit-btn:hover:not(:disabled) { opacity: .85; }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* ── Action buttons (TTS / Rec — identical to Leçon 1/2) ── */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 85%;
+            padding: 0.55em 1em;
+            border-radius: var(--radius-box);
+            font-size: 0.88em;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: opacity .2s;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+        .action-button .icon { margin-right: 0.5em; }
+        .action-button.icon-only .icon { margin-right: 0; }
+        .action-button:hover { opacity: .85; }
+        .action-button:disabled { opacity: .5; cursor: not-allowed; }
+        .tts-button { background-color: #4A90E2; }
+        .rec-button { background-color: #50E3C2; }
+        .rec-button.listening { background-color: #F5A623; }
+        .hint-button { background-color: #F5A623; }
+        .hint-button[data-revealed="false"] { visibility: hidden; }
+
+        /* ── Example pages (word chips — Leçon 12/13 style) ──────── */
+        .example-page h3 { font-size: 1.3em; margin-bottom: 0.3em; }
+        .example-phrase-buttons { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 0.6em; margin-bottom: 0.6em; }
+        .word-button-container { text-align: center; }
+        .word-button { background: var(--theme-light); border: 0.12em solid var(--border); border-radius: var(--radius-box); padding: 0.5em 0.8em; font-size: 1.15em; font-weight: bold; cursor: pointer; transition: background .2s, color .2s; font-family: inherit; color: var(--text); }
+        .word-button:hover { background: var(--theme); color: var(--white); border-color: var(--theme); }
+        .word-translation { font-size: 0.72em; color: #777; display: block; margin-top: 0.2em; }
+        .example-explanation { font-size: 0.82em; color: #555; margin-top: 0.4em; line-height: 1.4; text-align: center; max-width: 95%; }
+        .example-explanation span { color: var(--theme); font-weight: bold; }
+        .structure-box { background: var(--theme-light); border-radius: var(--radius-box); padding: 0.9em; margin: 0.9em 0; width: 100%; box-sizing: border-box; text-align: center; font-size: 1em; font-weight: bold; }
+
+        /* ── Practice / listen-repeat pages (Leçon 8/10 style) ─── */
+        .practice-number { font-size: 3.2em; font-weight: bold; color: var(--text); margin: 0; line-height: 1; }
+        .practice-pronunciation { font-size: 1.5em; color: var(--theme); margin: 0; }
+        .practice-korean { font-size: 1.1em; color: var(--theme); opacity: 0.75; margin: 0; }
+        .quiz-instruction { font-size: 0.82em; color: #555; text-align: center; margin: 0; flex-shrink: 0; }
+
+        /* ── Speech quiz prompt (Leçon 14 style) ────────────────── */
+        .translation-text { font-size: 1.3em; font-weight: bold; margin: 0; color: var(--text); }
+
+        /* ── Matching Quiz (Leçon 14/15 style) ──────────────────── */
+        .matching-container { display: flex; justify-content: space-between; width: 100%; margin-top: 1em; gap: 0.6em; }
+        .matching-column { width: 47%; display: flex; flex-direction: column; gap: 0.6em; }
+        .match-item { padding: 0.7em; border: 0.12em solid var(--border); border-radius: var(--radius-box); cursor: pointer; font-size: 1.05em; transition: all .2s ease; background: var(--white); }
+        .match-item.selected { border-color: var(--theme); background: var(--theme-light); font-weight: bold; }
+        .match-item.correct { background: var(--success-bg); border-color: var(--success); cursor: default; }
+        .match-item.incorrect { background: var(--error-bg); border-color: var(--error); }
+        .quiz-page.answered .match-item:not(.correct) { opacity: 0.6; cursor: default; }
+
+        /* ── Dropdown quiz (Leçon 15 style) ──────────────────────── */
+        .dropdown-quiz-container { display: flex; align-items: center; justify-content: center; gap: 0.5em; flex-wrap: wrap; }
+        .dropdown-quiz-container select { padding: 0.55em; border: 0.12em solid var(--border); border-radius: var(--radius-box); font-size: 1em; font-family: inherit; background: var(--white); min-width: 4.5em; text-align: center; text-align-last: center; }
+        .dropdown-quiz-container select:focus { outline: none; border-color: var(--theme); }
+        .dropdown-quiz-container select.correct { background: var(--success-bg); border-color: var(--success); }
+        .dropdown-quiz-container select.incorrect { background: var(--error-bg); border-color: var(--error); }
+        .date-part { font-size: 1.25em; font-weight: bold; }
+        .submit-dropdown-btn { background: var(--success); color: var(--white); border: none; padding: 0.55em 1.4em; font-size: 0.95em; font-family: inherit; border-radius: 1.2em; cursor: pointer; flex-shrink: 0; }
+
+        /* ── Bottom nav bar ──────────────────────────────────────── */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.9vh 6vw;
+            border-top: 1px solid var(--border);
+        }
+        .navigation[hidden] { display: none; }
+
+        .nav-btn {
+            background: var(--theme);
+            color: var(--white);
+            border: none;
+            min-width: 11ch;
+            padding: 1.5vh 6vw;
+            font-size: 2vh;
+            font-family: inherit;
+            border-radius: 2.5vh;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .nav-btn:hover:not(:disabled) { opacity: .85; }
+        .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .page-indicator {
+            font-size: 2vh;
+            color: #888;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="content-window">
+            <div class="pages-slider" id="pagesSlider">
+
+                <!-- PAGE 1 · Cover -->
+                <div class="page page-cover">
+                    <p class="kicker">Maîtriser les nombres coréens</p>
+                    <p class="chapter">Chapitre 4 – Mise en pratique</p>
+                    <h1>Leçon 16<br>Lire la date</h1>
+                    <button class="start-btn" id="startBtn" type="button">Commencer</button>
+                </div>
+
+                <!-- PAGE 2 · Ordre de lecture -->
+                <div class="page">
+                    <p class="emoji">📅</p>
+                    <h3>Ordre de lecture</h3>
+                    <p>En coréen, on lit la date dans l'ordre suivant :</p>
+                    <p><span class="highlight">Année → Mois → Jour</span></p>
+                    <p>Chaque élément est suivi d'un mot spécifique.</p>
+                </div>
+
+                <!-- PAGE 3 · Année : 년 -->
+                <div class="page example-page">
+                    <h3>Année : <span class="highlight">년</span></h3>
+                    <div class="example-phrase-buttons">
+                        <div class="word-button-container">
+                            <button class="word-button" type="button" data-korean="년">🔊 년</button>
+                            <span class="word-translation">année</span>
+                        </div>
+                    </div>
+                    <p class="example-explanation">On lit le nombre de l'année avec les chiffres <span>chinois</span>, puis on ajoute <span>년</span>.</p>
+                    <div class="structure-box">
+                        Ex : 2025년 (이천이십오년)
+                        <div class="example-phrase-buttons" style="margin: 0.4em 0 0;">
+                            <button class="word-button" type="button" data-korean="이천이십오년">🔊 이천이십오년</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 4 · Pratique 1 : 2025년 -->
+                <div class="page listen-repeat-page" data-korean="이천이십오년" data-attempts="0" data-answered="false">
+                    <h3>Écoutez et répétez</h3>
+                    <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
+                    <p class="practice-number">2025년</p>
+                    <p class="practice-korean">이천이십오년</p>
+                    <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 5 · Pratique 2 : 1987년 -->
+                <div class="page listen-repeat-page" data-korean="천구백팔십칠년" data-attempts="0" data-answered="false">
+                    <h3>Écoutez et répétez</h3>
+                    <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
+                    <p class="practice-number">1987년</p>
+                    <p class="practice-korean">천구백팔십칠년</p>
+                    <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 6 · Mois : 월 -->
+                <div class="page example-page">
+                    <h3>Mois : <span class="highlight">월</span></h3>
+                    <div class="example-phrase-buttons">
+                        <div class="word-button-container">
+                            <button class="word-button" type="button" data-korean="월">🔊 월</button>
+                            <span class="word-translation">mois</span>
+                        </div>
+                    </div>
+                    <p class="example-explanation">Chaque mois s'écrit avec son numéro (chiffres <span>chinois</span>) suivi de <span>월</span>.</p>
+                    <div class="example-phrase-buttons">
+                        <div class="word-button-container">
+                            <button class="word-button" type="button" data-korean="사월">🔊 사월</button>
+                            <span class="word-translation">avril (4월)</span>
+                        </div>
+                        <div class="word-button-container">
+                            <button class="word-button" type="button" data-korean="유월">🔊 유월</button>
+                            <span class="word-translation">juin (6월)</span>
+                        </div>
+                        <div class="word-button-container">
+                            <button class="word-button" type="button" data-korean="시월">🔊 시월</button>
+                            <span class="word-translation">octobre (10월)</span>
+                        </div>
+                    </div>
+                    <p class="example-explanation">⚠️ Exceptions : Juin et Octobre se prononcent <span>유월</span> et <span>시월</span>.</p>
+                </div>
+
+                <!-- PAGE 7 · Pratique 1 : 1-4월 -->
+                <div class="page listen-repeat-page" data-korean="일월 이월 삼월 사월" data-attempts="0" data-answered="false">
+                    <h3>Écoutez et répétez</h3>
+                    <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
+                    <p class="practice-pronunciation">1 · 2 · 3 · 4</p>
+                    <p class="practice-korean">일월 · 이월 · 삼월 · 사월</p>
+                    <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 8 · Pratique 2 : 5-8월 -->
+                <div class="page listen-repeat-page" data-korean="오월 유월 칠월 팔월" data-attempts="0" data-answered="false">
+                    <h3>Écoutez et répétez</h3>
+                    <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
+                    <p class="practice-pronunciation">5 · 6 · 7 · 8</p>
+                    <p class="practice-korean">오월 · 유월 · 칠월 · 팔월</p>
+                    <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 9 · Pratique 3 : 9-12월 -->
+                <div class="page listen-repeat-page" data-korean="구월 시월 십일월 십이월" data-attempts="0" data-answered="false">
+                    <h3>Écoutez et répétez</h3>
+                    <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
+                    <p class="practice-pronunciation">9 · 10 · 11 · 12</p>
+                    <p class="practice-korean">구월 · 시월 · 십일월 · 십이월</p>
+                    <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 10 · Jour : 일 -->
+                <div class="page example-page">
+                    <h3>Jour : <span class="highlight">일</span></h3>
+                    <div class="example-phrase-buttons">
+                        <div class="word-button-container">
+                            <button class="word-button" type="button" data-korean="일">🔊 일</button>
+                            <span class="word-translation">jour</span>
+                        </div>
+                    </div>
+                    <p class="example-explanation">On lit le numéro du jour avec les chiffres <span>chinois</span>, puis on ajoute <span>일</span>.</p>
+                    <div class="structure-box">
+                        Ex : Le 10 → 십일
+                        <div class="example-phrase-buttons" style="margin: 0.4em 0 0;">
+                            <button class="word-button" type="button" data-korean="십일">🔊 십일</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 11 · Pratique 1 : 16일 -->
+                <div class="page listen-repeat-page" data-korean="십육일" data-attempts="0" data-answered="false">
+                    <h3>Écoutez et répétez</h3>
+                    <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
+                    <p class="practice-number">16일</p>
+                    <p class="practice-korean">십육일</p>
+                    <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 12 · Pratique 2 : 21일 -->
+                <div class="page listen-repeat-page" data-korean="이십일일" data-attempts="0" data-answered="false">
+                    <h3>Écoutez et répétez</h3>
+                    <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
+                    <p class="practice-number">21일</p>
+                    <p class="practice-korean">이십일일</p>
+                    <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 13 · Pratique 3 : 7일 -->
+                <div class="page listen-repeat-page" data-korean="칠일" data-attempts="0" data-answered="false">
+                    <h3>Écoutez et répétez</h3>
+                    <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
+                    <p class="practice-number">7일</p>
+                    <p class="practice-korean">칠일</p>
+                    <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 14 · Vérifions -->
+                <div class="page">
+                    <p class="emoji">✅</p>
+                    <h3>Vérifions !</h3>
+                    <p>Testons votre compréhension avec quelques questions.</p>
+                </div>
+
+                <!-- PAGE 15 · Quiz 1 / 7 Matching -->
+                <div class="page quiz-page matching-page" data-answered="false" data-correct-matches="0" data-total-matches="3">
+                    <p class="quiz-counter">Quiz 1 / 7</p>
+                    <h3>Associez le mot coréen à sa signification.</h3>
+                    <div class="matching-container">
+                        <div class="matching-column" id="matchCol1">
+                            <div class="match-item" data-id="1" data-match="annee">년</div>
+                            <div class="match-item" data-id="2" data-match="mois">월</div>
+                            <div class="match-item" data-id="3" data-match="jour">일</div>
+                        </div>
+                        <div class="matching-column" id="matchCol2">
+                            <div class="match-item" data-id="4" data-match="mois">Mois</div>
+                            <div class="match-item" data-id="5" data-match="jour">Jour</div>
+                            <div class="match-item" data-id="6" data-match="annee">Année</div>
+                        </div>
+                    </div>
+                    <p class="quiz-feedback" id="match-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 16 · Quiz 2 / 7 Date dropdown -->
+                <div class="page quiz-page date-dropdown-page" data-answered="false" data-attempts="0">
+                    <p class="quiz-counter">Quiz 2 / 7</p>
+                    <h3>Complétez la date.</h3>
+                    <div class="dropdown-quiz-container">
+                        <span class="date-part">2025</span>
+                        <select class="dd-select" data-answer="년">
+                            <option value="">( ? )</option>
+                            <option value="년">년</option>
+                            <option value="월">월</option>
+                            <option value="일">일</option>
+                        </select>
+                        <span class="date-part">9</span>
+                        <select class="dd-select" data-answer="월">
+                            <option value="">( ? )</option>
+                            <option value="년">년</option>
+                            <option value="월">월</option>
+                            <option value="일">일</option>
+                        </select>
+                        <span class="date-part">26</span>
+                        <select class="dd-select" data-answer="일">
+                            <option value="">( ? )</option>
+                            <option value="년">년</option>
+                            <option value="월">월</option>
+                            <option value="일">일</option>
+                        </select>
+                    </div>
+                    <button class="submit-dropdown-btn" type="button">Valider</button>
+                    <p class="quiz-feedback dropdown-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 17 · Quiz 3 / 7 Speech : 13 Octobre -->
+                <div class="page speech-page" data-answered="false" data-korean="시월십삼일" data-answer="시월십삼일" data-attempts="0" data-max-attempts="3">
+                    <p class="quiz-counter">Quiz 3 / 7</p>
+                    <h3>Dites en coréen.</h3>
+                    <p class="translation-text">13 Octobre</p>
+                    <p class="quiz-instruction">(N'oubliez pas l'exception pour Octobre !)</p>
+                    <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 18 · Quiz 4 / 7 Speech : 31 Janvier -->
+                <div class="page speech-page" data-answered="false" data-korean="일월삼십일일" data-answer="일월삼십일일" data-attempts="0" data-max-attempts="3">
+                    <p class="quiz-counter">Quiz 4 / 7</p>
+                    <h3>Dites en coréen.</h3>
+                    <p class="translation-text">31 Janvier</p>
+                    <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 19 · Quiz 5 / 7 Speech : 26 Avril 1993 -->
+                <div class="page speech-page" data-answered="false" data-korean="천구백구십삼년사월이십육일" data-answer="천구백구십삼년사월이십육일" data-attempts="0" data-max-attempts="3">
+                    <p class="quiz-counter">Quiz 5 / 7</p>
+                    <h3>Dites en coréen.</h3>
+                    <p class="translation-text">26 Avril 1993</p>
+                    <button class="action-button hint-button icon-only" type="button" data-revealed="false"><span class="icon">🔊</span></button>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 20 · Quiz 6 / 7 Speech : votre anniversaire -->
+                <div class="page speech-page" data-answered="false" data-flexible="birthday" data-attempts="0" data-max-attempts="3">
+                    <p class="quiz-counter">Quiz 6 / 7</p>
+                    <h3>Dites votre anniversaire (mois et jour).</h3>
+                    <p class="quiz-instruction">Dites-le en coréen, dans l'ordre mois puis jour.</p>
+                    <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
+                    <p class="speech-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 21 · Quiz 7 / 7 Listening : son anniversaire -->
+                <div class="page quiz-page date-input-page" data-answered="false" data-attempts="0" data-max-attempts="3">
+                    <p class="quiz-counter">Quiz 7 / 7</p>
+                    <h3>Quel est son anniversaire ?</h3>
+                    <button class="action-button tts-button" type="button" data-korean="제 생일은 천구백구십오년 팔월 십칠일이에요"><span class="icon">🔊</span>Écouter</button>
+                    <div class="date-input-row">
+                        <input type="number" class="quiz-input" data-answer="17" placeholder="Jour" min="1" max="31">
+                        <span class="date-sep">/</span>
+                        <input type="number" class="quiz-input" data-answer="8" placeholder="Mois" min="1" max="12">
+                        <span class="date-sep">/</span>
+                        <input type="number" class="quiz-input" data-answer="1995" placeholder="Année" min="1000" max="9999">
+                    </div>
+                    <button class="submit-btn" type="button">Valider</button>
+                    <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+
+                <!-- PAGE 22 · Final cover -->
+                <div class="page page-cover">
+                    <p class="emoji" style="font-size:2.8em;">🎉</p>
+                    <h1 style="font-size:1.8em;">Excellent !</h1>
+                    <p style="opacity:.9;">Entraînez-vous régulièrement à lire les dates. Dans la Leçon 17, vous apprendrez à lire l'heure.</p>
+                </div>
+
+            </div>
+        </div><!-- /.content-window -->
+
+        <nav class="navigation" id="navigation">
+            <button class="nav-btn" id="prevBtn" type="button">Précédent</button>
+            <span class="page-indicator" id="pageIndicator"></span>
+            <button class="nav-btn" id="nextBtn" type="button">Suivant</button>
+        </nav>
+
+    </div><!-- /.app-container -->
+
+    <script>
+    // ================================================================
+    // AUDIO FILE LIST (Rule 4) — 효과음 (synth fallback)
+    // ================================================================
+    const AUDIO = {
+        lesson_start: '',
+        page_turn:    '',
+        correct:      '',
+        incorrect:    '',
+        lesson_end:   '',
+    };
+    // ================================================================
+
+    // ── Feedback messages (Rule 8) ───────────────────────────────────
+    const MSG = {
+        success_retry: 'Très bien, essayons encore une fois.',
+        success_end:   'Très bien ! Passez à la suite.',
+        fail_retry:    'On y est presque ! Essayons encore une fois.',
+        fail_end:      'Bien essayé ! Passez à la suite.',
+        fail_reveal:   'Bien essayé ! Voici la bonne réponse.',
+    };
+
+    // ── Audio engine (synth fallback, identical to Leçon 1/2) ────────
+    let audioCtx = null;
+
+    function initAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function playSynth(type) {
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+        const configs = {
+            lesson_start: { notes: [[523,.00],[659,.12],[784,.24],[1047,.38]], shape:'sine',   vol:.07 },
+            page_turn:    { notes: [[600,.00]],                               shape:'sine',   vol:.06 },
+            correct:      { notes: [[784,.00],[988,.12]],                     shape:'sine',   vol:.08 },
+            incorrect:    { notes: [[220,.00],[196,.10]],                     shape:'square', vol:.05 },
+            lesson_end:   { notes: [[523,.00],[659,.10],[784,.20],[1047,.32],[1319,.46]], shape:'sine', vol:.07 },
+        };
+        const cfg = configs[type] || configs.page_turn;
+        cfg.notes.forEach(([freq, delay]) => {
+            const osc = audioCtx.createOscillator();
+            const g   = audioCtx.createGain();
+            osc.type = cfg.shape;
+            osc.frequency.value = freq;
+            g.gain.setValueAtTime(0, now + delay);
+            g.gain.linearRampToValueAtTime(cfg.vol, now + delay + 0.01);
+            g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.18);
+            osc.connect(g);
+            g.connect(audioCtx.destination);
+            osc.start(now + delay);
+            osc.stop(now + delay + 0.2);
+        });
+    }
+
+    function playSound(type) {
+        initAudio();
+        const url = AUDIO[type];
+        if (url) {
+            const a = new Audio(url);
+            a.play().catch(() => playSynth(type));
+        } else {
+            playSynth(type);
+        }
+    }
+
+    // ── TTS playback queue (identical to Leçon 1/2) ──────────────────
+    let currentTTS = null;
+    let ttsQueue   = [];
+
+    function playNextTTS() {
+        if (!ttsQueue.length) { currentTTS = null; restoreRec(); return; }
+        currentTTS = new Audio(ttsQueue.shift());
+        currentTTS.play().catch(e => { console.error(e); restoreRec(); });
+        currentTTS.onended = playNextTTS;
+    }
+
+    // 조합수 TTS fallback (실라버스: 일의자리/십의자리 수 = 링크, 이외 조합수 = TTS)
+    function speakTTS(text) {
+        if (!('speechSynthesis' in window)) return;
+        speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ko-KR';
+        utterance.rate = 0.8;
+        blockRec();
+        utterance.onend   = restoreRec;
+        utterance.onerror = restoreRec;
+        speechSynthesis.speak(utterance);
+    }
+
+    function playAudioSequence(text) {
+        if (activeRecorder && activeRecorder.state === 'recording') return;
+        if (currentTTS) { currentTTS.pause(); currentTTS = null; }
+        if (audioMap[text]) {
+            ttsQueue = [audioMap[text]];
+            blockRec();
+            playNextTTS();
+            return;
+        }
+        const words = text.split(' ').map(w => audioMap[w]);
+        if (words.length && words.every(Boolean)) {
+            ttsQueue = words;
+            blockRec();
+            playNextTTS();
+            return;
+        }
+        speakTTS(text);
+    }
+
+    // ── Feedback helpers ─────────────────────────────────────────────
+    function setFeedback(el, text, type) {
+        el.textContent = text;
+        el.className = `${el.className.split(' ')[0]} show ${type}`;
+    }
+
+    function clearFeedback(el) {
+        el.textContent = '';
+        el.className = el.className.split(' ')[0];
+    }
+
+    // ── Clova Speech (identical engine to Leçon 2) ───────────────────
+    let activeRecorder   = null;
+    let recordingTimeout = null;
+    let micBlocked       = false;
+
+    function blockRec() {
+        micBlocked = true;
+        if (activeRecorder && activeRecorder.state === 'recording') {
+            activeRecorder.stop();
+            if (recordingTimeout) { clearTimeout(recordingTimeout); recordingTimeout = null; }
+        }
+        document.querySelectorAll('.rec-button:not(.listening)').forEach(btn => {
+            if (!btn.disabled) { btn.disabled = true; btn.dataset.audioBlocked = '1'; }
+        });
+    }
+
+    function restoreRec() {
+        micBlocked = false;
+        document.querySelectorAll('.rec-button[data-audio-blocked]').forEach(btn => {
+            delete btn.dataset.audioBlocked;
+            const page = btn.closest('[data-answered]');
+            if (!page || page.dataset.answered !== 'true') btn.disabled = false;
+        });
+    }
+
+    function normalize(text) {
+        const numMap = {'1':'일','2':'이','3':'삼','4':'사','5':'오','6':'육','7':'칠','8':'팔','9':'구'};
+        return text
+            .replace(/[\s.,?!。·]/g, '')
+            .replace(/[1-9]/g, d => numMap[d])
+            .toLowerCase();
+    }
+
+    function similarity(a, b) {
+        const s1 = normalize(a);
+        const s2 = normalize(b);
+        if (s1 === s2) return 100;
+        if (!s1.length || !s2.length) return 0;
+        const m = [];
+        for (let i = 0; i <= s2.length; i++) {
+            m[i] = [];
+            for (let j = 0; j <= s1.length; j++) m[i][j] = i === 0 ? j : j === 0 ? i : 0;
+        }
+        for (let i = 1; i <= s2.length; i++)
+            for (let j = 1; j <= s1.length; j++)
+                m[i][j] = s1[j-1] === s2[i-1] ? m[i-1][j-1] : Math.min(m[i-1][j]+1, m[i][j-1]+1, m[i-1][j-1]+1);
+        return Math.max(0, Math.round((1 - m[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
+    }
+
+    // ── Speech logic (Threshold 80, 1회 틀리면 indice 노출, 최대 3회) ──
+    const SPEECH_THRESHOLD = 80;
+    const MAX_ATTEMPTS = 2;
+
+    async function startListening(recBtn, feedbackEl, page) {
+        if (page.dataset.answered === 'true') return;
+        if (micBlocked) return;
+        if (activeRecorder && activeRecorder.state === 'recording') {
+            activeRecorder.stop();
+            if (recordingTimeout) { clearTimeout(recordingTimeout); recordingTimeout = null; }
+            return;
+        }
+
+        const flexible  = page.dataset.flexible === 'birthday';
+        const koreanText = page.dataset.korean;
+        if (!koreanText && !flexible) return;
+
+        const hintBtn = page.querySelector('.hint-button');
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const chunks = [];
+            const rec    = new MediaRecorder(stream);
+            activeRecorder = rec;
+
+            rec.ondataavailable = e => chunks.push(e.data);
+
+            rec.onstop = async () => {
+                recBtn.innerHTML = `<span class="icon">⏳</span>Analyse…`;
+                recBtn.classList.remove('listening');
+                stream.getTracks().forEach(t => t.stop());
+
+                const blob   = new Blob(chunks, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = async () => {
+                    const b64 = reader.result.split(',')[1];
+                    let recognized = '', score = 0, isCorrect = false;
+                    try {
+                        const res  = await fetch(CLOVA_URL, {
+                            method:  'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body:    JSON.stringify({ audioBase64: b64, languageCode: 'Kor', assessment: false }),
+                        });
+                        if (!res.ok) throw new Error('API');
+                        const data = await res.json();
+                        recognized = data.recognized || data.text || '';
+                        if (flexible) {
+                            // 월/일 순서의 적절한 숫자라면 모두 정답으로 인정
+                            const t = recognized.replace(/\s+/g, '');
+                            isCorrect = /([0-9]+|[가-힣]+)월/.test(t) && /([0-9]+|[가-힣]+)일/.test(t);
+                            score = isCorrect ? 100 : 0;
+                        } else {
+                            score      = similarity(recognized, koreanText);
+                            isCorrect = score >= SPEECH_THRESHOLD;
+                        }
+                    } catch { score = 0; }
+
+                    const maxAttempts = parseInt(page.dataset.maxAttempts || String(MAX_ATTEMPTS));
+                    const attempts = parseInt(page.dataset.attempts) + 1;
+                    page.dataset.attempts = attempts;
+
+                    recBtn.innerHTML = `<span class="icon">🎤</span>Parler`;
+
+                    const scoreInfo = flexible
+                        ? ` — « ${recognized} »`
+                        : ` — « ${recognized} » (${score}%)`;
+
+                    if (isCorrect) {
+                        setFeedback(feedbackEl, MSG.success_end + scoreInfo, 'success');
+                        if (hintBtn) {
+                            hintBtn.innerHTML = `<span class="icon">🔊</span>${koreanText}`;
+                            hintBtn.classList.remove('icon-only');
+                            hintBtn.dataset.revealed = 'true';
+                        }
+                        playSound('correct');
+                        page.dataset.answered = 'true';
+                        nextBtn.disabled = false;
+                        recBtn.disabled = true;
+                    } else if (attempts >= maxAttempts) {
+                        const endMsg = hintBtn ? MSG.fail_reveal : MSG.fail_end;
+                        setFeedback(feedbackEl, endMsg + scoreInfo, 'error');
+                        if (hintBtn) {
+                            hintBtn.innerHTML = `<span class="icon">🔊</span>${koreanText}`;
+                            hintBtn.classList.remove('icon-only');
+                            hintBtn.dataset.revealed = 'true';
+                        }
+                        playSound('incorrect');
+                        page.dataset.answered = 'true';
+                        nextBtn.disabled = false;
+                        recBtn.disabled = true;
+                    } else {
+                        setFeedback(feedbackEl, MSG.fail_retry + scoreInfo, 'error');
+                        playSound('incorrect');
+                        if (attempts === 1 && hintBtn) {
+                            hintBtn.dataset.revealed = 'true';
+                        }
+                        if (page.classList.contains('listen-repeat-page')) {
+                            setTimeout(() => playAudioSequence(koreanText), 600);
+                        }
+                    }
+                };
+            };
+
+            rec.start();
+            recBtn.innerHTML = `<span class="icon">⏹</span>En écoute…`;
+            recBtn.classList.add('listening');
+            clearFeedback(feedbackEl);
+
+            recordingTimeout = setTimeout(() => {
+                if (rec.state === 'recording') rec.stop();
+                recordingTimeout = null;
+            }, 6000);
+
+        } catch {
+            setFeedback(feedbackEl, 'Erreur micro.', 'error');
+        }
+    }
+
+    // ── Matching logic (모든 쌍을 맞출 때까지, 정답 공개 없음) ──────────
+    let matchSel = { col1: null, col2: null };
+    function setupMatching(page) {
+        const feedbackEl = page.querySelector('#match-feedback');
+        const need = parseInt(page.dataset.totalMatches || '4');
+        page.querySelectorAll('.match-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (item.classList.contains('correct') || page.dataset.answered === 'true') return;
+                const isCol1 = !!item.closest('#matchCol1');
+                const slot = isCol1 ? 'col1' : 'col2';
+                if (matchSel[slot] === item) { item.classList.remove('selected'); matchSel[slot] = null; }
+                else { if (matchSel[slot]) matchSel[slot].classList.remove('selected'); item.classList.add('selected'); matchSel[slot] = item; }
+                if (matchSel.col1) matchSel.col1.classList.remove('incorrect');
+                if (matchSel.col2) matchSel.col2.classList.remove('incorrect');
+                if (feedbackEl) clearFeedback(feedbackEl);
+                if (matchSel.col1 && matchSel.col2) {
+                    if (matchSel.col1.dataset.match === matchSel.col2.dataset.match) {
+                        playSound('correct');
+                        matchSel.col1.classList.add('correct'); matchSel.col2.classList.add('correct');
+                        matchSel.col1.classList.remove('selected'); matchSel.col2.classList.remove('selected');
+                        matchSel = { col1: null, col2: null };
+                        const cnt = parseInt(page.dataset.correctMatches || '0') + 1;
+                        page.dataset.correctMatches = cnt;
+                        if (cnt === need) { page.dataset.answered = 'true'; nextBtn.disabled = false; }
+                    } else {
+                        playSound('incorrect');
+                        matchSel.col1.classList.add('incorrect'); matchSel.col2.classList.add('incorrect');
+                        const a = matchSel.col1, b = matchSel.col2;
+                        matchSel = { col1: null, col2: null };
+                        setTimeout(() => { a.classList.remove('selected','incorrect'); b.classList.remove('selected','incorrect'); }, 800);
+                    }
+                }
+            });
+        });
+    }
+
+    // ── Date dropdown logic (Valider로 검증, 재시도, Leçon 15 dropdown 방식) ──
+    const DATE_DROPDOWN_MAX_ATTEMPTS = 4;
+
+    function setupDateDropdown(page) {
+        const selects    = Array.from(page.querySelectorAll('.dd-select'));
+        const feedbackEl = page.querySelector('.dropdown-feedback');
+        const submitBtn  = page.querySelector('.submit-dropdown-btn');
+
+        const lockSelects   = () => selects.forEach(s => s.disabled = true);
+        const unlockSelects = () => selects.forEach(s => s.disabled = false);
+
+        const revealAnswer = () => {
+            selects.forEach(s => { s.value = s.dataset.answer; s.classList.remove('incorrect'); s.classList.add('correct'); });
+            lockSelects();
+        };
+
+        const doCheck = () => {
+            if (page.dataset.answered === 'true') return;
+            if (selects.some(s => !s.value)) return;
+
+            const ok = selects.every(s => s.value === s.dataset.answer);
+            if (ok) {
+                setFeedback(feedbackEl, MSG.success_end, 'success');
+                selects.forEach(s => { s.classList.remove('incorrect'); s.classList.add('correct'); });
+                lockSelects();
+                playSound('correct');
+                submitBtn.disabled = true;
+                page.dataset.answered = 'true'; nextBtn.disabled = false;
+                return;
+            }
+
+            const attempts = parseInt(page.dataset.attempts) + 1;
+            page.dataset.attempts = attempts;
+
+            if (attempts >= DATE_DROPDOWN_MAX_ATTEMPTS) {
+                revealAnswer();
+                setFeedback(feedbackEl, MSG.fail_reveal, 'error');
+                playSound('incorrect');
+                submitBtn.disabled = true;
+                page.dataset.answered = 'true'; nextBtn.disabled = false;
+                return;
+            }
+
+            setFeedback(feedbackEl, MSG.fail_retry, 'error');
+            selects.forEach(s => s.classList.toggle('incorrect', s.value !== s.dataset.answer));
+            playSound('incorrect');
+            lockSelects();
+            submitBtn.textContent = 'Réessayer';
+            submitBtn.onclick = doRetry;
+        };
+
+        const doRetry = () => {
+            selects.forEach(s => { s.value = ''; s.classList.remove('incorrect', 'correct'); });
+            unlockSelects();
+            clearFeedback(feedbackEl);
+            submitBtn.textContent = 'Valider';
+            submitBtn.onclick = doCheck;
+        };
+
+        submitBtn.onclick = doCheck;
+    }
+
+    // ── Date input logic (écriture, Threshold 100, 최대 3회, Leçon 15 writing 방식) ──
+    const dateInputTimers = new WeakMap();
+
+    function setupDateInput(page) {
+        const inputs     = Array.from(page.querySelectorAll('.date-input-row .quiz-input'));
+        const button     = page.querySelector('.submit-btn');
+        const feedbackEl = page.querySelector('.quiz-feedback');
+
+        const normValue = v => v.replace(/[^0-9]/g, '').replace(/^0+(?=\d)/, '');
+
+        button.addEventListener('click', () => {
+            if (page.dataset.answered === 'true') return;
+            const values = inputs.map(i => normValue(i.value.trim()));
+            if (values.some(v => !v)) return;
+
+            if (dateInputTimers.has(page)) {
+                clearTimeout(dateInputTimers.get(page));
+                dateInputTimers.delete(page);
+            }
+
+            const allCorrect = inputs.every((input, idx) => values[idx] === input.dataset.answer);
+
+            const maxAttempts = parseInt(page.dataset.maxAttempts);
+            const attempts = parseInt(page.dataset.attempts) + 1;
+            page.dataset.attempts = attempts;
+
+            if (allCorrect) {
+                inputs.forEach(input => { input.classList.add('correct'); input.classList.remove('incorrect'); input.disabled = true; });
+                button.disabled = true;
+                setFeedback(feedbackEl, MSG.success_end, 'success');
+                playSound('correct');
+                page.dataset.answered = 'true'; nextBtn.disabled = false;
+            } else {
+                playSound('incorrect');
+                if (attempts >= maxAttempts) {
+                    inputs.forEach((input, idx) => { input.value = input.dataset.answer; input.classList.add('incorrect'); input.disabled = true; });
+                    button.disabled = true;
+                    setFeedback(feedbackEl, MSG.fail_reveal, 'error');
+                    page.dataset.answered = 'true'; nextBtn.disabled = false;
+                } else {
+                    inputs.forEach((input, idx) => { input.classList.toggle('incorrect', values[idx] !== input.dataset.answer); });
+                    setFeedback(feedbackEl, MSG.fail_retry, 'error');
+                    const timer = setTimeout(() => {
+                        inputs.forEach(input => { input.value = ''; input.classList.remove('incorrect'); });
+                        clearFeedback(feedbackEl);
+                        dateInputTimers.delete(page);
+                    }, 1400);
+                    dateInputTimers.set(page, timer);
+                }
+            }
+        });
+    }
+
+    // ── App state ────────────────────────────────────────────────────
+    const TOTAL = 22;
+    const IDX_FIRST = 0;
+    const IDX_LAST  = TOTAL - 1;
+
+    let currentPage = 0;
+
+    const slider    = document.getElementById('pagesSlider');
+    const navEl     = document.getElementById('navigation');
+    const prevBtn   = document.getElementById('prevBtn');
+    const nextBtn   = document.getElementById('nextBtn');
+    const indicator = document.getElementById('pageIndicator');
+    const allPages  = Array.from(document.querySelectorAll('.page'));
+
+    // ── Navigation ───────────────────────────────────────────────────
+    function render() {
+        slider.style.transform = `translateX(-${currentPage * 100}%)`;
+
+        const isCover = currentPage === IDX_FIRST || currentPage === IDX_LAST;
+        navEl.hidden  = isCover;
+
+        if (!isCover) {
+            indicator.textContent = `${currentPage + 1} / ${TOTAL}`;
+            prevBtn.disabled = (currentPage <= 1);
+
+            const page = allPages[currentPage];
+            const needsAnswer =
+                (page.classList.contains('listen-repeat-page') ||
+                 page.classList.contains('speech-page') ||
+                 page.classList.contains('matching-page') ||
+                 page.classList.contains('date-dropdown-page') ||
+                 page.classList.contains('date-input-page')) &&
+                page.dataset.answered !== 'true';
+
+            nextBtn.disabled = needsAnswer;
+        }
+
+        if (currentPage === IDX_LAST) triggerLessonComplete();
+    }
+
+    function goTo(idx, sound = 'page_turn') {
+        if (idx < 0 || idx >= TOTAL) return;
+        currentPage = idx;
+        playSound(sound);
+        render();
+    }
+
+    prevBtn.onclick = () => goTo(currentPage - 1);
+    nextBtn.onclick = () => goTo(currentPage + 1);
+    document.getElementById('startBtn').addEventListener('click', () => goTo(1, 'lesson_start'));
+
+    // ── Lesson complete (Rule 9) ─────────────────────────────────────
+    function triggerLessonComplete() {
+        playSound('lesson_end');
+        window.parent.postMessage({ type: 'lesson_complete' }, '*');
+    }
+
+    // ── Wire up all page interactions ────────────────────────────────
+    allPages.forEach(page => {
+        // TTS buttons
+        page.querySelectorAll('.tts-button').forEach(btn => {
+            const korean = btn.dataset.korean || page.dataset.korean;
+            if (korean) btn.addEventListener('click', () => playAudioSequence(korean));
+        });
+
+        // Word chips (example pages)
+        page.querySelectorAll('.word-button').forEach(btn => {
+            const korean = btn.dataset.korean;
+            if (korean) btn.addEventListener('click', () => playAudioSequence(korean));
+        });
+
+        // Speech / listen-repeat pages
+        if (page.classList.contains('speech-page') || page.classList.contains('listen-repeat-page')) {
+            const recBtn  = page.querySelector('.rec-button');
+            const feedEl  = page.querySelector('.speech-feedback');
+            const hintBtn = page.querySelector('.hint-button');
+            if (recBtn && feedEl) recBtn.addEventListener('click', () => startListening(recBtn, feedEl, page));
+            if (hintBtn) hintBtn.addEventListener('click', () => playAudioSequence(page.dataset.korean));
+        }
+
+        // Matching (Quiz 1)
+        if (page.classList.contains('matching-page')) setupMatching(page);
+
+        // Date dropdown (Quiz 2)
+        if (page.classList.contains('date-dropdown-page')) setupDateDropdown(page);
+
+        // Date input (Quiz 7)
+        if (page.classList.contains('date-input-page')) setupDateInput(page);
+    });
+
+    // ── Boot ─────────────────────────────────────────────────────────
+    document.body.addEventListener('click', initAudio, { once: true });
+    render();
+    </script>
+</body>
+</html>
