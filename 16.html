@@ -269,6 +269,12 @@
         .word-button { background: var(--theme-light); border: 0.12em solid var(--border); border-radius: var(--radius-box); padding: 0.5em 0.8em; font-size: 1.15em; font-weight: bold; cursor: pointer; transition: background .2s, color .2s; font-family: inherit; color: var(--text); }
         .word-button:hover { background: var(--theme); color: var(--white); border-color: var(--theme); }
         .word-translation { font-size: 0.72em; color: #777; display: block; margin-top: 0.2em; }
+        .comparison-box { border: 0.12em solid var(--border); border-radius: var(--radius-box); padding: 0.9em; margin: 0.5em 0; width: 100%; box-sizing: border-box; text-align: left; }
+        .comparison-box h4 { margin: 0 0 0.4em 0; color: var(--theme); font-size: 1.05em; }
+        .comparison-phrase { margin: 0.4em 0; font-size: 1.05em; display: flex; align-items: center; justify-content: space-between; }
+        .comparison-phrase .korean { font-weight: bold; }
+        .comparison-phrase button { background: none; border: none; font-size: 1.15em; cursor: pointer; padding: 0 0.3em; }
+        .comparison-meaning { font-size: 0.9em; color: #555; }
         .example-explanation { font-size: 0.82em; color: #555; margin-top: 0.4em; line-height: 1.4; text-align: center; max-width: 95%; }
         .example-explanation span { color: var(--theme); font-weight: bold; }
 
@@ -358,15 +364,16 @@
 
                 <!-- PAGE 3 · Année : 년 -->
                 <div class="page example-page">
-                    <h3>Année : 년</h3>
+                    <h3>Année : <span class="highlight">년</span></h3>
                     <button class="action-button tts-button" type="button" data-korean="년"><span class="icon">🔊</span>년</button>
-                    <p>On lit le nombre de l'année avec les chiffres <span class="highlight">chinois</span>, puis on ajoute <span class="highlight">년</span>.</p>
-                    <h4>Exemple</h4>
-                    <div class="example-phrase-buttons">
-                        <div class="word-button-container">
-                            <button class="word-button" type="button" data-korean="이천이십오년">이천이십오년</button>
-                            <div class="word-translation">2025</div>
+                    <p class="example-explanation">On lit le nombre de l'année avec les chiffres <span>chinois</span>, puis on ajoute <span>년</span>.</p>
+                    <div class="comparison-box">
+                        <h4>Exemple</h4>
+                        <div class="comparison-phrase">
+                            <span class="korean">2025년</span>
+                            <button type="button" data-korean="이천이십오년">🔊</button>
                         </div>
+                        <div class="comparison-meaning">이천이십오년</div>
                     </div>
                 </div>
 
@@ -394,27 +401,24 @@
 
                 <!-- PAGE 6 · Mois : 월 -->
                 <div class="page example-page">
-                    <h3>Mois : 월</h3>
+                    <h3>Mois : <span class="highlight">월</span></h3>
                     <button class="action-button tts-button" type="button" data-korean="월"><span class="icon">🔊</span>월</button>
-                    <p>Chaque mois s'écrit avec son numéro (chiffres <span class="highlight">chinois</span>) suivi de <span class="highlight">월</span>.</p>
-                    <h4>Exemple</h4>
+                    <p class="example-explanation">Chaque mois s'écrit avec son numéro (chiffres <span>chinois</span>) suivi de <span>월</span>.</p>
                     <div class="example-phrase-buttons">
                         <div class="word-button-container">
                             <button class="word-button" type="button" data-korean="사월">사월</button>
-                            <div class="word-translation">Avril (4월)</div>
+                            <div class="word-translation">avril (4월)</div>
                         </div>
-                    </div>
-                    <h4>Exceptions</h4>
-                    <div class="example-phrase-buttons">
                         <div class="word-button-container">
                             <button class="word-button" type="button" data-korean="유월">유월</button>
-                            <div class="word-translation">Juin (6월)</div>
+                            <div class="word-translation">juin (6월)</div>
                         </div>
                         <div class="word-button-container">
                             <button class="word-button" type="button" data-korean="시월">시월</button>
-                            <div class="word-translation">Octobre (10월)</div>
+                            <div class="word-translation">octobre (10월)</div>
                         </div>
                     </div>
+                    <p class="example-explanation">⚠️ Exceptions : Juin et Octobre se prononcent <span>유월</span> et <span>시월</span>.</p>
                 </div>
 
                 <!-- PAGE 7 · Pratique 1 : 1-4월 -->
@@ -452,15 +456,16 @@
 
                 <!-- PAGE 10 · Jour : 일 -->
                 <div class="page example-page">
-                    <h3>Jour : 일</h3>
+                    <h3>Jour : <span class="highlight">일</span></h3>
                     <button class="action-button tts-button" type="button" data-korean="일"><span class="icon">🔊</span>일</button>
-                    <p>On lit le numéro du jour avec les chiffres <span class="highlight">chinois</span>, puis on ajoute <span class="highlight">일</span>.</p>
-                    <h4>Exemple</h4>
-                    <div class="example-phrase-buttons">
-                        <div class="word-button-container">
-                            <button class="word-button" type="button" data-korean="십일">십일</button>
-                            <div class="word-translation">Le 10</div>
+                    <p class="example-explanation">On lit le numéro du jour avec les chiffres <span>chinois</span>, puis on ajoute <span>일</span>.</p>
+                    <div class="comparison-box">
+                        <h4>Exemple</h4>
+                        <div class="comparison-phrase">
+                            <span class="korean">십일</span>
+                            <button type="button" data-korean="십일">🔊</button>
                         </div>
+                        <div class="comparison-meaning">Le 10</div>
                     </div>
                 </div>
 
@@ -1115,6 +1120,10 @@
         page.querySelectorAll('.word-button').forEach(btn => {
             const korean = btn.dataset.korean;
             if (korean) btn.addEventListener('click', () => playAudioSequence(korean));
+        });
+        page.querySelectorAll('.comparison-phrase button').forEach(btn => {
+            const k = btn.dataset.korean;
+            if (k) btn.addEventListener('click', () => playAudioSequence(k));
         });
 
         // Speech / listen-repeat pages
