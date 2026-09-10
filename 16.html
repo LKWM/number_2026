@@ -5,8 +5,13 @@
     <script>
     // ================================================================
     // 한국어 발음 오디오 — 녹음 완료 후 링크 추가 시 자동 연동
-    // leçon 16 : 일의자리 수 / 십의자리 수(한자어)는 링크 연동,
-    // 이외의 조합수(년/월/일·날짜·연도)는 TTS 사용
+    // leçon 16 녹음 대기 항목 (링크 추가 전까지는 무음):
+    //   단위: 년 / 월 / 일(날 단위, 숫자 1 아님)
+    //   월: 일월 이월 삼월 사월 오월 유월 칠월 팔월 구월 시월 십일월 십이월
+    //   연도: 이천이십오년 천구백팔십칠년
+    //   날짜: 십일 십육일 이십일일 칠일
+    //   퀴즈 정답: 시월십삼일 일월삼십일일 천구백구십삼년사월이십육일
+    //   문장: 제 생일은 천구백구십오년 팔월 십칠일이에요
     // ================================================================
     const audioMap = {
         '일': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976070/1_%E1%84%8B%E1%85%B5%E1%86%AF_jkudjv.mp3',
@@ -134,7 +139,7 @@
             padding: 0.7em 2.2em;
             font-size: 1em;
             font-weight: 700;
-            border-radius: var(--radius-box);
+            border-radius: var(--radius-btn);
             cursor: pointer;
             transition: opacity .2s;
         }
@@ -709,36 +714,15 @@
         currentTTS.onended = playNextTTS;
     }
 
-    // 조합수 TTS fallback (실라버스: 일의자리/십의자리 수 = 링크, 이외 조합수 = TTS)
-    function speakTTS(text) {
-        if (!('speechSynthesis' in window)) return;
-        speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'ko-KR';
-        utterance.rate = 0.8;
-        blockRec();
-        utterance.onend   = restoreRec;
-        utterance.onerror = restoreRec;
-        speechSynthesis.speak(utterance);
-    }
-
     function playAudioSequence(text) {
         if (activeRecorder && activeRecorder.state === 'recording') return;
         if (currentTTS) { currentTTS.pause(); currentTTS = null; }
-        if (audioMap[text]) {
-            ttsQueue = [audioMap[text]];
-            blockRec();
-            playNextTTS();
-            return;
-        }
-        const words = text.split(' ').map(w => audioMap[w]);
-        if (words.length && words.every(Boolean)) {
-            ttsQueue = words;
-            blockRec();
-            playNextTTS();
-            return;
-        }
-        speakTTS(text);
+        ttsQueue = audioMap[text]
+            ? [audioMap[text]]
+            : text.split(' ').map(w => audioMap[w]).filter(Boolean);
+        if (!ttsQueue.length) return;
+        blockRec();
+        playNextTTS();
     }
 
     // ── Feedback helpers ─────────────────────────────────────────────
