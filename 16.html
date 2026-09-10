@@ -263,6 +263,7 @@
 
         /* ── Example pages (word chips — Leçon 12/13 style) ──────── */
         .example-page h3 { font-size: 1.3em; margin-bottom: 0.3em; }
+        .example-page h4 { font-size: 1.05em; margin: 0.5em 0; color: var(--text); }
         .example-phrase-buttons { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 0.6em; margin-bottom: 0.6em; }
         .word-button-container { text-align: center; }
         .word-button { background: var(--theme-light); border: 0.12em solid var(--border); border-radius: var(--radius-box); padding: 0.5em 0.8em; font-size: 1.15em; font-weight: bold; cursor: pointer; transition: background .2s, color .2s; font-family: inherit; color: var(--text); }
@@ -270,10 +271,9 @@
         .word-translation { font-size: 0.72em; color: #777; display: block; margin-top: 0.2em; }
         .example-explanation { font-size: 0.82em; color: #555; margin-top: 0.4em; line-height: 1.4; text-align: center; max-width: 95%; }
         .example-explanation span { color: var(--theme); font-weight: bold; }
-        .structure-box { background: var(--theme-light); border-radius: var(--radius-box); padding: 0.9em; margin: 0.9em 0; width: 100%; box-sizing: border-box; text-align: center; font-size: 1em; font-weight: bold; }
 
         /* ── Practice / listen-repeat pages (Leçon 8/10 style) ─── */
-        .practice-number { font-size: 3.2em; font-weight: bold; color: var(--text); margin: 0; line-height: 1; }
+        .practice-number { font-size: 4em; font-weight: bold; color: var(--text); margin: 0; line-height: 1; }
         .practice-pronunciation { font-size: 1.5em; color: var(--theme); margin: 0; }
         .practice-korean { font-size: 1.1em; color: var(--theme); opacity: 0.75; margin: 0; }
         .quiz-instruction { font-size: 0.82em; color: #555; text-align: center; margin: 0; flex-shrink: 0; }
@@ -358,18 +358,14 @@
 
                 <!-- PAGE 3 · Année : 년 -->
                 <div class="page example-page">
-                    <h3>Année : <span class="highlight">년</span></h3>
+                    <h3>Année : 년</h3>
+                    <button class="action-button tts-button" type="button" data-korean="년"><span class="icon">🔊</span>년</button>
+                    <p>On lit le nombre de l'année avec les chiffres <span class="highlight">chinois</span>, puis on ajoute <span class="highlight">년</span>.</p>
+                    <h4>Exemple</h4>
                     <div class="example-phrase-buttons">
                         <div class="word-button-container">
-                            <button class="word-button" type="button" data-korean="년">🔊 년</button>
-                            <span class="word-translation">année</span>
-                        </div>
-                    </div>
-                    <p class="example-explanation">On lit le nombre de l'année avec les chiffres <span>chinois</span>, puis on ajoute <span>년</span>.</p>
-                    <div class="structure-box">
-                        Ex : 2025년 (이천이십오년)
-                        <div class="example-phrase-buttons" style="margin: 0.4em 0 0;">
-                            <button class="word-button" type="button" data-korean="이천이십오년">🔊 이천이십오년</button>
+                            <button class="word-button" type="button" data-korean="이천이십오년">이천이십오년</button>
+                            <div class="word-translation">2025</div>
                         </div>
                     </div>
                 </div>
@@ -378,7 +374,7 @@
                 <div class="page listen-repeat-page" data-korean="이천이십오년" data-attempts="0" data-answered="false">
                     <h3>Écoutez et répétez</h3>
                     <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
-                    <p class="practice-number">2025년</p>
+                    <p class="practice-number">2025</p>
                     <p class="practice-korean">이천이십오년</p>
                     <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
                     <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
@@ -389,7 +385,7 @@
                 <div class="page listen-repeat-page" data-korean="천구백팔십칠년" data-attempts="0" data-answered="false">
                     <h3>Écoutez et répétez</h3>
                     <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
-                    <p class="practice-number">1987년</p>
+                    <p class="practice-number">1987</p>
                     <p class="practice-korean">천구백팔십칠년</p>
                     <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
                     <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
@@ -398,29 +394,27 @@
 
                 <!-- PAGE 6 · Mois : 월 -->
                 <div class="page example-page">
-                    <h3>Mois : <span class="highlight">월</span></h3>
+                    <h3>Mois : 월</h3>
+                    <button class="action-button tts-button" type="button" data-korean="월"><span class="icon">🔊</span>월</button>
+                    <p>Chaque mois s'écrit avec son numéro (chiffres <span class="highlight">chinois</span>) suivi de <span class="highlight">월</span>.</p>
+                    <h4>Exemple</h4>
                     <div class="example-phrase-buttons">
                         <div class="word-button-container">
-                            <button class="word-button" type="button" data-korean="월">🔊 월</button>
-                            <span class="word-translation">mois</span>
+                            <button class="word-button" type="button" data-korean="사월">사월</button>
+                            <div class="word-translation">Avril (4월)</div>
                         </div>
                     </div>
-                    <p class="example-explanation">Chaque mois s'écrit avec son numéro (chiffres <span>chinois</span>) suivi de <span>월</span>.</p>
+                    <h4>Exceptions</h4>
                     <div class="example-phrase-buttons">
                         <div class="word-button-container">
-                            <button class="word-button" type="button" data-korean="사월">🔊 사월</button>
-                            <span class="word-translation">avril (4월)</span>
+                            <button class="word-button" type="button" data-korean="유월">유월</button>
+                            <div class="word-translation">Juin (6월)</div>
                         </div>
                         <div class="word-button-container">
-                            <button class="word-button" type="button" data-korean="유월">🔊 유월</button>
-                            <span class="word-translation">juin (6월)</span>
-                        </div>
-                        <div class="word-button-container">
-                            <button class="word-button" type="button" data-korean="시월">🔊 시월</button>
-                            <span class="word-translation">octobre (10월)</span>
+                            <button class="word-button" type="button" data-korean="시월">시월</button>
+                            <div class="word-translation">Octobre (10월)</div>
                         </div>
                     </div>
-                    <p class="example-explanation">⚠️ Exceptions : Juin et Octobre se prononcent <span>유월</span> et <span>시월</span>.</p>
                 </div>
 
                 <!-- PAGE 7 · Pratique 1 : 1-4월 -->
@@ -458,18 +452,14 @@
 
                 <!-- PAGE 10 · Jour : 일 -->
                 <div class="page example-page">
-                    <h3>Jour : <span class="highlight">일</span></h3>
+                    <h3>Jour : 일</h3>
+                    <button class="action-button tts-button" type="button" data-korean="일"><span class="icon">🔊</span>일</button>
+                    <p>On lit le numéro du jour avec les chiffres <span class="highlight">chinois</span>, puis on ajoute <span class="highlight">일</span>.</p>
+                    <h4>Exemple</h4>
                     <div class="example-phrase-buttons">
                         <div class="word-button-container">
-                            <button class="word-button" type="button" data-korean="일">🔊 일</button>
-                            <span class="word-translation">jour</span>
-                        </div>
-                    </div>
-                    <p class="example-explanation">On lit le numéro du jour avec les chiffres <span>chinois</span>, puis on ajoute <span>일</span>.</p>
-                    <div class="structure-box">
-                        Ex : Le 10 → 십일
-                        <div class="example-phrase-buttons" style="margin: 0.4em 0 0;">
-                            <button class="word-button" type="button" data-korean="십일">🔊 십일</button>
+                            <button class="word-button" type="button" data-korean="십일">십일</button>
+                            <div class="word-translation">Le 10</div>
                         </div>
                     </div>
                 </div>
@@ -478,7 +468,7 @@
                 <div class="page listen-repeat-page" data-korean="십육일" data-attempts="0" data-answered="false">
                     <h3>Écoutez et répétez</h3>
                     <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
-                    <p class="practice-number">16일</p>
+                    <p class="practice-number">16</p>
                     <p class="practice-korean">십육일</p>
                     <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
                     <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
@@ -489,7 +479,7 @@
                 <div class="page listen-repeat-page" data-korean="이십일일" data-attempts="0" data-answered="false">
                     <h3>Écoutez et répétez</h3>
                     <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
-                    <p class="practice-number">21일</p>
+                    <p class="practice-number">21</p>
                     <p class="practice-korean">이십일일</p>
                     <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
                     <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
@@ -500,7 +490,7 @@
                 <div class="page listen-repeat-page" data-korean="칠일" data-attempts="0" data-answered="false">
                     <h3>Écoutez et répétez</h3>
                     <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
-                    <p class="practice-number">7일</p>
+                    <p class="practice-number">7</p>
                     <p class="practice-korean">칠일</p>
                     <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
                     <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
