@@ -271,7 +271,7 @@
         .word-translation { font-size: 0.72em; color: #777; display: block; margin-top: 0.2em; }
         .comparison-box { border: 0.12em solid var(--border); border-radius: var(--radius-box); padding: 0.9em; margin: 0.5em 0; width: 100%; box-sizing: border-box; text-align: center; }
         .comparison-box h4 { margin: 0 0 0.4em 0; color: var(--theme); font-size: 1.05em; }
-        .comparison-phrase { margin: 0.4em 0; font-size: 1.05em; display: flex; align-items: center; justify-content: space-between; }
+        .comparison-phrase { margin: 0.4em 0; font-size: 1.05em; display: flex; align-items: center; justify-content: center; gap: 0.35em; }
         .comparison-phrase .korean { font-weight: bold; }
         .comparison-phrase button { background: none; border: none; font-size: 1.15em; cursor: pointer; padding: 0 0.3em; }
         .comparison-meaning { font-size: 0.9em; color: #555; }
@@ -369,7 +369,10 @@
                     <p class="example-explanation">On lit le nombre de l'année avec les chiffres <span>chinois</span>, puis on ajoute <span>년</span>.</p>
                     <div class="comparison-box">
                         <h4>Exemple</h4>
-                        <button class="action-button tts-button" type="button" data-korean="이천이십오년"><span class="icon">🔊</span>2025년</button>
+                        <div class="comparison-phrase">
+                            <button type="button" data-korean="이천이십오년">🔊</button>
+                            <span class="korean">2025년</span>
+                        </div>
                         <div class="comparison-meaning">이천이십오년</div>
                     </div>
                 </div>
@@ -458,7 +461,10 @@
                     <p class="example-explanation">On lit le numéro du jour avec les chiffres <span>chinois</span>, puis on ajoute <span>일</span>.</p>
                     <div class="comparison-box">
                         <h4>Exemple</h4>
-                        <button class="action-button tts-button" type="button" data-korean="십일"><span class="icon">🔊</span>십일</button>
+                        <div class="comparison-phrase">
+                            <button type="button" data-korean="십일">🔊</button>
+                            <span class="korean">십일</span>
+                        </div>
                         <div class="comparison-meaning">Le 10</div>
                     </div>
                 </div>
