@@ -992,11 +992,13 @@
         const t = text.replace(/\s+/g, '');
         let hour = null, min = null;
         const hm = t.match(/(한|두|세|네|다섯|여섯|일곱|여덟|아홉|열한|열두|열|[0-9]{1,2})시/);
+        let rest = t;
         if (hm) {
             const h = hm[1];
             hour = HOUR_WORDS[h] !== undefined ? HOUR_WORDS[h] : parseInt(h, 10);
+            rest = t.slice(hm.index + hm[0].length);
         }
-        const mm = t.match(/([가-힣0-9]{1,4})분/);
+        const mm = rest.match(/([가-힣0-9]{1,4})분/);
         if (mm) {
             const v = sinoToNumber(mm[1]);
             if (v !== null && v >= 0 && v <= 59) min = String(v).padStart(2, '0');
