@@ -1400,6 +1400,12 @@
     nextBtn.onclick = () => goTo(currentPage + 1);
     document.getElementById('startBtn').addEventListener('click', () => goTo(1, 'lesson_start'));
 
+        // LAYOUT TEST COPY ONLY — URL 해시로 해당 페이지로 점프
+        if (location.hash) {
+            const n = parseInt(location.hash.slice(1), 10);
+            if (n >= 1 && n < TOTAL) setTimeout(() => goTo(n, 'page_turn'), 150);
+        }
+
     // ── Lesson complete (Rule 9) ─────────────────────────────────────
     function triggerLessonComplete() {
         playSound('lesson_end');
