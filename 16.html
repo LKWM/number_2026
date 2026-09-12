@@ -35,8 +35,9 @@
         '제 생일은 천구백구십오년 팔월 십칠일이에요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789061721/%E1%84%8C%E1%85%A6_%E1%84%89%E1%85%A2%E1%86%BC%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%8B%E1%85%B3%E1%86%AB_1995%E1%84%82%E1%85%A7%E1%86%AB_8%E1%84%8B%E1%85%AF%E1%86%AF_17%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%A6%E1%84%8B%E1%85%AD_ykbc9p.mp3',
     };
     // ================================================================
-    // Clova Speech API
-    const CLOVA_URL = 'https://coreeno.base44.app/api/functions/naverClovaSpeech';
+    // Geminichat API (전사 무조건 한글 — 숫자 포함)
+    const GEMINI_URL = 'https://coreeno.base44.app/api/functions/Geminichat';
+    const GEMINI_SYSTEM = '유저의 발화를 한국어로 그대로 전사하라. 숫자는 절대 아라비아 숫자로 표기하지 말고 반드시 한글로 표기하라. 점수, 평가, 설명 등 어떤 문구도 덧붙이지 말고 전사값만 답하라.';
     // ================================================================
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -820,14 +821,24 @@
                     const b64 = reader.result.split(',')[1];
                     let recognized = '', score = 0, isCorrect = false;
                     try {
-                        const res  = await fetch(CLOVA_URL, {
+                        const mimeType = blob.type.split(';')[0] || 'audio/webm';
+                        const res  = await fetch(GEMINI_URL, {
                             method:  'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body:    JSON.stringify({ audioBase64: b64, languageCode: 'Kor', assessment: false }),
+                            body:    JSON.stringify({
+                                contents: [{
+                                    role: "user",
+                                    parts: [
+                                        { text: "Analyze the audio response." },
+                                        { inline_data: { mime_type: mimeType, data: b64 } },
+                                    ],
+                                }],
+                                systemInstruction: GEMINI_SYSTEM,
+                            }),
                         });
                         if (!res.ok) throw new Error('API');
                         const data = await res.json();
-                        recognized = data.recognized || data.text || '';
+                        recognized = (data.text || '').trim();
                         if (flexible) {
                             // 월/일 순서의 적절한 숫자라면 모두 정답으로 인정
                             const t = recognized.replace(/\s+/g, '');

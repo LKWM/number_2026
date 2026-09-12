@@ -327,6 +327,7 @@
         .mixed-line { font-family: 'Noto Sans KR', 'Inter', sans-serif; }
         .clock-row select { font-size: 1.3em; padding: 0.3em 0.45em; }
         .sentence-french { font-size: 1.2em; margin: 0.5em 0; line-height: 1.9; }
+        .sentence-french .blanks-row { white-space: nowrap; }
         .sentence-french select { padding: 0.25em 0.5em; border: 0.12em solid var(--border); border-radius: var(--radius-box); font-size: 0.9em; font-family: inherit; background: var(--white); color: var(--text); min-width: 3.4em; text-align: center; text-align-last: center; vertical-align: middle; }
         .sentence-french select:focus { outline: none; border-color: var(--theme); }
         .sentence-french select.correct { background: var(--success-bg); border-color: var(--success); }
@@ -796,7 +797,7 @@
                     <p class="quiz-instruction">Écoutez la phrase coréenne, puis complétez les blancs.</p>
                     <button class="action-button tts-button" type="button" data-korean="저는 아침 7시에 학교에 가요"><span class="icon">🔊</span>Écouter</button>
                     <p class="sentence-french">Je vais à l'école
-                        <select class="dd-select" data-answer="à">
+                        <span class="blanks-row"><select class="dd-select" data-answer="à">
 <option value="">( ? )</option>
 <option value="à">à</option>
 <option value="pendant">pendant</option>
@@ -807,7 +808,7 @@
 <option value="7">7</option>
 <option value="18">18</option>
 <option value="3">3</option>
-                        </select> h</p>
+                        </select> h</span></p>
                     <button class="submit-dropdown-btn" type="button">Valider</button>
                     <p class="quiz-feedback dropdown-feedback" aria-live="polite"></p>
                 </div>
@@ -817,7 +818,7 @@
                     <p class="quiz-instruction">Écoutez la phrase coréenne, puis complétez les blancs.</p>
                     <button class="action-button tts-button" type="button" data-korean="저는 오후 6시에 퇴근해요"><span class="icon">🔊</span>Écouter</button>
                     <p class="sentence-french">Je fini le travaile
-                        <select class="dd-select" data-answer="à">
+                        <span class="blanks-row"><select class="dd-select" data-answer="à">
 <option value="">( ? )</option>
 <option value="à">à</option>
 <option value="pendant">pendant</option>
@@ -828,7 +829,7 @@
 <option value="3">3</option>
 <option value="18">18</option>
 <option value="7">7</option>
-                        </select> h</p>
+                        </select> h</span></p>
                     <button class="submit-dropdown-btn" type="button">Valider</button>
                     <p class="quiz-feedback dropdown-feedback" aria-live="polite"></p>
                 </div>
@@ -838,7 +839,7 @@
                     <p class="quiz-instruction">Écoutez la phrase coréenne, puis complétez les blancs.</p>
                     <button class="action-button tts-button" type="button" data-korean="어제 세 시간동안 공부했어요"><span class="icon">🔊</span>Écouter</button>
                     <p class="sentence-french">J'ai révisé
-                        <select class="dd-select" data-answer="pendant">
+                        <span class="blanks-row"><select class="dd-select" data-answer="pendant">
 <option value="">( ? )</option>
 <option value="à">à</option>
 <option value="pendant">pendant</option>
@@ -849,7 +850,7 @@
 <option value="18">18</option>
 <option value="3">3</option>
 <option value="7">7</option>
-                        </select> h hier</p>
+                        </select> h hier</span></p>
                     <button class="submit-dropdown-btn" type="button">Valider</button>
                     <p class="quiz-feedback dropdown-feedback" aria-live="polite"></p>
                 </div>

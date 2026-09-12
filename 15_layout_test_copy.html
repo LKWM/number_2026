@@ -1172,7 +1172,7 @@ function render() {
              page.classList.contains('dropdown-quiz-page')) &&
             page.dataset.answered !== 'true';
 
-        nextBtn.disabled = needsAnswer;
+        nextBtn.disabled = false; // LAYOUT TEST COPY
     }
 
     if (currentPage === IDX_LAST) triggerLessonComplete();
@@ -1181,6 +1181,12 @@ function render() {
 prevBtn.onclick = () => goTo(currentPage - 1);
 nextBtn.onclick = () => goTo(currentPage + 1);
 document.getElementById('startBtn').addEventListener('click', () => goTo(1, 'lesson_start'));
+
+        // LAYOUT TEST COPY ONLY — URL 해시로 해당 페이지로 점프
+        if (location.hash) {
+            const n = parseInt(location.hash.slice(1), 10);
+            if (n >= 1 && n < TOTAL) setTimeout(() => goTo(n, 'page_turn'), 150);
+        }
 
 // ── Lesson complete (Rule 9) ─────────────────────────────────────
 function triggerLessonComplete() {
