@@ -8,30 +8,30 @@
     // ================================================================
     const audioMap = {
         // leçon 17 사용 오디오
-        '시': '',
-        '분': '',
-        '한시': '',
-        '두시': '',
-        '세시': '',
-        '네시': '',
-        '다섯시': '',
-        '여섯시': '',
-        '일곱시': '',
-        '여덟시': '',
-        '아홉시': '',
-        '열시': '',
-        '열한시': '',
-        '열두시': '',
-        '세시 삼십분': '',
-        '열시 팔분': '',
-        '여섯시 이십육분': '',
-        '한시 삼십삼분': '',
-        '두시 오분': '',
-        '일곱시 삼십삼분': '',
-        '열두시 사십삼분': '',
-        '저는 아침 7시에 학교에 가요': '',
-        '저는 오후 6시에 퇴근해요': '',
-        '어제 세 시간동안 공부했어요': '',
+        '시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210418/%E1%84%89%E1%85%B5_by80ud.mp3',
+        '분': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210514/%E1%84%87%E1%85%AE%E1%86%AB_eqv9tx.mp3',
+        '한시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210428/1%E1%84%89%E1%85%B5_xwzsqz.mp3',
+        '두시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210423/2%E1%84%89%E1%85%B5_qmhsw5.mp3',
+        '세시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210418/3%E1%84%89%E1%85%B5_iscejl.mp3',
+        '네시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210417/4%E1%84%89%E1%85%B5_liv7xr.mp3',
+        '다섯시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210424/5%E1%84%89%E1%85%B5_xxrxl1.mp3',
+        '여섯시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210428/6%E1%84%89%E1%85%B5_eyptrb.mp3',
+        '일곱시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210423/7%E1%84%89%E1%85%B5_c7wxm6.mp3',
+        '여덟시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210429/8%E1%84%89%E1%85%B5_b92rzr.mp3',
+        '아홉시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210423/9%E1%84%89%E1%85%B5_zjbkob.mp3',
+        '열시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210424/10%E1%84%89%E1%85%B5_y65yku.mp3',
+        '열한시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210417/11%E1%84%89%E1%85%B5_tqxqgo.mp3',
+        '열두시': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210418/12%E1%84%89%E1%85%B5_y0klcm.mp3',
+        '세시 사십분': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210513/%E1%84%89%E1%85%A6%E1%84%89%E1%85%B5_%E1%84%89%E1%85%A1%E1%84%89%E1%85%B5%E1%86%B8%E1%84%87%E1%85%AE%E1%86%AB_vl83wv.mp3',
+        '열시 팔분': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210716/%E1%84%8B%E1%85%A7%E1%86%AF%E1%84%89%E1%85%B5_%E1%84%91%E1%85%A1%E1%86%AF%E1%84%87%E1%85%AE%E1%86%AB_pkopb3.mp3',
+        '여섯시 이십칠분': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210512/%E1%84%8B%E1%85%A7%E1%84%89%E1%85%A5%E1%86%BA%E1%84%89%E1%85%B5_%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B5%E1%86%B8%E1%84%8E%E1%85%B5%E1%86%AF%E1%84%87%E1%85%AE%E1%86%AB_vwbbo7.mp3',
+        '한시 삼십사분': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210820/%E1%84%92%E1%85%A1%E1%86%AB%E1%84%89%E1%85%B5_%E1%84%89%E1%85%A1%E1%86%B7%E1%84%89%E1%85%B5%E1%86%B8%E1%84%89%E1%85%A1%E1%84%87%E1%85%AE%E1%86%AB_l6sibh.mp3',
+        '두시 오분': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210724/%E1%84%83%E1%85%AE%E1%84%89%E1%85%B5_%E1%84%8B%E1%85%A9%E1%84%87%E1%85%AE%E1%86%AB_pktv72.mp3',
+        '일곱시 삼십삼분': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210513/%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%80%E1%85%A9%E1%86%B8%E1%84%89%E1%85%B5_%E1%84%89%E1%85%A1%E1%86%B7%E1%84%89%E1%85%B5%E1%86%B8%E1%84%89%E1%85%A1%E1%86%B7%E1%84%87%E1%85%AE%E1%86%AB_x7pgzk.mp3',
+        '열두시 사십삼분': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210513/%E1%84%8B%E1%85%A7%E1%86%AF%E1%84%83%E1%85%AE%E1%84%89%E1%85%B5_%E1%84%89%E1%85%A1%E1%84%89%E1%85%B5%E1%86%B8%E1%84%89%E1%85%A1%E1%86%B7%E1%84%87%E1%85%AE%E1%86%AB_nfoqsh.mp3',
+        '저는 아침 7시에 학교에 가요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210742/%E1%84%8C%E1%85%A5%E1%84%82%E1%85%B3%E1%86%AB_%E1%84%8B%E1%85%A1%E1%84%8E%E1%85%B5%E1%86%B7_%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%80%E1%85%A9%E1%86%B8%E1%84%89%E1%85%B5%E1%84%8B%E1%85%A6_%E1%84%92%E1%85%A1%E1%86%A8%E1%84%80%E1%85%AD%E1%84%8B%E1%85%A6_%E1%84%80%E1%85%A1%E1%84%8B%E1%85%AD_bkfjpc.mp3',
+        '저는 오후 6시에 퇴근해요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210747/%E1%84%8C%E1%85%A5%E1%84%82%E1%85%B3%E1%86%AB_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_6%E1%84%89%E1%85%B5%E1%84%8B%E1%85%A6_%E1%84%90%E1%85%AC%E1%84%80%E1%85%B3%E1%86%AB%E1%84%92%E1%85%A2%E1%84%8B%E1%85%AD_xni5x7.mp3',
+        '어제 세 시간동안 공부했어요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789210753/%E1%84%8B%E1%85%A5%E1%84%8C%E1%85%A6_%E1%84%89%E1%85%A6_%E1%84%89%E1%85%B5%E1%84%80%E1%85%A1%E1%86%AB%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A1%E1%86%AB_%E1%84%80%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%92%E1%85%A2%E1%86%BB%E1%84%8B%E1%85%A5%E1%84%8B%E1%85%AD_u8zi6g.mp3',
     };
     // ================================================================
     // Clova Speech API
@@ -447,12 +447,12 @@
                     <p class="example-explanation">⚠️ Ne l'omettez jamais : le nombre seul ne suffit pas à indiquer les minutes.</p>
                 </div>
 
-                <!-- PAGE 8 · Pratique 1 : 3시 30분 -->
-                <div class="page listen-repeat-page" data-korean="세시 삼십분" data-attempts="0" data-answered="false">
+                <!-- PAGE 8 · Pratique 1 : 3시 40분 -->
+                <div class="page listen-repeat-page" data-korean="세시 사십분" data-attempts="0" data-answered="false">
                     <h3>Écoutez et répétez</h3>
                     <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
-                    <p class="practice-pronunciation">3시 30분</p>
-                    <p class="practice-korean">세시 삼십분</p>
+                    <p class="practice-pronunciation">3시 40분</p>
+                    <p class="practice-korean">세시 사십분</p>
                     <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
                     <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                     <p class="speech-feedback" aria-live="polite"></p>
@@ -467,22 +467,22 @@
                     <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                     <p class="speech-feedback" aria-live="polite"></p>
                 </div>
-                <!-- PAGE 10 · Pratique 3 : 6시 26분 -->
-                <div class="page listen-repeat-page" data-korean="여섯시 이십육분" data-attempts="0" data-answered="false">
+                <!-- PAGE 10 · Pratique 3 : 6시 27분 -->
+                <div class="page listen-repeat-page" data-korean="여섯시 이십칠분" data-attempts="0" data-answered="false">
                     <h3>Écoutez et répétez</h3>
                     <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
-                    <p class="practice-pronunciation">6시 26분</p>
-                    <p class="practice-korean">여섯시 이십육분</p>
+                    <p class="practice-pronunciation">6시 27분</p>
+                    <p class="practice-korean">여섯시 이십칠분</p>
                     <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
                     <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                     <p class="speech-feedback" aria-live="polite"></p>
                 </div>
-                <!-- PAGE 11 · Pratique 4 : 1시 33분 -->
-                <div class="page listen-repeat-page" data-korean="한시 삼십삼분" data-attempts="0" data-answered="false">
+                <!-- PAGE 11 · Pratique 4 : 1시 34분 -->
+                <div class="page listen-repeat-page" data-korean="한시 삼십사분" data-attempts="0" data-answered="false">
                     <h3>Écoutez et répétez</h3>
                     <p class="quiz-instruction">Écoutez la séquence, puis prononcez-la à voix haute.</p>
-                    <p class="practice-pronunciation">1시 33분</p>
-                    <p class="practice-korean">한시 삼십삼분</p>
+                    <p class="practice-pronunciation">1시 34분</p>
+                    <p class="practice-korean">한시 삼십사분</p>
                     <button class="action-button tts-button" type="button"><span class="icon">🔊</span>Écouter</button>
                     <button class="action-button rec-button" type="button"><span class="icon">🎤</span>Parler</button>
                     <p class="speech-feedback" aria-live="polite"></p>
