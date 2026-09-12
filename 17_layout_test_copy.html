@@ -327,6 +327,10 @@
         .mixed-line { font-family: 'Noto Sans KR', 'Inter', sans-serif; }
         .clock-row select { font-size: 1.3em; padding: 0.3em 0.45em; }
         .sentence-french { font-size: 1.2em; margin: 0.5em 0; line-height: 1.9; }
+        .sentence-french select { padding: 0.25em 0.5em; border: 0.12em solid var(--border); border-radius: var(--radius-box); font-size: 0.9em; font-family: inherit; background: var(--white); color: var(--text); min-width: 3.4em; text-align: center; text-align-last: center; vertical-align: middle; }
+        .sentence-french select:focus { outline: none; border-color: var(--theme); }
+        .sentence-french select.correct { background: var(--success-bg); border-color: var(--success); }
+        .sentence-french select.incorrect { background: var(--error-bg); border-color: var(--error); }
         .submit-dropdown-btn { background: var(--success); color: var(--white); border: none; padding: 0.55em 1.4em; font-size: 0.95em; font-family: inherit; border-radius: 1.2em; cursor: pointer; flex-shrink: 0; }
 
         /* ── Bottom nav bar ──────────────────────────────────────── */
@@ -845,7 +849,7 @@
 <option value="18">18</option>
 <option value="3">3</option>
 <option value="7">7</option>
-                        </select> h</p>
+                        </select> h hier</p>
                     <button class="submit-dropdown-btn" type="button">Valider</button>
                     <p class="quiz-feedback dropdown-feedback" aria-live="polite"></p>
                 </div>
