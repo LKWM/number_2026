@@ -7,7 +7,6 @@
     // 한국어 발음 오디오 — 녹음 완료 후 링크 추가 시 자동 연동
     // ================================================================
     const audioMap = {
-        // leçon 15 사용 오디오 (수사·분류사·문장)
         '권': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786300823/%E1%84%80%E1%85%AF%E1%86%AB_rtr5jm.mp3',
         '두': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261097/2%E1%84%83%E1%85%AE_l5gide.mp3',
         '삼': 'https://res.cloudinary.com/de76i94ia/video/upload/v1781976183/3_%E1%84%89%E1%85%A1%E1%86%B7_fow10k.mp3',
@@ -20,18 +19,15 @@
         '일곱': 'https://res.cloudinary.com/de76i94ia/video/upload/v1783876508/7_%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%80%E1%85%A9%E1%86%B8_ppgjm9.mp3',
         '쪽': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600705/%E1%84%8D%E1%85%A9%E1%86%A8_siykeg.mp3',
         '층': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600796/%E1%84%8E%E1%85%B3%E1%86%BC_ald9gu.mp3',
-        // 2단어 콤보 (개별 재생보다 자연스러운 실제 녹음)
         '세 권': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600588/%E1%84%89%E1%85%A6_%E1%84%80%E1%85%AF%E1%86%AB_d9ygsd.mp3',
         '삼 권': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600588/%E1%84%89%E1%85%A1%E1%86%B7_%E1%84%80%E1%85%AF%E1%86%AB_e8zpvq.mp3',
         '열 쪽': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600587/%E1%84%8B%E1%85%A7%E1%86%AF_%E1%84%8D%E1%85%A9%E1%86%A8_acbutj.mp3',
         '십 쪽': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600587/%E1%84%89%E1%85%B5%E1%86%B8_%E1%84%8D%E1%85%A9%E1%86%A8_gcdpe6.mp3',
         '이 층': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600594/%E1%84%8B%E1%85%B5_%E1%84%8E%E1%85%B3%E1%86%BC_aguyua.mp3',
         '두 층': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600588/%E1%84%83%E1%85%AE_%E1%84%8E%E1%85%B3%E1%86%BC_rtas9s.mp3',
-        // 퀴즈 본문 오디오 (P10-12) — 녹음 필요
-        '오 권': '',
-        '일곱 쪽': '',
-        '일 층': '',
-        // 문장 (통짜)
+        '오 권': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789285409/5%E1%84%80%E1%85%AF%E1%86%AB_l2pule.mp3',
+        '일곱 쪽': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789285410/%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%80%E1%85%A9%E1%86%B8_%E1%84%8D%E1%85%A9%E1%86%A8_uwltaa.mp3',
+        '일 층': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789285410/1%E1%84%8E%E1%85%B3%E1%86%BC_nubc48.mp3',
         '병원은 삼 층에 있어요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600793/%E1%84%87%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%8B%E1%85%B3%E1%86%AB_3%E1%84%8E%E1%85%B3%E1%86%BC%E1%84%8B%E1%85%A6_%E1%84%8B%E1%85%B5%E1%86%BB%E1%84%8B%E1%85%A5%E1%84%8B%E1%85%AD_wi0dxw.mp3',
         '만화책 두 권이 없어요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600867/%E1%84%86%E1%85%A1%E1%86%AB%E1%84%92%E1%85%AA%E1%84%8E%E1%85%A2%E1%86%A8_2%E1%84%80%E1%85%AF%E1%86%AB%E1%84%8B%E1%85%B5_%E1%84%8B%E1%85%A5%E1%86%B9%E1%84%8B%E1%85%A5%E1%84%8B%E1%85%AD_pzn39x.mp3',
         '책 십오 쪽을 읽으세요': 'https://res.cloudinary.com/de76i94ia/video/upload/v1788600706/%E1%84%8E%E1%85%A2%E1%86%A8_15%E1%84%8D%E1%85%A9%E1%86%A8%E1%84%8B%E1%85%B3%E1%86%AF_%E1%84%8B%E1%85%B5%E1%86%B0%E1%84%8B%E1%85%B3%E1%84%89%E1%85%A6%E1%84%8B%E1%85%AD_g0l6th.mp3',
