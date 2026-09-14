@@ -1513,6 +1513,8 @@
 
     // ── Boot ─────────────────────────────────────────────────────────
     document.body.addEventListener('click', initAudio, { once: true });
+    const hashJump = parseInt(location.hash.slice(1));
+    if (!isNaN(hashJump) && hashJump >= 0 && hashJump < TOTAL) currentPage = hashJump;
     render();
     </script>
 </body>
