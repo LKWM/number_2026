@@ -46,6 +46,9 @@
         '두': 'https://static.wixstatic.com/mp3/699687_496edce5da724685a53c7799053eae2a.mp3',
         '유월': 'https://static.wixstatic.com/mp3/699687_b079126a02e2485e9402c697e468d7c0.mp3',
         '천구백구십년 오월 삼일': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789380051/1990%E1%84%82%E1%85%A7%E1%86%AB_5%E1%84%8B%E1%85%AF%E1%86%AF_3%E1%84%8B%E1%85%B5%E1%86%AF_g9ycee.mp3',
+        '컴퓨터 한 대': '', // 녹음 필요
+        '삼 권': '', // 녹음 필요
+        '삼 층': '', // 녹음 필요
     };
     // ================================================================
     // Geminichat API (전사 무조건 한글 — 숫자 포함)
@@ -745,12 +748,10 @@
 
     function playAudioSequence(text) {
         if (currentTTS) { currentTTS.pause(); currentTTS = null; }
-        // audioMap에 키가 있으면(빈 값 포함) 그 키 하나로 취급, 없으면 단어별 분해
-        ttsQueue = (text in audioMap)
-            ? [audioMap[text]]
-            : text.split(' ').map(w => audioMap[w]);
-        ttsQueue = ttsQueue.filter(Boolean);
-        if (!ttsQueue.length) return;
+        // 정확히 일치하는 녹음 링크만 재생 — 링크 없으면 무음 (녹음 필요 항목은 Min에게 요청)
+        const url = audioMap[text];
+        if (!url) return;
+        ttsQueue = [url];
         playNextTTS();
     }
 
