@@ -1003,6 +1003,8 @@
         if (idx < 0 || idx >= TOTAL) return;
         currentPage = idx;
         playSound(sound);
+    const hashJump = parseInt(location.hash.slice(1));
+    if (!isNaN(hashJump) && hashJump >= 0 && hashJump < TOTAL_PAGES) currentPage = hashJump;
         render();
 
         // 오디오가 있는 문제 진입 0.2초 후 오디오 1회 자동 재생 (미응답 문제만)
