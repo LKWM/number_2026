@@ -1437,6 +1437,14 @@
                 if (currentPage === idx) playAudioSequence(pg.dataset.korean);
             }, 200);
         }
+
+        // 듣기 문제(date-dropdown) 페이지 진입 0.2초 후 오디오 1회 자동 재생 (미완료 시)
+        if (pg && pg.classList.contains('date-dropdown-page') && pg.dataset.answered !== 'true') {
+            const ddKorean = pg.querySelector('.tts-button') ? pg.querySelector('.tts-button').dataset.korean : null;
+            if (ddKorean) setTimeout(() => {
+                if (currentPage === idx) playAudioSequence(ddKorean);
+            }, 200);
+        }
     }
 
     prevBtn.onclick = () => goTo(currentPage - 1);
