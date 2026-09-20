@@ -15,9 +15,9 @@
         '마리': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261184/%E1%84%86%E1%85%A1%E1%84%85%E1%85%B5_zvvuc9.mp3',
         '두': 'https://res.cloudinary.com/de76i94ia/video/upload/v1786261097/2%E1%84%83%E1%85%AE_l5gide.mp3',
         '천구백구십년 오월 삼일': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789380051/1990%E1%84%82%E1%85%A7%E1%86%AB_5%E1%84%8B%E1%85%AF%E1%86%AF_3%E1%84%8B%E1%85%B5%E1%86%AF_g9ycee.mp3',
-        '컴퓨터 한 대': '', // 녹음 필요
-        '삼 권': '', // 녹음 필요
-        '삼 층': '', // 녹음 필요
+        '컴퓨터 한 대': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789408271/%E1%84%8F%E1%85%A5%E1%86%B7%E1%84%91%E1%85%B2%E1%84%90%E1%85%A5_%E1%84%92%E1%85%A1%E1%86%AB_%E1%84%83%E1%85%A2_hkgdrq.mp3',
+        '삼 권': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789408277/%E1%84%89%E1%85%A1%E1%86%B7_%E1%84%80%E1%85%AF%E1%86%AB_h60re6.mp3',
+        '삼 층': 'https://res.cloudinary.com/de76i94ia/video/upload/v1789408270/3%E1%84%8E%E1%85%B3%E1%86%BC_gxyufe.mp3',
     };
     // ================================================================
     // Geminichat API (전사 무조건 한글 — 숫자 포함)
@@ -352,6 +352,7 @@
         .order-answer-area { min-height: 2.6em; border: 0.12em dashed var(--border); border-radius: var(--radius-box); padding: 0.5em; margin-bottom: 0.8em; display: flex; flex-wrap: wrap; gap: 0.5em; align-items: center; width: 100%; box-sizing: border-box; flex-shrink: 0; }
         .order-answer-item { padding: 0.45em 0.7em; background: var(--theme); color: var(--white); border-radius: var(--radius-box); font-size: 1.05em; font-weight: bold; cursor: pointer; font-family: 'Noto Sans KR', 'Inter', sans-serif; }
         .submit-order-btn { background: var(--success); color: var(--white); border: none; padding: 0.55em 1.4em; font-size: 0.95em; font-family: inherit; border-radius: 1.2em; cursor: pointer; margin-top: 0.5em; flex-shrink: 0; }
+        .submit-order-btn:disabled { background: #ccc; cursor: not-allowed; }
 
         /* ── Bilan score & review ───────────────────────────────── */
         #score-display { font-size: 3em; font-weight: bold; color: var(--theme); margin: 0.6em 0; }
@@ -955,7 +956,7 @@
     function render() {
         slider.style.transform = `translateX(-${currentPage * 100}%)`;
 
-        const isCover = currentPage === IDX_FIRST || currentPage === IDX_LAST;
+        const isCover = currentPage === IDX_FIRST;   // 커버만 하단바 숨김 — 마지막 페이지는 하단바·Précédent 표시
         navEl.hidden  = isCover;
 
         if (!isCover) {
@@ -964,7 +965,7 @@
 
             const page = allPages[currentPage];
             const needsAnswer = page.classList.contains('quiz-page') && page.dataset.answered !== 'true';
-            nextBtn.disabled = needsAnswer;
+            nextBtn.disabled = needsAnswer || currentPage === IDX_LAST;
         }
 
         if (currentPage === IDX_LAST - 1) calculateAndShowScore();
