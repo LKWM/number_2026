@@ -377,6 +377,8 @@
     </style>
 </head>
 <body>
+<div id="jserr" style="position:fixed;top:0;left:0;right:0;background:#f00;color:#fff;z-index:99999;font-size:12px;padding:2px;"></div>
+<script>window.addEventListener('error', e => { document.getElementById('jserr').textContent = 'JSERR: ' + e.message + ' @' + e.lineno; });</script>
     <div class="app-container">
         <div class="content-window">
             <div class="pages-slider" id="pagesSlider">
@@ -1042,6 +1044,8 @@
 
     // ── Boot ─────────────────────────────────────────────────────────
     document.body.addEventListener('click', initAudio, { once: true });
+    const hashJump = parseInt(location.hash.slice(1));
+    if (!isNaN(hashJump) && hashJump >= 0 && hashJump < TOTAL) currentPage = hashJump;
     render();
     </script>
 </body>
